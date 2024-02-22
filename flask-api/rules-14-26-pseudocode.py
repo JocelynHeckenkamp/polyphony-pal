@@ -36,10 +36,9 @@ Initialize list of errors
 Parse chorddatas and check rules
 
 14
-<TODO: define isLeadingTone()>
 Leadingtones counter := 0
 foreach note in notes:
-    if note.isLeadingTone():
+    if note == four of key or note == seven of key:
         Leadingtones counter += 1
 if Leadingtones counter > 2
     Mark "Never double the leading tone" error (voice # & #)
@@ -102,8 +101,16 @@ if inversion == 2:
         Mark "In second inversion, double the 5th (bass note)" error (whole chord)
 
 21 
-<TODO: ... what is a neapolitan chord?>
-
+if numeral == 'IIb' and inversion == 1:
+    bass note := notes[3]
+    bass counter := 0
+    foreach note in notes:
+        if note == bass note:
+            bass counter += 1
+    if bass counter < 2
+        Mark "In a Neapolitan chord, double the bass and resolve b2^ down to the nearest note of the next chord" error (whole chord)
+    if harmonic_interval[2].chromatic_direction > 0:
+        Mark "In a Neapolitan chord, double the bass and resolve b2^ down to the nearest note of the next chord" error (voice 2)
 22
 if incomplete and not 7th-chord:
     root counter := 0
@@ -137,16 +144,41 @@ if prev.numeral == V and curr.numeral == VI and not curr.7th-chord and key.quali
         prev.melodic_intervals[i].chromatic.direction < 0:
             Mark "In the Deceptive Progression (V to VI in minor keys), the 3rd of V must resolve up" error (voice #)
 25
-<TODO: this lmao>
+***pass in two chords next and curr into this function***
+if curr.quality == augmented and curr.numeral == VI:
+    sharp_four := sharp four from key
+    target index := 0
+    foreach i, note in enumerate(curr.notes):
+        if note == sharp four:
+            target index := i
+    if next.numeral == V7 and next.notes[target index] != four of key:
+        Mark "The #4^ of an augmented 6th chord must resolve to 5^ unless the chord resolves to V7 in which case it resolves to natural 4" error (whole chord)
+    else if next.notes[target index] != five of key:
+        Mark "The #4^ of an augmented 6th chord must resolve to 5^ unless the chord resolves to V7 in which case it resolves to natural 4" error (whole chord)
 
 26
-<TODO: define (cadential 6/4), (passing in bass), (arpeggio staying on same chord), (pedal point)>
+***pass in prev,curr, next, and nextnext chords into this function***
 if inversion == 2 and not 7th-chord:
     if not (cadential 6/4)
     and not (passing in bass)
-    and not (arpeggio staying on same chord)
     and not (pedal point):
         Mark "6/4 Chords can only be used in four cases: cadential 6/4, passing in bass, arpeggio staying on same chord, pedal point" error (whole chord)
+
+cadential 6/4:
+    return ( (next.numeral == V or next.numeral == V7) and nextnext.numeral == I)
+
+passing in bass:
+    return (areStepwise(prev.notes[3], curr.notes[3]) and areStepwise(next.notes[3], curr.notes[3]) and (prev.harmonic_interval[3].chromatic_direction * curr.harmonic_interval[3].chromatic_direction > 0)
+
+pedal point:
+    return (prev.notes[3] == curr.notes[3] == next.notes[3])
+
+areStepwise(noteA, noteB):
+    // there seriously must be a better way...
+    return (int(noteA.name[0]) == int(noteB.name[0]) + 1) 
+            or (int(noteA.name[0]) == int(noteB.name[0]) - 1)
+            or (int(noteA.name[0]) == int(noteB.name[0]) + 6) 
+            or (int(noteA.name[0]) == int(noteB.name[0]) - 6) 
 """
 
 s.show()
