@@ -5,11 +5,23 @@ from collections import defaultdict
 filename = "../music-xml-examples/voice-leading-7.musicxml"
 #filename = "../music-xml-examples/bad-voice-leading.musicxml"
 
+'''
+TODO
+Attach Chord_Wrapper list to ScoreWrapper
+Remove Chord_Transition and attach melodic intervals to Chord_Wrapper
+ChordWrapper properties to add: quality, number, 7th chord, triad, incomplete, location, duration
+Store Chord_Wrappers in sorted list (short function or comparison function)
+'''
+
 class ScoreWrapper:
     key = None
     key_signature = None
     key_interpretations = []
     chord_transitions = []
+    chord_wrappers = []
+
+    # store chords and location
+
     def __init__(self, score):
         self.key = score.analyze("key")
         self.key_signature = score[2][1].keySignature
@@ -19,13 +31,17 @@ class ScoreWrapper:
         return f"score({self.key})"
 
 class ChordWrapper:
-    notes = None
+    notes = None # list of 4 notes
     chord_obj = None # "chord" taken by music21 module
-    inversion = None
-    intervals = {}
-    degrees = {}
-    name = None
-    rn = None
+    inversion = None # 0, 1, 2
+    intervals = {} # dictionary of intervals (note_index_1, note_index_2)
+    degrees = {} # dictionary of integers 1-8 (note_index)
+    name = None #?? get this property from chord_obj?
+    # quality
+    # number
+    # seventh/triad
+    # everything else from pseudocode except melodic intervals
+    rn = None # music21 roman numeral
 
     def __init__(self, v1, v2, v3, v4):
         self.notes = [v1, v2, v3, v4] # notes preserve duration; chord does not
@@ -57,9 +73,9 @@ class ChordWrapper:
         return message
 
 class ChordTransition:
-    chord_prev = None
-    chord_next = None
-    intervals = {}
+    chord_prev = None # ChordWrapper
+    chord_next = None # ChordWrapper
+    intervals = {} # dictionary of intervals (note_index)
 
     def __init__(self, chord_prev, chord_next):
         self.chord_prev = chord_prev
