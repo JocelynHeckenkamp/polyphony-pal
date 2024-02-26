@@ -2,45 +2,32 @@ from music21 import *
 from collections import defaultdict 
 
 # filename = "AP Music Theory 2022 Q5.mxl"
-filename = "../music-xml-examples/voice-leading-7.musicxml"
+filename = "music-xml-examples/voice-leading-7.musicxml"
 #filename = "../music-xml-examples/bad-voice-leading.musicxml"
 
 '''
 TODO
-Attach Chord_Wrapper list to ScoreWrapper
 Remove Chord_Transition and attach melodic intervals to Chord_Wrapper
-ChordWrapper properties to add: quality, number, 7th chord, triad, incomplete, location, duration
 Store Chord_Wrappers in sorted list (short function or comparison function)
 '''
-
-class ScoreWrapper:
-    key = None
-    key_signature = None
-    key_interpretations = []
-    chord_transitions = []
-    chord_wrappers = []
-
-    # store chords and location
-
-    def __init__(self, score):
-        self.key = score.analyze("key")
-        self.key_signature = score[2][1].keySignature
-        self.key_interpretations = score.analyze("key").alternateInterpretations[0:3]
-
-    def __str__(self):
-        return f"score({self.key})"
-
 class ChordWrapper:
+    # set on init
     notes = None # list of 4 notes
     chord_obj = None # "chord" taken by music21 module
+
+    # set externally
+    prev_chord = None
+    next_chord = None
+
+    # calculated by analyze
+    location = None # (measure number, offset)
+    duration = None 
     inversion = None # 0, 1, 2
-    intervals = {} # dictionary of intervals (note_index_1, note_index_2)
+    harmonic_intervals = {} # dictionary of intervals (note_index_1, note_index_2)
     degrees = {} # dictionary of integers 1-8 (note_index)
-    name = None #?? get this property from chord_obj?
-    # quality
-    # number
-    # seventh/triad
-    # everything else from pseudocode except melodic intervals
+    quality = None # major, minor, diminished, augmented, other
+    incomplete = None # incomplete major or incomplete minor (dyad of root and maj/min third)
+    isSeventh = None # true if all 4 notes in seventh chord are present
     rn = None # music21 roman numeral
 
     def __init__(self, v1, v2, v3, v4):
@@ -54,13 +41,27 @@ class ChordWrapper:
         # harmonic intervals
         for a in range(len(self.notes)-1):
             for b in range(a+1, len(self.notes)):
-                self.intervals[(a, b)] = interval.Interval(self.notes[a], self.notes[b])
+                self.harmonic_intervals[(a, b)] = interval.Interval(self.notes[a], self.notes[b])
 
         # scale degrees
         sc = key.getScale()
-        #for no in self.notes:
         for a in range(len(self.notes)):
             self.degrees[a] = sc.getScaleDegreeFromPitch(self.notes[a].pitch)
+
+        # quality
+        self.quality = self.chord_obj.quality
+
+        # incomplete
+        self.incomplete = self.chord_obj.isIncompleteMajorTriad() or self.chord_obj.isIncompleteMinorTriad()
+
+        # isSeventh
+        self.isSeventh = self.chord_obj.isSeventh()
+
+        # location
+        self.location = tuple((self.notes[0].measureNumber, self.notes[0].offset))
+
+        # duration
+        self.duration = self.notes[0].duration.quarterLength
 
         # roman numerals, chord quality
         self.rn = roman.romanNumeralFromChord(self.chord_obj, key)
@@ -71,6 +72,60 @@ class ChordWrapper:
         message += f'{self.notes}\n'
         # message += f'{self.intervals}\n'
         return message
+
+class ScoreWrapper:
+    key = None
+    key_signature = None
+    key_interpretations = []
+    chord_transitions = []
+    chord_wrappers = []
+    score = None
+
+    # store chords and location
+
+    def __init__(self, score):
+        self.score = score
+        self.key = score.analyze("key")
+        self.key_signature = score[2][1].keySignature
+        self.key_interpretations = score.analyze("key").alternateInterpretations[0:3]
+        self.parseScore()
+        self.format_chord_wrappers()
+
+    def __str__(self):
+        return f"score({self.key})"
+    
+    def parseScore(self):
+        voice_map = {}
+        note_matrix = {}
+        locations = set()
+        for voice in self.score.recurse().voices: # 2 staffs per score; n measures per staff, 2 voices per measure
+            # map voice to number
+            vox = str(voice)[-2]
+            if vox not in voice_map:
+                voice_map[vox] = len(voice_map)
+
+            for no in voice.notes:
+                measure_num = no.measureNumber
+                offset = no.offset
+                locations.add((measure_num, offset))
+                note_matrix[(measure_num, offset, voice_map[vox])] = no
+
+        chords = []
+        for location in locations:
+            chords.append(ChordWrapper(note_matrix[(location[0], location[1], 0)], 
+                                    note_matrix[(location[0], location[1], 1)], 
+                                    note_matrix[(location[0], location[1], 2)], 
+                                    note_matrix[(location[0], location[1], 3)]))
+        self.chord_wrappers = chords
+
+    def format_chord_wrappers(self):
+        #TODO: sort chords by location here
+            
+        #TODO: set previous and next chord links within chord wrappers here
+
+        # set all chord wrapper attributes here
+        for i in range(len(self.chord_wrappers)):
+            self.chord_wrappers[i].analyze(self.key)
 
 class ChordTransition:
     chord_prev = None # ChordWrapper
@@ -89,43 +144,12 @@ class ChordTransition:
     def __str__(self):
         return f"[{self.chord_prev}, {self.chord_next}]"
 
-def parse_XML(filename):
+if __name__ == '__main__':
     s = converter.parse(filename)
     sw = ScoreWrapper(s)
+    print(sw)
 
-    voice_map = {}
-    note_matrix = {}
-    locations = set()
-    for voice in s.recurse().voices: # 2 staffs per score; n measures per staff, 2 voices per measure
-        # map voice to number
-        vox = str(voice)[-2]
-        if vox not in voice_map:
-            voice_map[vox] = len(voice_map)
-
-        for no in voice.notes:
-            measure_num = no.measureNumber
-            offset = no.offset
-            locations.add((measure_num, offset))
-            note_matrix[(measure_num, offset, voice_map[vox])] = no
-
-    chords = {}
-    chord_transitions = []
-    chord_prev = None
-    for id, location in enumerate(locations):
-        chords[location] = ChordWrapper(note_matrix[(location[0], location[1], 0)], note_matrix[(location[0], location[1], 1)], note_matrix[(location[0], location[1], 2)], note_matrix[(location[0], location[1], 3)])
-        chords[location].analyze(sw.key)
-        if (id > 0):
-            chord_transitions.append(ChordTransition(chord_prev, chords[location]))
-            chord_transitions[-1].analyze()
-        chord_prev = chords[location]
-
-    sw.chord_transitions = chord_transitions
-    return chords, locations, sw
-
-if __name__ == '__main__':
-    chords, locations, sc = parse_XML(filename)
-
-    for location in locations:
-        print(chords[location])
+    for c in sw.chord_wrappers:
+        print(c)
 
 
