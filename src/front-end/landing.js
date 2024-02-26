@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Outlet, Link } from "react-router-dom";
 import logo from '../logo.svg'
 import '../App.css';
 
@@ -18,6 +19,10 @@ function Landing() {
           <h2>Welcome to React</h2>
           <p>The current time is {currentTime}.</p>
       </header>
+        <Link to="/upload">
+        <button >Upload</button>
+        </Link>
+      <Outlet />
     </div>
   );
 }
