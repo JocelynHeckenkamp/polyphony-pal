@@ -26,11 +26,12 @@ function handleUpload()
  
 }
 
+
   return (
     <div className="Upload">
         <h1>Upload Test</h1>
 
-        <input onChange={(e) => {setFile(e.target.files[0])}} type="file"></input>
+        <input onChange={ (e) => {setFile(e.target.files[0])}} type='file' accept='.musicxml,.mxml, .mxl' ></input>
 
         <button onClick={handleUpload}>Upload</button>
     </div>
