@@ -2,7 +2,7 @@ from music21 import *
 from collections import defaultdict 
 from functools import cmp_to_key
 # filename = "AP Music Theory 2022 Q5.mxl"
-filename = "music-xml-examples/voice-leading-7.musicxml"
+fn = "../music-xml-examples/voice-leading-7.musicxml"
 #filename = "../music-xml-examples/bad-voice-leading.musicxml"
 
 class ChordWrapper:
@@ -29,6 +29,8 @@ class ChordWrapper:
     def __init__(self, v1, v2, v3, v4):
         self.notes = [v1, v2, v3, v4]   # notes preserve duration; chord does not
         self.chord_obj = chord.Chord([no.pitch.name for no in self.notes])
+        self.melodic_intervals = {}
+        self.harmonic_intervals = {}
 
     def set_location(self):
         # location
@@ -46,7 +48,7 @@ class ChordWrapper:
         # melodic intervals
         for a in range(len(self.chord_obj.notes)):
             if self.next is not None:
-                self.melodic_intervals[a] = interval.Interval(self.chord_obj.notes[a], self.next.notes[a]) 
+                self.melodic_intervals[a] = interval.Interval(self.notes[a], self.next.notes[a])
 
         # scale degrees
         sc = key.getScale()
@@ -83,8 +85,6 @@ class ScoreWrapper:
     chord_wrappers = []
     score = None
 
-    # store chords and location
-
     def __init__(self, score):
         self.score = score
         self.key = score.analyze("key")
@@ -118,7 +118,7 @@ class ScoreWrapper:
                                     note_matrix[(location[0], location[1], 1)], 
                                     note_matrix[(location[0], location[1], 2)], 
                                     note_matrix[(location[0], location[1], 3)]))
-            chords[-1].set_location() 
+            chords[-1].set_location()
         self.chord_wrappers = chords
 
     def format_chord_wrappers(self):
@@ -143,13 +143,18 @@ class ScoreWrapper:
         for i in range(len(self.chord_wrappers)):
             self.chord_wrappers[i].analyze(self.key)
 
-if __name__ == '__main__':
+def getScoreWrapper(filename):
     s = converter.parse(filename)
     sw = ScoreWrapper(s)
+    return sw
+
+if __name__ == '__main__':
+    sw = getScoreWrapper(fn)
     print(sw)
 
-    # for c in sw.chord_wrappers:
-    #     print(c)
+    #for c in sw.chord_wrappers:
+        #print(c.location, c.chord_obj.fullName)
+        #print(c.melodic_intervals)
 
     # chords iterated through by next pointer
     curr = sw.chord_wrappers[0]
