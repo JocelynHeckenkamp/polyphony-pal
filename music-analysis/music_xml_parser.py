@@ -31,6 +31,7 @@ class ChordWrapper:
         self.chord_obj = chord.Chord([no.pitch.name for no in self.notes])
         self.melodic_intervals = {}
         self.harmonic_intervals = {}
+        self.degrees = {}
 
     def set_location(self):
         # location
