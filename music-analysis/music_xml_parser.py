@@ -1,38 +1,38 @@
 from music21 import *
 from collections import defaultdict 
-
+from functools import cmp_to_key
 # filename = "AP Music Theory 2022 Q5.mxl"
 filename = "music-xml-examples/voice-leading-7.musicxml"
 #filename = "../music-xml-examples/bad-voice-leading.musicxml"
 
-'''
-TODO
-Remove Chord_Transition and attach melodic intervals to Chord_Wrapper
-Store Chord_Wrappers in sorted list (short function or comparison function)
-'''
 class ChordWrapper:
     # set on init
     notes = None # list of 4 notes
     chord_obj = None # "chord" taken by music21 module
 
     # set externally
-    prev_chord = None
-    next_chord = None
+    prev = None
+    next = None
 
     # calculated by analyze
-    location = None # (measure number, offset)
-    duration = None 
-    inversion = None # 0, 1, 2
-    harmonic_intervals = {} # dictionary of intervals (note_index_1, note_index_2)
-    degrees = {} # dictionary of integers 1-8 (note_index)
-    quality = None # major, minor, diminished, augmented, other
-    incomplete = None # incomplete major or incomplete minor (dyad of root and maj/min third)
-    isSeventh = None # true if all 4 notes in seventh chord are present
-    rn = None # music21 roman numeral
+    location = None                     # (measure number, offset)
+    duration = None                     # quarterlength of first note in chord (assume all notes in chord are same length)
+    inversion = None                    # 0, 1, 2
+    harmonic_intervals = {}             # dictionary of harmonic intervals (note_index_1, note_index_2)
+    melodic_intervals = {}              # dictionary of melodic intervals (note_index)
+    degrees = {}                        # dictionary of integers 1-8 (note_index)
+    quality = None                      # major, minor, diminished, augmented, other
+    incomplete = None                   # incomplete major or incomplete minor (dyad of root and maj/min third)
+    isSeventh = None                    # true if all 4 notes in seventh chord are present
+    rn = None                           # music21 roman numeral
 
     def __init__(self, v1, v2, v3, v4):
-        self.notes = [v1, v2, v3, v4] # notes preserve duration; chord does not
+        self.notes = [v1, v2, v3, v4]   # notes preserve duration; chord does not
         self.chord_obj = chord.Chord([no.pitch.name for no in self.notes])
+
+    def set_location(self):
+        # location
+        self.location = tuple((self.notes[0].measureNumber, self.notes[0].offset))
 
     def analyze(self, key):
         # inversions
@@ -42,6 +42,11 @@ class ChordWrapper:
         for a in range(len(self.notes)-1):
             for b in range(a+1, len(self.notes)):
                 self.harmonic_intervals[(a, b)] = interval.Interval(self.notes[a], self.notes[b])
+
+        # melodic intervals
+        for a in range(len(self.chord_obj.notes)):
+            if self.next is not None:
+                self.melodic_intervals[a] = interval.Interval(self.chord_obj.notes[a], self.next.notes[a]) 
 
         # scale degrees
         sc = key.getScale()
@@ -57,20 +62,17 @@ class ChordWrapper:
         # isSeventh
         self.isSeventh = self.chord_obj.isSeventh()
 
-        # location
-        self.location = tuple((self.notes[0].measureNumber, self.notes[0].offset))
-
         # duration
         self.duration = self.notes[0].duration.quarterLength
 
         # roman numerals, chord quality
-        self.rn = roman.romanNumeralFromChord(self.chord_obj, key)
+        self.rn = roman.romanNumeralFromChord(self.chord_obj, key).romanNumeral
 
     def __str__(self):
         message = f''
-        # message += f'{self.name}\n'
-        message += f'{self.notes}\n'
-        # message += f'{self.intervals}\n'
+        message += f'{self.chord_obj.root()} {self.quality}'
+        message += f' {self.rn}{(7 if self.isSeventh else "")}\n'
+        message += f'{self.chord_obj.fullName}\n'
         return message
 
 class ScoreWrapper:
@@ -116,40 +118,45 @@ class ScoreWrapper:
                                     note_matrix[(location[0], location[1], 1)], 
                                     note_matrix[(location[0], location[1], 2)], 
                                     note_matrix[(location[0], location[1], 3)]))
+            chords[-1].set_location() 
         self.chord_wrappers = chords
 
     def format_chord_wrappers(self):
-        #TODO: sort chords by location here
+        # sort chordwrappers by measure number first then offset number second
+        def compare_chordWrapper(chord1, chord2):
+            if chord1.location[0] == chord2.location[0]:
+                return chord1.location[1] - chord2.location[1]
+            else:
+                return chord1.location[0] - chord2.location[0]
+        self.chord_wrappers.sort(key=cmp_to_key(compare_chordWrapper))
+
+        # link prev and next chord attributes
+        for i in range(len(self.chord_wrappers)):
+            if i != 0:
+                self.chord_wrappers[i].prev = self.chord_wrappers[i-1]
             
-        #TODO: set previous and next chord links within chord wrappers here
+            if i != len(self.chord_wrappers)-1:
+                self.chord_wrappers[i].next = self.chord_wrappers[i+1]
+
 
         # set all chord wrapper attributes here
         for i in range(len(self.chord_wrappers)):
             self.chord_wrappers[i].analyze(self.key)
-
-class ChordTransition:
-    chord_prev = None # ChordWrapper
-    chord_next = None # ChordWrapper
-    intervals = {} # dictionary of intervals (note_index)
-
-    def __init__(self, chord_prev, chord_next):
-        self.chord_prev = chord_prev
-        self.chord_next = chord_next
-
-    def analyze(self):
-        # melodic intervals
-        for a in range(len(self.chord_prev.notes)):
-            self.intervals[a] = interval.Interval(self.chord_prev.notes[a], self.chord_next.notes[a])
-
-    def __str__(self):
-        return f"[{self.chord_prev}, {self.chord_next}]"
 
 if __name__ == '__main__':
     s = converter.parse(filename)
     sw = ScoreWrapper(s)
     print(sw)
 
-    for c in sw.chord_wrappers:
-        print(c)
+    # for c in sw.chord_wrappers:
+    #     print(c)
+
+    # chords iterated through by next pointer
+    curr = sw.chord_wrappers[0]
+    while(curr is not None):
+        print(curr)
+        curr = curr.next
+
+    # s.show()
 
 
