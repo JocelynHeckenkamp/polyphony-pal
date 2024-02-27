@@ -1,7 +1,8 @@
 from music21 import *
 import music_xml_parser
 
-filename = "../music-xml-examples/voice-leading-7.musicxml"
+#filename = "../music-xml-examples/voice-leading-7.musicxml"
+filename = "../music-xml-examples/key-signature-error.musicxml"
 
 '''
 Error location types
@@ -37,14 +38,54 @@ class Error:
         self.suggestion = suggestion
 
     def __str__(self):
-        return f"{self.title({self.location})}"
+        #return f"{self.title} ({self.location})"
+        return f"{self.title} ({self.location})\n - {self.description}\n - {self.suggestion}"
 
 def getErrors(sw):
     errors = []
 
-    # key signature
+    # rule 27: key signatures
     if (sw.key != sw.key_signature):
         title = "Key Signature Error"
+        location = 0 # set the location correctly later
+        description = "Your voice leading is most suitable for another key signature."
+        suggestion = f"Suggested key: {sw.key}"
+
+        accidentals = sw.key.sharps
+        if accidentals > 1: # surprised there is nothing in music21 for this
+            suggestion += f" ({accidentals} shaprs)"
+        elif accidentals == 0:
+            suggestion += f" (no accidentals)"
+        else:
+            suggestion += f" ({abs(accidentals)} flats)"
+
+        errors.append(Error(title, location, description, suggestion))
+
+    # rule 1: ranges
+
+    # rule 2: spacing
+
+    # rule 3: crossing
+
+    # rule 4: overlapping
+
+    # rule 5: leaping once
+
+    # rule 6: leaping twice
+
+    # rule 7: large leaps
+
+    # rule 8: leaps of diminished quality
+
+    # rule 9: resolution of 7^
+
+    # rule 10: chords
+
+    # rule 11: parallel octaves
+
+    # rule 12: parallel 5ths
+
+    # rule 13: hidden 5ths and octaves
 
 
     return errors
@@ -53,7 +94,8 @@ if __name__ == '__main__':
     sw = music_xml_parser.getScoreWrapper(filename)
     print(sw)
 
-    errors = getErrors()
-    print(errors)
+    errors = getErrors(sw)
 
+    for e in errors:
+        print(e)
 
