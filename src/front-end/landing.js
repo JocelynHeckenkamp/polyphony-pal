@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Outlet, Link } from "react-router-dom";
+import logo from '../logo.svg'
+import '../App.css';
 
-function App() {
+function Landing() {
   const [currentTime, setCurrentTime] = useState(0);
 
   useEffect(() => {
@@ -12,14 +13,18 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div className="Landing">
       <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
           <p>The current time is {currentTime}.</p>
       </header>
+        <Link to="/upload">
+        <button >Upload</button>
+        </Link>
+      <Outlet />
     </div>
   );
 }
 
-export default App;
+export default Landing;
