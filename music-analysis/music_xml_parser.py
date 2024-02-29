@@ -29,7 +29,7 @@ class ChordWrapper:
 
     def __init__(self, v1, v2, v3, v4):
         self.notes = [v1, v2, v3, v4]   # notes preserve duration; chord does not
-        self.chord_obj = chord.Chord([no.pitch.name for no in self.notes])
+        self.chord_obj = chord.Chord([no for no in self.notes])
         self.melodic_intervals = {}
         self.harmonic_intervals = {}
         self.degrees = {}

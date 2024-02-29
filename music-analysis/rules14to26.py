@@ -23,10 +23,10 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper):
 # if Leadingtones counter > 2
 #     Mark "Never double the leading tone" error (voice # & #)
     # 15
-    if chord.inversion == 0 and chord.quality is not "diminished" and not chord.isSeventh:
+    if chord.inversion == 0 and str(chord.quality) != "diminished" and not chord.isSeventh:
         root_counter = 0
+        print(chord.notes[0].name, chord.notes[1].name, chord.notes[2].name, chord.notes[3].name)
         for note in chord.notes:
-            print(note.name, chord.chord_obj.root())
             if str(chord.chord_obj.root()) == str(note.name):
                 root_counter += 1
         if root_counter < 2:
