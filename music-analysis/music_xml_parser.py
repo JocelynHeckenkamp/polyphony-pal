@@ -1,8 +1,9 @@
 from music21 import *
 from collections import defaultdict 
 from functools import cmp_to_key
+
 # filename = "AP Music Theory 2022 Q5.mxl"
-fn = "../music-xml-examples/voice-leading-7.musicxml"
+fn = "./music-xml-examples/voice-leading-7.musicxml"
 #filename = "../music-xml-examples/bad-voice-leading.musicxml"
 
 class ChordWrapper:
@@ -72,10 +73,10 @@ class ChordWrapper:
         self.rn = roman.romanNumeralFromChord(self.chord_obj, key).romanNumeral
 
     def __str__(self):
-        message = f''
+        message = f'\n'
         message += f'{self.chord_obj.root()} {self.quality}'
         message += f' {self.rn}{(7 if self.isSeventh else "")}\n'
-        message += f'{self.chord_obj.fullName}\n'
+        message += f'{self.chord_obj.fullName}'
         return message
 
 class ScoreWrapper:
@@ -162,7 +163,6 @@ if __name__ == '__main__':
     while(curr is not None):
         print(curr)
         curr = curr.next
-
     # s.show()
 
 

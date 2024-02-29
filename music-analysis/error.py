@@ -30,12 +30,16 @@ class Error:
     title = None
     location = None
     description = None
+    voices = [False] * 4
     suggestion = None
-    def __init__(self, title, location, description, suggestion):
+    duration = None
+    def __init__(self, title: str, location: tuple, description: str, suggestion: str, voices: list, duration: float):
         self.title = title
         self.location = location
         self.description = description
         self.suggestion = suggestion
+        self.voices = voices
+        self.duration = duration
 
     def __str__(self):
         #return f"{self.title} ({self.location})"
