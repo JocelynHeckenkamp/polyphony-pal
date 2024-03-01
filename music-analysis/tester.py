@@ -16,7 +16,7 @@ if __name__ == '__main__':
     curr = sw.chord_wrappers[0]
     while(curr is not None):
         print(curr, curr.inversion)
-        errors = r1426.check_rules_14_to_26(curr)
+        errors = r1426.check_rules_14_to_26(curr, sw)
         for error in errors:
             print(error)
         curr = curr.next
