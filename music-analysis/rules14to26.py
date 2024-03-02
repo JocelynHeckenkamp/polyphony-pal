@@ -95,23 +95,40 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
             errors.append(e.Error(**ErrorParams))
 
     # 19
-    # if inversion == 2 and quality is not diminished and not 7th-chord:
-    #     bass note := notes[3]
-    #     bass counter := 0
-    #     foreach note in notes:
-    #         if note == bass note:
-    #             bass counter += 1
-    #     if bass counter < 2
-    #         Mark "In second inversion non-diminished triads, double the bass" error (whole chord)
+    if chord.inversion == 2 and chord.quality != "diminished" and not chord.isSeventh:
+        bass_note = chord.notes[3].name
+        bass_counter = 0
+        for note in chord.notes:
+            if bass_note == note.name:
+                bass_counter += 1
+        if bass_counter < 2:
+            ErrorParams = {
+                'title': 'Rule 19',
+                'location': chord.location,
+                'description': "Rule 19: In second inversion non-diminished triads, double the bass.",
+                'suggestion': f'double the bass note: {bass_note}',
+                'voices': WHOLE_CHORD,
+                'duration': 1.0,
+            }
+            errors.append(e.Error(**ErrorParams))
 
-    # 19
-    # if inversion == 2:
-    #     fifth counter := 0
-    #     foreach note in notes:
-    #         if note == chord.fifth:
-    #             fifth counter += 1
-    #     if fifth counter < 2
-    #         Mark "In second inversion, double the 5th (bass note)" error (whole chord)
+    # 20
+    if chord.inversion == 2:
+        fifth_counter = 0
+        for note in chord.notes:
+            if chord.chord_obj.fifth().name == note.name:
+                fifth_counter += 1
+        if fifth_counter < 2:
+            ErrorParams = {
+                'title': 'Rule 20',
+                'location': chord.location,
+                'description': "Rule 20: In second inversion, double the 5th (bass note)",
+                'suggestion': f'double the 5th: {chord.chord_obj.fifth().name}',
+                'voices': WHOLE_CHORD,
+                'duration': 1.0,
+            }
+            errors.append(e.Error(**ErrorParams))
+    
 
     # 21 
     # if numeral == 'IIb' and inversion == 1:
@@ -124,6 +141,33 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     #         Mark "In a Neapolitan chord, double the bass and resolve b2^ down to the nearest note of the next chord" error (whole chord)
     #     if harmonic_interval[2].chromatic_direction > 0:
     #         Mark "In a Neapolitan chord, double the bass and resolve b2^ down to the nearest note of the next chord" error (voice 2)
+    #TODO: fix melodic intervals
+    if str(chord.rn) == "IIb" and chord.inversion == 1:
+        bass_note = chord.notes[3].name
+        bass_counter = 0
+        for note in chord.notes:
+            if bass_note == note.name:
+                bass_counter += 1
+        if bass_counter < 2:
+            ErrorParams = {
+                'title': 'Rule 21',
+                'location': chord.location,
+                'description': "Rule 21: In a Neapolitan chord, double the bass",
+                'suggestion': f'double the bass: {bass_note}',
+                'voices': WHOLE_CHORD,
+                'duration': 1.0,
+            }
+            errors.append(e.Error(**ErrorParams))
+        if chord.harmonic_intervals[2].direction > 0:
+            ErrorParams = {
+                'title': 'Rule 21',
+                'location': chord.location,
+                'description': "Rule 21: In a Neapolitan chord, resolve b2^ down to the nearest note of the next chord",
+                'suggestion': f'resolve b2^ note down: {chord.notes[2].name}',
+                'voices': [False, False, True, False],
+                'duration': 2.0,
+            }
+            errors.append(e.Error(**ErrorParams))
     # 22
     # if incomplete and not 7th-chord:
     #     root counter := 0
