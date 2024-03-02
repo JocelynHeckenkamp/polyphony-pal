@@ -2,7 +2,7 @@ import music_xml_parser as mxp
 import error as e
 import rules14to26 as r1426
 
-fn = "./music-xml-examples/voice-leading-7.musicxml"
+fn = "./music-xml-examples/voice-leading-1.musicxml"
 
 if __name__ == '__main__':
     sw = mxp.getScoreWrapper(fn)
@@ -20,4 +20,5 @@ if __name__ == '__main__':
         for error in errors:
             print(error)
         curr = curr.next
-    # s.show()
+        
+    # sw.score.show()
