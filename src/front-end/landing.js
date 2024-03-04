@@ -98,9 +98,6 @@ function Landing() {
         ))}
       </Grid>
 
-      {/* Additional sections like user testimonials can be added here */}
-      {/* ... */}
-
     </Container>
   );
 }
