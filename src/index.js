@@ -10,13 +10,13 @@ export default function Index() {
   return (
     <BrowserRouter>
       <Routes>
-        
-          
+
+
           <Route path="upload" element={<Upload />} />
-          
-          <Route path="/" element={<Landing/>}>
-          
-        </Route>
+
+          <Route path="/" element={<Landing/>} />
+
+
       </Routes>
     </BrowserRouter>
   );

@@ -1,0 +1,65 @@
+/* Landing.css */
+
+/* Ensure all elements use border-box */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+.landing-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.landing-logo {
+  width: 120px;
+  margin-bottom: 20px;
+}
+
+.landing-title {
+  font-size: 48px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.landing-subtitle {
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 30px;
+}
+
+.get-started-btn {
+  margin-top: 30px;
+
+}
+
+/* Adjust team member styles */
+.team-grid-container {
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.team-member {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.team-avatar {
+  background-color: #ccc;
+  margin-bottom: 15px;
+}
+
+.team-name {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.team-role {
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+
+/* Footer styles if you have a footer */
+.footer {
+  /* Your styles here */
+  
+}
