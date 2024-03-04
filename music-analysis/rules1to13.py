@@ -19,7 +19,7 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     errors.extend(rule4(chord)) # voice overlapping
     errors.extend(rule5(chord)) # large melodic leaps
     errors.extend(rule6(chord)) # double melodic leaps
-    errors.extend(rule7(chord)) # resolving leaps
+    errors.extend(rules7_8(chord)) # resolving leaps
 
     # rule 6: leaping twice
 
@@ -212,12 +212,12 @@ def rule6(chord: mxp.ChordWrapper): # double leaps
 
     return errors
 
-def rule7(chord: mxp.ChordWrapper): # resolving leaps
+def rules7_8(chord: mxp.ChordWrapper): # resolving leaps
     errors = []
 
     for a in range(len(chord.melodic_intervals)):
         i = chord.melodic_intervals[a]
-        if (int(i.name[1]) > 4 and chord.next is not None and chord.next.next is not None):
+        if ((int(i.name[1]) > 4 or i.name[0] == 'd') and chord.next is not None and chord.next.next is not None):
             i2 = chord.next.melodic_intervals[a]
             if (not (i2.isStep and i.diatonic.direction != i2.diatonic.direction)):
                 print(0)
