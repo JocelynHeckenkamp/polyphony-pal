@@ -34,15 +34,18 @@ function handleUpload()
 
     <div  className="upload-container" align="left">
         <Grid container   direction="row"  className="top-bar">
-          <Grid item xs={9} md={9} lg={9} >
-            <Typography variant="h2" gutterBottom component="div" className="upload-title">
-              PolyphonyPal
+          <Grid item container xs={9} md={9} lg={9} direction="row" >
+            <Typography variant="h2" gutterBottom  className="upload-title">
+              Polyphony
+            </Typography>
+            <Typography variant="h2" gutteBottom  sx={{fontWeight:"bold"}} >
+              Pal
             </Typography>
           </Grid>
         
         
           <Grid item xs={3} md={3} lg={3} pt={4}     className="navigation-buttons" >
-            <Button  size="large" sx={{color: "black"}}>About</Button>
+            <Button size="large" sx={{color: "black"}}>About</Button>
             <Button size="large" sx={{color: "black"}}>Features</Button>
             <Button size="large" sx={{color: "black"}}>Account</Button>
             <Button size="large" sx={{color: "black"}}>Upload</Button>
@@ -53,15 +56,17 @@ function handleUpload()
           <Grid item align="center" >
             <Paper sx={{padding:3, backgroundColor: "#f7f7f7", px:10}} elevation={2} >
               
-              <Typography variant="h2" color="black" align="center" className="upload-subtitle">
+              <Typography variant="h2" color="black" sx={{fontWeight:"bold"}}  className="upload-subtitle">
               Upload Music XML File
               </Typography>
-              <Typography pb={3} pt={1} variant="h6" color="textSecondary" align="center" className="upload-subtitle">
+              <Typography pb={3} pt={1} variant="h6" color="textSecondary"  className="upload-subtitle">
               Export Music XML file from Musescore or any other editor
               </Typography>
               
-            <input onChange={ (e) => {setFile(e.target.files[0])}} type='file' accept='.musicxml,.mxml, .mxl' align="center"></input>
-            <Button variant="contained" onClick={handleUpload} sx={{backgroundColor: "black"}}>Upload</Button>
+            <input onChange={ (e) => {setFile(e.target.files[0])}} type='file' accept='.musicxml,.mxml, .mxl' ></input>
+            <Button variant="contained" onClick={handleUpload}
+              sx={{backgroundColor: "black",'&:hover': {backgroundColor: "grey"}  }}
+              >Upload</Button>
             
             </Paper>
           </Grid>
