@@ -19,7 +19,8 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     errors.extend(rule4(chord)) # voice overlapping
     errors.extend(rule5(chord)) # large melodic leaps
     errors.extend(rule6(chord)) # double melodic leaps
-    errors.extend(rules7_8(chord)) # resolving leaps
+    errors.extend(rule7(chord)) # resolving leaps
+    errors.extend(rule8(chord)) # resolving diminished movement
 
     # rule 6: leaping twice
 
@@ -212,20 +213,58 @@ def rule6(chord: mxp.ChordWrapper): # double leaps
 
     return errors
 
-def rules7_8(chord: mxp.ChordWrapper): # resolving leaps
+def rule7(chord: mxp.ChordWrapper): # resolving leaps
     errors = []
 
     for a in range(len(chord.melodic_intervals)):
         i = chord.melodic_intervals[a]
-        if ((int(i.name[1]) > 4 or i.name[0] == 'd') and chord.next is not None and chord.next.next is not None):
+        if (int(i.name[1]) > 4 and chord.next is not None and chord.next.next is not None):
             i2 = chord.next.melodic_intervals[a]
             if (not (i2.isStep and i.diatonic.direction != i2.diatonic.direction)):
-                print(0)
+                voices = [False] * 4
+                voices[a] = True
+                ErrorParams = {
+                    'title': "Improperly Resolved Leap",
+                    'location': chord.location,
+                    'description': f"{voice_names[a]} leaps greater than P4 without resolve.",
+                    'suggestion': "Resolve stepwise in the opposite direction.",
+                    'voices': voices,
+                    'duration': 3.0,
+                }
+                errors.append(e.Error(**ErrorParams))
+
+    return errors
+
+def rule8(chord: mxp.ChordWrapper): # resolving diminished movement
+    errors = []
+
+    for a in range(len(chord.melodic_intervals)):
+        i = chord.melodic_intervals[a]
+        if (i.name[0] == 'd' and chord.next is not None and chord.next.next is not None):
+            i2 = chord.next.melodic_intervals[a]
+            if (not (i2.isStep and i.diatonic.direction != i2.diatonic.direction)):
+                voices = [False] * 4
+                voices[a] = True
+                ErrorParams = {
+                    'title': "Improperly Resolved Leap",
+                    'location': chord.location,
+                    'description': f"{voice_names[a]} moves by diminished interval without resolving.",
+                    'suggestion': "Resolve stepwise in the opposite direction.",
+                    'voices': voices,
+                    'duration': 3.0,
+                }
+                errors.append(e.Error(**ErrorParams))
+
+    return errors
+
+def rule9(chord: mxp.ChordWrapper): # resolving the 7th
+    errors = []
+
 
     return errors
 
 if __name__ == '__main__':
-    fn = "../music-xml-examples/voice-leading-1.musicxml"
+    fn = "../music-xml-examples/bad-voice-leading-2.musicxml"
     sw = mxp.getScoreWrapper(fn)
     curr = sw.chord_wrappers[0]
     errors = []
