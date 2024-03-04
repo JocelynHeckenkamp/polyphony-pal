@@ -2,6 +2,7 @@ import error as e
 import music21
 import music_xml_parser as mxp
 WHOLE_CHORD = [True, True, True, True]
+voice_names = ["Soprano", "Alto", "Tenor", "Bass"]
 
 
 # Parse chorddatas and check rules
@@ -11,9 +12,8 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 
     errors = []
 
-    errors.extend(rule1(chord, score)) # range
-
-    # rule 2: spacing
+    errors.extend(rule1(chord)) # range
+    errors.extend(rule2(chord)) # spacing
 
     # rule 3: crossing
 
@@ -69,7 +69,7 @@ def pedalPoint(chord: mxp.ChordWrapper):
             and chord.notes[3] is chord.next.notes[3])
 
 # rule 1: range
-def rule1(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+def rule1(chord: mxp.ChordWrapper):
     errors = []
     ranges = [
         ('C4', 'G5'),  # soprano
@@ -91,9 +91,41 @@ def rule1(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'description': f"{voice_name} is out of range.",
                 'suggestion': f"Write voice in range [{low}, {high}].",
                 'voices': voices,
-                'duration': 0.0,
+                'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
+
+    return errors
+
+def rule2(chord: mxp.ChordWrapper):
+    errors = []
+
+    s_a = chord.harmonic_intervals[(0, 1)]
+    a_t = chord.harmonic_intervals[(1, 2)]
+
+    title = "Spacing Error"
+
+    if s_a.semitones > 12:
+        ErrorParams = {
+            'title': title,
+            'location': chord.location,
+            'description': "Soprano and alto voices are wider than P8.",
+            'suggestion': "Lower the soprano voice or raise the alto voice.",
+            'voices': [True, True, False, False],
+            'duration': 1.0,
+        }
+        errors.append(e.Error(**ErrorParams))
+
+    if a_t.semitones > 12:
+        ErrorParams = {
+            'title': title,
+            'location': chord.location,
+            'description': "Alto and tenor voices are wider than P8.",
+            'suggestion': "Lower the alto voice or raise the tenor voice.",
+            'voices': [False, True, True, False],
+            'duration': 1.0,
+        }
+        errors.append(e.Error(**ErrorParams))
 
     return errors
 
