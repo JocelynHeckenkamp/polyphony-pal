@@ -17,9 +17,7 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     errors.extend(rule2(chord)) # spacing
     errors.extend(rule3(chord)) # voice crossing
     errors.extend(rule4(chord)) # voice overlapping
-    # rule 4: overlapping
-
-    # rule 5: leaping once
+    errors.extend(rule5(chord)) # large melodic leaps
 
     # rule 6: leaping twice
 
@@ -163,6 +161,25 @@ def rule4(chord: mxp.ChordWrapper): # overlapping
                 'title': "Voice Overlapping",
                 'location': chord.location,
                 'description': f"{voice_names[a+1]} crosses above the {voice_names_lower[a]} voice.",
+                'suggestion': "",
+                'voices': voices,
+                'duration': 2.0,
+            }
+            errors.append(e.Error(**ErrorParams))
+
+    return errors
+
+def rule5(chord: mxp.ChordWrapper): # melodic leaps
+    errors = []
+
+    for a in range(len(chord.melodic_intervals)):
+        if chord.melodic_intervals[a].semitones > 12:
+            voices = [False] * 4
+            voices[a] = True
+            ErrorParams = {
+                'title': "Large Melodic Leap",
+                'location': chord.location,
+                'description': f"{voice_names[a]} leaps an interval greater than P8.",
                 'suggestion': "",
                 'voices': voices,
                 'duration': 2.0,
