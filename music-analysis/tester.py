@@ -8,7 +8,7 @@ fn = "../music-xml-examples/key-signature-error.musicxml"
 
 if __name__ == '__main__':
     sw = mxp.getScoreWrapper(fn)
-    print(sw)
+    #print(sw)
 
     #for c in sw.chord_wrappers:
         #print(c.location, c.chord_obj.fullName)
