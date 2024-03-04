@@ -3,6 +3,7 @@ import music21
 import music_xml_parser as mxp
 WHOLE_CHORD = [True, True, True, True]
 voice_names = ["Soprano", "Alto", "Tenor", "Bass"]
+voice_names_lower = ["soprano", "alto", "tenor", "bass"]
 
 
 # Parse chorddatas and check rules
@@ -68,8 +69,7 @@ def pedalPoint(chord: mxp.ChordWrapper):
             and chord.prev.notes[3] is chord.notes[3]                                       # ensure previous bass is the same as current bass
             and chord.notes[3] is chord.next.notes[3])
 
-# rule 1: range
-def rule1(chord: mxp.ChordWrapper):
+def rule1(chord: mxp.ChordWrapper): # range
     errors = []
     ranges = [
         ('C4', 'G5'),  # soprano
@@ -97,7 +97,7 @@ def rule1(chord: mxp.ChordWrapper):
 
     return errors
 
-def rule2(chord: mxp.ChordWrapper):
+def rule2(chord: mxp.ChordWrapper): # spacing
     errors = []
 
     s_a = chord.harmonic_intervals[(0, 1)]
@@ -126,6 +126,27 @@ def rule2(chord: mxp.ChordWrapper):
             'duration': 1.0,
         }
         errors.append(e.Error(**ErrorParams))
+
+    return errors
+
+def rule2(chord: mxp.ChordWrapper): # voice crossing
+    errors = []
+
+    for a in range(len(chord.notes)-1):
+        for b in range(a, len(chord.notes)):
+            if chord.notes[b].higherThan(chord.notes[a]):
+                voices = [False] * 4
+                voices[a] = True
+                voices[b] = True
+                ErrorParams = {
+                    'title': "Voice Crossing",
+                    'location': chord.location,
+                    'description': f"{voice_names[b]} voice is above {voice_names_lower[a]} voice.",
+                    'suggestion': "Move or switch voices.",
+                    'voices': voices,
+                    'duration': 1.0,
+                }
+                errors.append(e.Error(**ErrorParams))
 
     return errors
 
