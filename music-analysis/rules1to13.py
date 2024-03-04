@@ -15,9 +15,8 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 
     errors.extend(rule1(chord)) # range
     errors.extend(rule2(chord)) # spacing
-
-    # rule 3: crossing
-
+    errors.extend(rule3(chord)) # voice crossing
+    errors.extend(rule4(chord)) # voice overlapping
     # rule 4: overlapping
 
     # rule 5: leaping once
@@ -129,7 +128,7 @@ def rule2(chord: mxp.ChordWrapper): # spacing
 
     return errors
 
-def rule2(chord: mxp.ChordWrapper): # voice crossing
+def rule3(chord: mxp.ChordWrapper): # voice crossing
     errors = []
 
     for a in range(len(chord.notes)-1):
@@ -147,6 +146,28 @@ def rule2(chord: mxp.ChordWrapper): # voice crossing
                     'duration': 1.0,
                 }
                 errors.append(e.Error(**ErrorParams))
+
+    return errors
+
+def rule4(chord: mxp.ChordWrapper): # overlapping
+    errors = []
+
+    title = "Voice Overlapping"
+
+    for a in range(len(chord.notes)-1):
+        if chord.next is not None and chord.notes[a].lessThan(chord.next.notes[a+1]):
+            voices = [False] * 4
+            voices[a] = True
+            voices[a+1] = True
+            ErrorParams = {
+                'title': "Voice Overlapping",
+                'location': chord.location,
+                'description': f"{voice_names[a+1]} crosses above the {voice_names_lower[a]} voice.",
+                'suggestion': "",
+                'voices': voices,
+                'duration': 2.0,
+            }
+            errors.append(e.Error(**ErrorParams))
 
     return errors
 
