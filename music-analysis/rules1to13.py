@@ -18,6 +18,7 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     errors.extend(rule3(chord)) # voice crossing
     errors.extend(rule4(chord)) # voice overlapping
     errors.extend(rule5(chord)) # large melodic leaps
+    errors.extend(rule6(chord)) # double melodic leaps
 
     # rule 6: leaping twice
 
@@ -185,6 +186,28 @@ def rule5(chord: mxp.ChordWrapper): # melodic leaps
                 'duration': 2.0,
             }
             errors.append(e.Error(**ErrorParams))
+
+    return errors
+
+def rule6(chord: mxp.ChordWrapper): # double leaps
+    errors = []
+
+    for a in range(len(chord.melodic_intervals)):
+        if (int(chord.melodic_intervals[a].name[1]) > 2 and chord.next is not None and chord.next.next is not None):
+            if (int(chord.next.melodic_intervals[a].name[1]) > 2):
+                melodic_chord = music21.chord.Chord([chord.notes[a], chord.next.notes[a], chord.next.next.notes[a]])
+                if (melodic_chord.isTriad and not (melodic_chord.isIncompleteMajorTriad or melodic_chord.isIncompleteMinorTriad)):
+                    voices = [False] * 4
+                    voices[a] = True
+                    ErrorParams = {
+                        'title': "Double Melodic Leap not a Triad",
+                        'location': chord.location,
+                        'description': f"{voice_names[a]} leaps twice not outlining a triad.",
+                        'suggestion': "Change a leap to a step.",
+                        'voices': voices,
+                        'duration': 3.0,
+                    }
+                    errors.append(e.Error(**ErrorParams))
 
     return errors
 
