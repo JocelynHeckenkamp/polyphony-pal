@@ -23,12 +23,8 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     errors.extend(rule8(chord)) # resolving diminished movement
     errors.extend(rule9(chord)) # resolving the seventh of a chord
     errors.extend(rule10(chord)) # non-chords
-
-    # rule 10: chords
-
-    # rule 11: parallel octaves
-
-    # rule 12: parallel 5ths
+    errors.extend(rule11(chord)) # parallel octaves
+    errors.extend(rule12(chord)) # parallel fifths
 
     # rule 13: hidden 5ths and octaves
 
@@ -309,7 +305,7 @@ def rule11(chord: mxp.ChordWrapper): # parallel octaves
     if (chord.next is not None):
         for a in range(len(chord.notes) - 1):
             for b in range(a, len(chord.notes)):
-                vlq = music21.voiceLeading.voiceLeadingQuartet(chord.notes[a], chord.notes[b], chord.next.notes[a], chord.next.notes[b])
+                vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[a], chord.notes[b], chord.next.notes[a], chord.next.notes[b])
                 if (vlq.parallelUnisonOrOctave):
                     voices = [False] * 4
                     voices[a] = True
@@ -324,8 +320,34 @@ def rule11(chord: mxp.ChordWrapper): # parallel octaves
                     }
                     errors.append(e.Error(**ErrorParams))
 
+    return errors
+
+# test resolution of half/fully diminished seventh chords
+def rule12(chord: mxp.ChordWrapper): # parallel fifths
+    errors = []
+
+    if (chord.next is not None):
+        for a in range(len(chord.notes) - 1):
+            for b in range(a, len(chord.notes)):
+                vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[a], chord.notes[b], chord.next.notes[a], chord.next.notes[b])
+                if (vlq.parallelFifth
+                    and not ((chord.chord_obj.isDiminishedSeventh or chord.chord_obj.isHalfDiminishedSeventh) and vlq.isProperResolution())):
+                    voices = [False] * 4
+                    voices[a] = True
+                    voices[b] = True
+                    ErrorParams = {
+                        'title': "Parallel Octaves",
+                        'location': chord.location,
+                        'description': f"{voice_names[a]} and {voice_names_lower[b]} form a parallel octave.",
+                        'suggestion': "",
+                        'voices': voices,
+                        'duration': 2.0,
+                    }
+                    errors.append(e.Error(**ErrorParams))
 
     return errors
+
+
 
 if __name__ == '__main__':
     #fn = "../music-xml-examples/bad-voice-leading-2.musicxml"
