@@ -22,8 +22,7 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     errors.extend(rule7(chord)) # resolving leaps
     errors.extend(rule8(chord)) # resolving diminished movement
     errors.extend(rule9(chord)) # resolving the seventh of a chord
-
-    # rule 9: resolution of 7^
+    errors.extend(rule10(chord)) # non-chords
 
     # rule 10: chords
 
@@ -257,8 +256,9 @@ def rule9(chord: mxp.ChordWrapper): # resolving the 7th
 
     for a in range(len(chord.notes)):
         if (chord.notes[a].pitch == chord.chord_obj.seventh): # note is seventh
-            if (not chord.melodic_intervals[a].isStep
-                or chord.prev is not None and chord.prev.melodic_intervals[a].direction != chord.melodic_intervals[a].direction):
+            if (chord.next is None or
+                (not chord.melodic_intervals[a].isStep
+                or chord.prev is not None and chord.prev.melodic_intervals[a].direction != chord.melodic_intervals[a].direction)):
 
                 # conditions to skip
                 if (a != 0 # seventh is not in soprano
@@ -283,8 +283,28 @@ def rule9(chord: mxp.ChordWrapper): # resolving the 7th
 
     return errors
 
+# test for augented sixth chords
+def rule10(chord: mxp.ChordWrapper): # resolving the 7th
+    errors = []
+
+    co = chord.chord_obj
+    if (not (co.isTriad == True or co.isSeventh == True)):
+        voices = [True] * 4
+        ErrorParams = {
+            'title': "Impermissable Chord Type",
+            'location': chord.location,
+            'description': f"Voices do not form a triad or seventh chord.",
+            'suggestion': "Rewrite as a seventh chord or triad.",
+            'voices': voices,
+            'duration': 2.0,
+        }
+        errors.append(e.Error(**ErrorParams))
+
+    return errors
+
 if __name__ == '__main__':
-    fn = "../music-xml-examples/bad-voice-leading-2.musicxml"
+    #fn = "../music-xml-examples/bad-voice-leading-2.musicxml"
+    fn = "../music-xml-examples/rule-10-test.musicxml"
     sw = mxp.getScoreWrapper(fn)
     curr = sw.chord_wrappers[0]
     errors = []
