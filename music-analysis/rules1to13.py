@@ -21,12 +21,7 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     errors.extend(rule6(chord)) # double melodic leaps
     errors.extend(rule7(chord)) # resolving leaps
     errors.extend(rule8(chord)) # resolving diminished movement
-
-    # rule 6: leaping twice
-
-    # rule 7: large leaps
-
-    # rule 8: leaps of diminished quality
+    errors.extend(rule9(chord)) # resolving the seventh of a chord
 
     # rule 9: resolution of 7^
 
@@ -260,6 +255,31 @@ def rule8(chord: mxp.ChordWrapper): # resolving diminished movement
 def rule9(chord: mxp.ChordWrapper): # resolving the 7th
     errors = []
 
+    for a in range(len(chord.notes)):
+        if (chord.notes[a].pitch == chord.chord_obj.seventh): # note is seventh
+            if (not chord.melodic_intervals[a].isStep
+                or chord.prev is not None and chord.prev.melodic_intervals[a].direction != chord.melodic_intervals[a].direction):
+
+                # conditions to skip
+                if (a != 0 # seventh is not in soprano
+                    and (chord.rn == 'i' or chord.rn == 1) # cadential 6/4
+                    and chord.inversion == 2
+                    and chord.next is not None
+                    and (chord.next.rn == 'v' or chord.next.rn == 5)
+                    and (chord.next[a].pitch == chord.chord_obj.getChordStep(5))):
+                    continue;
+
+                voices = [False] * 4
+                voices[a] = True
+                ErrorParams = {
+                    'title': "Improperly Resolved Seventh",
+                    'location': chord.location,
+                    'description': f"Seventh {voice_names_lower[a]} does not resolve stepwise in opposite direction.",
+                    'suggestion': "Resolve stepwise in the opposite direction.",
+                    'voices': voices,
+                    'duration': 2.0,
+                }
+                errors.append(e.Error(**ErrorParams))
 
     return errors
 

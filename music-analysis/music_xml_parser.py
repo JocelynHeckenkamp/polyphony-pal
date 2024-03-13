@@ -70,7 +70,7 @@ class ChordWrapper:
         self.duration = self.notes[0].duration.quarterLength
 
         # roman numerals, chord quality
-        self.rn = roman.romanNumeralFromChord(self.chord_obj, key).romanNumeral
+        self.rn = roman.romanNumeralFromChord(self.chord_obj, key)
 
     def __str__(self):
         message = f'\n'

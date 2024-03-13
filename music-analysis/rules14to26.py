@@ -303,9 +303,9 @@ def cadential64(chord: mxp.ChordWrapper):
 def passingInBass(chord: mxp.ChordWrapper):
     return (chord.prev is not None                                                          # ensure previous chord exists 
             and chord.next is not None                                                      # ensure next chord exists
-            and str(chord.prev.harmonic_intervals[3].name)[1] == "2"                        # ensure stepwise motion btween prev and curr chords
-            and str(chord.harmonic_intervals[3].name)[1] == "2"                             # ensure stepwise motion btween curr and next chords
-            and chord.prev.harmonic_intervals[3].direction == chord.harmonic_intervals[3])  # ensure motion is in the same direction
+            and str(chord.prev.melodic_intervals[3].name)[1] == "2"                        # ensure stepwise motion btween prev and curr chords
+            and str(chord.melodic_intervals[3].name)[1] == "2"                             # ensure stepwise motion btween curr and next chords
+            and chord.prev.melodic_intervals[3].direction == chord.harmonic_intervals[3])  # ensure motion is in the same direction
 
 
 def pedalPoint(chord: mxp.ChordWrapper):
