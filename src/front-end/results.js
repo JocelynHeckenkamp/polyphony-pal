@@ -7,7 +7,7 @@ function Results()
     
 
   
-
+//gets xml
     useEffect(()=>{
         fetch("/results") 
         .then(res => res.text())
@@ -20,7 +20,8 @@ function Results()
         console.log(data);
 
     }, [])
-
+    
+//just displays raw xml string
     return(
     
        data
