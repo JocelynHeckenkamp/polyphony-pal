@@ -25,8 +25,7 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     errors.extend(rule10(chord)) # non-chords
     errors.extend(rule11(chord)) # parallel octaves
     errors.extend(rule12(chord)) # parallel fifths
-
-    # rule 13: hidden 5ths and octaves
+    errors.extend(rule13(chord)) # hidden fifths and octaves
 
     return errors
 
@@ -338,7 +337,31 @@ def rule12(chord: mxp.ChordWrapper): # parallel fifths
                     ErrorParams = {
                         'title': "Parallel Octaves",
                         'location': chord.location,
-                        'description': f"{voice_names[a]} and {voice_names_lower[b]} form a parallel octave.",
+                        'description': f"{voice_names[a]} and {voice_names_lower[b]} form a parallel fifth.",
+                        'suggestion': "",
+                        'voices': voices,
+                        'duration': 2.0,
+                    }
+                    errors.append(e.Error(**ErrorParams))
+
+    return errors
+
+def rule13(chord: mxp.ChordWrapper): # hidden fifths and octaves
+    errors = []
+
+    if (chord.next is not None):
+        for a in range(len(chord.notes) - 1):
+            for b in range(a, len(chord.notes)):
+                vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[a], chord.notes[b], chord.next.notes[a], chord.next.notes[b])
+                if (vlq.hiddenInterval(music21.interval.Interval('P5'))
+                    or vlq.hiddenInterval(music21.interval.Interval('P8'))):
+                    voices = [False] * 4
+                    voices[a] = True
+                    voices[b] = True
+                    ErrorParams = {
+                        'title': "Parallel Octave or Fifth",
+                        'location': chord.location,
+                        'description': f"{voice_names[a]} and {voice_names_lower[b]} form a parallel octave or fifth.",
                         'suggestion': "",
                         'voices': voices,
                         'duration': 2.0,
