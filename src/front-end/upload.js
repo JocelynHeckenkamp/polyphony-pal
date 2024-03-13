@@ -1,6 +1,7 @@
 
 import React, {useState} from 'react';
-import { Container, Typography, Button, Grid,  Paper, Card } from '@mui/material';
+import { Typography, Button, Grid,  Paper } from '@mui/material';
+import logo from '../polypalLogo.svg';
 import { Link } from 'react-router-dom';
 
 
@@ -35,12 +36,8 @@ function handleUpload()
     <div  className="upload-container" align="left">
         <Grid container   direction="row"  className="top-bar">
           <Grid item container xs={9} md={9} lg={9} direction="row" >
-            <Typography variant="h2" gutterBottom  className="upload-title">
-              Polyphony
-            </Typography>
-            <Typography variant="h2" gutteBottom  sx={{fontWeight:"bold"}} >
-              Pal
-            </Typography>
+            
+            <img src={logo} alt="polypal logo"  />
           </Grid>
         
         
