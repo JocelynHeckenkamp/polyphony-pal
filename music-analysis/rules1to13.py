@@ -296,9 +296,34 @@ def rule10(chord: mxp.ChordWrapper): # resolving the 7th
             'description': f"Voices do not form a triad or seventh chord.",
             'suggestion': "Rewrite as a seventh chord or triad.",
             'voices': voices,
-            'duration': 2.0,
+            'duration': 1.0,
         }
         errors.append(e.Error(**ErrorParams))
+
+    return errors
+
+# test parallel unison as well
+def rule11(chord: mxp.ChordWrapper): # parallel octaves
+    errors = []
+
+    if (chord.next is not None):
+        for a in range(len(chord.notes) - 1):
+            for b in range(a, len(chord.notes)):
+                vlq = music21.voiceLeading.voiceLeadingQuartet(chord.notes[a], chord.notes[b], chord.next.notes[a], chord.next.notes[b])
+                if (vlq.parallelUnisonOrOctave):
+                    voices = [False] * 4
+                    voices[a] = True
+                    voices[b] = True
+                    ErrorParams = {
+                        'title': "Parallel Octaves",
+                        'location': chord.location,
+                        'description': f"{voice_names[a]} and {voice_names_lower[b]} form a parallel octave.",
+                        'suggestion': "",
+                        'voices': voices,
+                        'duration': 2.0,
+                    }
+                    errors.append(e.Error(**ErrorParams))
+
 
     return errors
 
