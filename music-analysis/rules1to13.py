@@ -27,6 +27,8 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     errors.extend(rule12(chord)) # parallel fifths
     errors.extend(rule13(chord)) # hidden fifths and octaves
 
+    errors.extend(rule28(chord)) # cadences
+
     return errors
 
 def higherThan(self, note):
@@ -370,7 +372,29 @@ def rule13(chord: mxp.ChordWrapper): # hidden fifths and octaves
 
     return errors
 
+# double check specific rules for these
+def rule28(chord: mxp.ChordWrapper): # hidden fifths and octaves
+    errors = []
 
+    if (chord.next is None):
+        pen_rn = chord.prev.rn.scaleDegree
+        last_rn = chord.rn.scaleDegree
+
+        if (not (pen_rn == 5 and last_rn in (1, 6) # PAC, IAC, Deceptive
+                or (pen_rn == 4 and last_rn == 1) # Plagal
+                or last_rn == 5)): # Half
+            voices = [False] * 4
+            ErrorParams = {
+                'title': "Improper Cadence",
+                'location': chord.location,
+                'description': f"{voice_names[a]} and {voice_names_lower[b]} form a parallel octave or fifth.",
+                'suggestion': "Rewrite last two chords with authentic cadence, plagal cadence, or deceptive cadence.",
+                'voices': voices,
+                'duration': 2.0,
+            }
+            errors.append(e.Error(**ErrorParams))
+
+    return errors
 
 if __name__ == '__main__':
     #fn = "../music-xml-examples/bad-voice-leading-2.musicxml"
