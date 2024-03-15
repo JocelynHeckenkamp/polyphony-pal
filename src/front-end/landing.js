@@ -30,7 +30,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Typography, Button, Grid, Box, Avatar } from '@mui/material';
-import logo from '../logo-white.svg';
+import logo from '../polypalLogo.svg';
 import '../Landing.css';
 
 
