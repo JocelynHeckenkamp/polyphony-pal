@@ -7,11 +7,15 @@
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.15.11",
     "bootstrap": "^5.3.3",
+    "flask": "^0.2.10",
+    "latest": "^0.2.0",
+    "opensheetmusicdisplay": "^1.8.7",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.1",
     "react-dom": "^18.2.0",
+    "react-musicxml": "github:amypellegrini/react-musicxml",
     "react-router-dom": "^6.22.1",
-    "react-scripts": "^3.0.1"
+    "react-scripts": "^5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
