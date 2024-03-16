@@ -30,7 +30,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Typography, Button, Grid, Box, Avatar } from '@mui/material';
-import logo from '../logo.svg';
+import logo from '../polypalLogo.svg';
 import '../Landing.css';
 
 
@@ -41,7 +41,11 @@ function Landing() {
     fetch('/time')
       .then(res => res.json())
       .then(data => {
-        setCurrentTime(data.time);
+        const date = new Date(data.time * 1000);
+
+        const formattedDateTime = date.toLocaleString('en-US', { hour12: true });
+        setCurrentTime(formattedDateTime);
+
       });
   }, []);
 
@@ -54,29 +58,33 @@ function Landing() {
 
   return (
     <Container maxWidth="lg" className="landing-container">
-      <Box className="landing-header">
-      <img src={logo} alt="logo" className="landing-logo" />
-        <Typography variant="h2" gutterBottom component="div" className="landing-title">
-          PolyphonyPal
-        </Typography>
-        <Typography variant="subtitle1" color="textSecondary" className="landing-subtitle">
-          Welcome to PolyphonyPal, your go-to music mistake checker!
-        </Typography>
 
-        <Typography variant="h6" color="textSecondary" className="landing-subtitle">
-          Welcome to PolyphonyPal, your go-to music mistake checker!
-          Perfect your compositions with ease using our intuitive platform
-          based on classical counterpoint rules. Receive real-time feedback,
-          visual error indicators, and customizable settings to accelerate
-          your learning in music theory classes or personal practice sessions.
-          With PolyphonyPal, compose confidently, correct errors swiftly, and
-          elevate your musical creations to new heights of excellence.
-        </Typography>
+      <Grid container spacing={4} alignItems="center" className="intro-box">
 
-        <Button variant="contained" component={Link} to="/get-started" className="landing-button">
-          Get Started
-        </Button>
-      </Box>
+        <Grid item xs={12} md={7}>
+          <Typography variant="h2" component="h1" gutterBottom className="landing-title">
+            PolyphonyPal
+          </Typography>
+          <Typography variant="h6" color="inherit" className="landing-subtitle" sx={{ mb: 2 }}>
+            Welcome to PolyphonyPal, your go-to music mistake checker!
+            Perfect your compositions with ease using our intuitive platform
+            based on classical counterpoint rules. Receive real-time feedback,
+            visual error indicators, and customizable settings to accelerate
+            your learning in music theory classes or personal practice sessions.
+            With PolyphonyPal, compose confidently, correct errors swiftly, and
+            elevate your musical creations to new heights of excellence.
+          </Typography>
+          <Button variant="contained" component={Link} to="/upload" className="get-started-btn" sx={{backgroundColor: "black"}}>
+            Get Started
+          </Button>
+        </Grid>
+
+        {/* Logo */}
+        <Grid item xs={12} md={5} className="logo-container">
+          <img src={logo} alt="PolyphonyPal logo" className="landing-logo" />
+        </Grid>
+      </Grid>
+
 
       <Typography variant="h4" component="div" className="team-heading">
         Meet the Team
