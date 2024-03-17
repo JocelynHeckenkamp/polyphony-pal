@@ -144,14 +144,29 @@ def rule4(chord: mxp.ChordWrapper): # overlapping
     title = "Voice Overlapping"
 
     for a in range(len(chord.notes)-1):
-        if chord.next is not None and chord.notes[a].lessThan(chord.next.notes[a+1]):
+        if (chord.next is not None and chord.notes[a].lessThan(chord.next.notes[a + 1])):
             voices = [False] * 4
             voices[a] = True
             voices[a+1] = True
             ErrorParams = {
-                'title': "Voice Overlapping",
+                'title': title,
                 'location': chord.location,
                 'description': f"{voice_names[a+1]} crosses above the {voice_names_lower[a]} voice.",
+                'suggestion': "",
+                'voices': voices,
+                'duration': 2.0,
+            }
+            errors.append(e.Error(**ErrorParams))
+
+    for b in range(1, len(chord.notes)):
+        if (chord.next is not None and chord.notes[b].higherThan(chord.next.notes[b - 1])):
+            voices = [False] * 4
+            voices[a] = True
+            voices[a+1] = True
+            ErrorParams = {
+                'title': title,
+                'location': chord.location,
+                'description': f"{voice_names[b-1]} crosses below the {voice_names_lower[b]} voice.",
                 'suggestion': "",
                 'voices': voices,
                 'duration': 2.0,
@@ -395,7 +410,7 @@ def rule28(chord: mxp.ChordWrapper): # cadences
 
 if __name__ == '__main__':
     #fn = "../music-xml-examples/voice-leading-1.musicxml"
-    fn = "../music-xml-examples/rule3.musicxml"
+    fn = "../music-xml-examples/rule4.musicxml"
     sw = mxp.getScoreWrapper(fn)
     curr = sw.chord_wrappers[0]
     errors = []
