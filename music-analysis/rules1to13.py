@@ -11,25 +11,25 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     music21.note.Note.higherThan = higherThan
     music21.note.Note.lessThan = lessThan
 
-    errors = []
+    all_errors = []
 
-    errors.extend(rule1(chord)) # range
-    errors.extend(rule2(chord)) # spacing
-    errors.extend(rule3(chord)) # voice crossing
-    errors.extend(rule4(chord)) # voice overlapping
-    errors.extend(rule5(chord)) # large melodic leaps
-    errors.extend(rule6(chord)) # double melodic leaps
-    errors.extend(rule7(chord)) # resolving leaps
-    errors.extend(rule8(chord)) # resolving diminished movement
-    errors.extend(rule9(chord)) # resolving the seventh of a chord
-    errors.extend(rule10(chord)) # non-chords
-    errors.extend(rule11(chord)) # parallel octaves
-    errors.extend(rule12(chord)) # parallel fifths
-    errors.extend(rule13(chord)) # hidden fifths and octaves
+    all_errors.extend(rule1(chord)) # range
+    all_errors.extend(rule2(chord)) # spacing
+    all_errors.extend(rule3(chord)) # voice crossing
+    all_errors.extend(rule4(chord)) # voice overlapping
+    all_errors.extend(rule5(chord)) # large melodic leaps
+    all_errors.extend(rule6(chord)) # double melodic leaps
+    all_errors.extend(rule7(chord)) # resolving leaps
+    all_errors.extend(rule8(chord)) # resolving diminished movement
+    all_errors.extend(rule9(chord)) # resolving the seventh of a chord
+    all_errors.extend(rule10(chord)) # non-chords
+    all_errors.extend(rule11(chord)) # parallel octaves
+    all_errors.extend(rule12(chord)) # parallel fifths
+    all_errors.extend(rule13(chord)) # hidden fifths and octaves
 
-    errors.extend(rule28(chord)) # cadences
+    #all_errors.extend(rule28(chord)) # cadences
 
-    return errors
+    return all_errors
 
 def higherThan(self, note):
     i = music21.interval.Interval(note, self)
@@ -68,18 +68,16 @@ def rule1(chord: mxp.ChordWrapper): # range
         ('C3', 'G4'),  # tenor
         ('E2', 'C4')  # bass
     ]
-    voice_names = ["Soprano", "Alto", "Tenor", "Bass"]
-    for i in range(len(ranges)):
+    for i in range(len(chord.notes)):
         n = chord.notes[i]
         if n.higherThan(music21.note.Note(ranges[i][1])) or n.lessThan(music21.note.Note(ranges[i][0])):
             low, high = ranges[i]
-            voice_name = voice_names[i]
             voices = [False] * 4
             voices[i] = True
             ErrorParams = {
                 'title': "Range Error",
                 'location': chord.location,
-                'description': f"{voice_name} is out of range.",
+                'description': f"{n.pitch} in {voice_names_lower[i]} is out of range.",
                 'suggestion': f"Write voice in range [{low}, {high}].",
                 'voices': voices,
                 'duration': 1.0,
@@ -373,7 +371,7 @@ def rule13(chord: mxp.ChordWrapper): # hidden fifths and octaves
     return errors
 
 # double check specific rules for these
-def rule28(chord: mxp.ChordWrapper): # hidden fifths and octaves
+def rule28(chord: mxp.ChordWrapper): # cadences
     errors = []
 
     if (chord.next is None):
@@ -387,7 +385,7 @@ def rule28(chord: mxp.ChordWrapper): # hidden fifths and octaves
             ErrorParams = {
                 'title': "Improper Cadence",
                 'location': chord.location,
-                'description': f"{voice_names[a]} and {voice_names_lower[b]} form a parallel octave or fifth.",
+                'description': f"No proper cadence.",
                 'suggestion': "Rewrite last two chords with authentic cadence, plagal cadence, or deceptive cadence.",
                 'voices': voices,
                 'duration': 2.0,
@@ -397,14 +395,15 @@ def rule28(chord: mxp.ChordWrapper): # hidden fifths and octaves
     return errors
 
 if __name__ == '__main__':
-    #fn = "../music-xml-examples/bad-voice-leading-2.musicxml"
-    fn = "../music-xml-examples/rule-10-test.musicxml"
+    #fn = "../music-xml-examples/voice-leading-1.musicxml"
+    fn = "../music-xml-examples/rule1.musicxml"
     sw = mxp.getScoreWrapper(fn)
     curr = sw.chord_wrappers[0]
     errors = []
     while (curr is not None):
         #print(curr, curr.inversion)
         errors.extend(check_rules_1_to_13(curr, sw))
-        for error in errors:
-            print(error)
         curr = curr.next
+
+    for error in errors:
+        print(error)
