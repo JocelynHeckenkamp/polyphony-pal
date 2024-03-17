@@ -3,7 +3,7 @@ from collections import defaultdict
 from functools import cmp_to_key
 
 # filename = "AP Music Theory 2022 Q5.mxl"
-fn = "./music-xml-examples/voice-leading-7.musicxml"
+fn = "../music-xml-examples/voice-leading-7.musicxml"
 #filename = "../music-xml-examples/bad-voice-leading.musicxml"
 
 class ChordWrapper:
@@ -45,7 +45,7 @@ class ChordWrapper:
         # harmonic intervals
         for a in range(len(self.notes)-1):
             for b in range(a+1, len(self.notes)):
-                self.harmonic_intervals[(a, b)] = interval.Interval(self.notes[a], self.notes[b])
+                self.harmonic_intervals[(a, b)] = interval.Interval(self.notes[b], self.notes[a])
 
         # melodic intervals
         for a in range(len(self.chord_obj.notes)):

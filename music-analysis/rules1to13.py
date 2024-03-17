@@ -26,8 +26,7 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     all_errors.extend(rule11(chord)) # parallel octaves
     all_errors.extend(rule12(chord)) # parallel fifths
     all_errors.extend(rule13(chord)) # hidden fifths and octaves
-
-    #all_errors.extend(rule28(chord)) # cadences
+    all_errors.extend(rule28(chord)) # cadences
 
     return all_errors
 
@@ -94,22 +93,22 @@ def rule2(chord: mxp.ChordWrapper): # spacing
 
     title = "Spacing Error"
 
-    if s_a.semitones > 12:
+    if abs(s_a.semitones) > 12:
         ErrorParams = {
             'title': title,
             'location': chord.location,
-            'description': "Soprano and alto voices are wider than P8.",
+            'description': f"{chord.notes[0].pitch} and {chord.notes[1].pitch} in soprano and alto voices are wider than P8.",
             'suggestion': "Lower the soprano voice or raise the alto voice.",
             'voices': [True, True, False, False],
             'duration': 1.0,
         }
         errors.append(e.Error(**ErrorParams))
 
-    if a_t.semitones > 12:
+    if abs(a_t.semitones) > 12:
         ErrorParams = {
             'title': title,
             'location': chord.location,
-            'description': "Alto and tenor voices are wider than P8.",
+            'description': f"{chord.notes[1].pitch} and {chord.notes[2].pitch} in alto and tenor voices are wider than P8.",
             'suggestion': "Lower the alto voice or raise the tenor voice.",
             'voices': [False, True, True, False],
             'duration': 1.0,
@@ -396,12 +395,11 @@ def rule28(chord: mxp.ChordWrapper): # cadences
 
 if __name__ == '__main__':
     #fn = "../music-xml-examples/voice-leading-1.musicxml"
-    fn = "../music-xml-examples/rule1.musicxml"
+    fn = "../music-xml-examples/rule2.musicxml"
     sw = mxp.getScoreWrapper(fn)
     curr = sw.chord_wrappers[0]
     errors = []
     while (curr is not None):
-        #print(curr, curr.inversion)
         errors.extend(check_rules_1_to_13(curr, sw))
         curr = curr.next
 
