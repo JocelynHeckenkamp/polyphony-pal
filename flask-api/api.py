@@ -14,5 +14,12 @@ def music_upload():
     print(content)
     return jsonify(200)
 
+@app.route('/results', methods=['GET', 'POST'])
+def music_return():
+    f = open(r'voice-leading-1.mxml', "r")
+    x = f.read()
+    return x
+
+
 if __name__ == '__main__':
     app.run(debug=True)
