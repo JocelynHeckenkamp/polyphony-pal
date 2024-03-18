@@ -20,4 +20,3 @@ run the app api first
 - `python3 app.py`
 run the frontend app
 - `npm start`
-
