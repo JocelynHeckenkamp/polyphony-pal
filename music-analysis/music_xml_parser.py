@@ -90,7 +90,7 @@ class ScoreWrapper:
     def __init__(self, score):
         self.score = score
         self.key = score.analyze("key")
-        self.key_signature = score[2][1].keySignature
+        self.key_signature = score.recurse().stream().keySignature
         self.key_interpretations = score.analyze("key").alternateInterpretations[0:3]
         self.parseScore()
         self.format_chord_wrappers()

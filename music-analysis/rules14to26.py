@@ -6,6 +6,22 @@ WHOLE_CHORD = [True, True, True, True]
 def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     errors = []
     # 14
+    leading_tone_counter = 0
+    vox = [False, False, False, False]
+    for i, note in enumerate(chord.notes):
+        if note.name == score.key_signature.getScale().pitches[6].name:
+            leading_tone_counter += 1
+            vox[i] = True
+    if leading_tone_counter > 1:
+        ErrorParams = {
+                'title': 'Rule 14',
+                'location': chord.location,
+                'description': "Rule 14: Never double the leading tone",
+                'suggestion': f'leading tone: {score.key_signature.getScale().pitches[6].name}',
+                'voices': vox,
+                'duration': 1.0,
+            }
+        errors.append(e.Error(**ErrorParams))
     # Leadingtones counter := 0
     # foreach note in notes:
     #     if note == four of key or note == seven of key:
@@ -80,7 +96,8 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     # 18
     if (chord.inversion == 1 
         and chord.quality != "diminished" 
-        and not chord.isSeventh):
+        and not chord.isSeventh
+        and not str(chord.rn) == "bII"):
 
         bass_note = chord.notes[3].name
         bass_counter = 0
@@ -144,7 +161,7 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 
     # 21 
     if (chord.next is not None 
-        and str(chord.rn) == "IIb" 
+        and str(chord.rn) == "bII" 
         and chord.inversion == 1):
 
         bass_note = chord.notes[3].name
@@ -206,7 +223,7 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 
 
     # 23
-    if chord.incomplete and chord.isSeventh:
+    if chord.chord_obj.fifth is None:
 
         root_counter = 0
         voices = [False, False, False, False]
@@ -247,7 +264,7 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
         for i, note in enumerate(chord.notes):
             if note.name == chord.chord_obj.third.name:
                 voices[i] = True
-                if chord.melodic_intervals[2].direction != "Direction.ASCENDING":
+                if chord.melodic_intervals[i].direction < 1:
                     ErrorParams = {
                         'title': 'Rule 24',
                         'location': chord.location,
@@ -303,9 +320,9 @@ def cadential64(chord: mxp.ChordWrapper):
 def passingInBass(chord: mxp.ChordWrapper):
     return (chord.prev is not None                                                          # ensure previous chord exists 
             and chord.next is not None                                                      # ensure next chord exists
-            and str(chord.prev.melodic_intervals[3].name)[1] == "2"                        # ensure stepwise motion btween prev and curr chords
-            and str(chord.melodic_intervals[3].name)[1] == "2"                             # ensure stepwise motion btween curr and next chords
-            and chord.prev.melodic_intervals[3].direction == chord.harmonic_intervals[3])  # ensure motion is in the same direction
+            and str(chord.prev.harmonic_intervals[3].name)[1] == "2"                        # ensure stepwise motion btween prev and curr chords
+            and str(chord.harmonic_intervals[3].name)[1] == "2"                             # ensure stepwise motion btween curr and next chords
+            and chord.prev.harmonic_intervals[3].direction == chord.harmonic_intervals[3].direction)  # ensure motion is in the same direction
 
 
 def pedalPoint(chord: mxp.ChordWrapper):

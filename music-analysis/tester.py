@@ -4,9 +4,7 @@ import rule27 as r27
 import rules1to13 as r113
 import rules14to26 as r1426
 
-#fn = "../music-xml-examples/voice-leading-1.musicxml"
-# fn = "../music-xml-examples/key-signature-error.musicxml"
-fn = "../music-xml-examples/bad-voice-leading-2.musicxml"
+fn = "../music-xml-examples/voice-leading-1.musicxml"
 
 if __name__ == '__main__':
     sw = mxp.getScoreWrapper(fn)
