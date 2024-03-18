@@ -3,7 +3,7 @@ from collections import defaultdict
 from functools import cmp_to_key
 
 # filename = "AP Music Theory 2022 Q5.mxl"
-fn = "./music-xml-examples/voice-leading-7.musicxml"
+fn = "./music-xml-examples/UnitTest14.musicxml"
 #filename = "../music-xml-examples/bad-voice-leading.musicxml"
 
 class ChordWrapper:
@@ -90,7 +90,7 @@ class ScoreWrapper:
     def __init__(self, score):
         self.score = score
         self.key = score.analyze("key")
-        self.key_signature = score[2][1].keySignature
+        self.key_signature = score.recurse().stream().keySignature
         self.key_interpretations = score.analyze("key").alternateInterpretations[0:3]
         self.parseScore()
         self.format_chord_wrappers()
