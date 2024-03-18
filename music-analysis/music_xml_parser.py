@@ -1,6 +1,7 @@
 from music21 import *
 from collections import defaultdict 
 from functools import cmp_to_key
+
 # filename = "AP Music Theory 2022 Q5.mxl"
 fn = "../music-xml-examples/voice-leading-7.musicxml"
 #filename = "../music-xml-examples/bad-voice-leading.musicxml"
@@ -28,7 +29,7 @@ class ChordWrapper:
 
     def __init__(self, v1, v2, v3, v4):
         self.notes = [v1, v2, v3, v4]   # notes preserve duration; chord does not
-        self.chord_obj = chord.Chord([no.pitch.name for no in self.notes])
+        self.chord_obj = chord.Chord([no for no in self.notes])
         self.melodic_intervals = {}
         self.harmonic_intervals = {}
         self.degrees = {}
@@ -44,7 +45,7 @@ class ChordWrapper:
         # harmonic intervals
         for a in range(len(self.notes)-1):
             for b in range(a+1, len(self.notes)):
-                self.harmonic_intervals[(a, b)] = interval.Interval(self.notes[a], self.notes[b])
+                self.harmonic_intervals[(a, b)] = interval.Interval(self.notes[b], self.notes[a])
 
         # melodic intervals
         for a in range(len(self.chord_obj.notes)):
@@ -69,13 +70,13 @@ class ChordWrapper:
         self.duration = self.notes[0].duration.quarterLength
 
         # roman numerals, chord quality
-        self.rn = roman.romanNumeralFromChord(self.chord_obj, key).romanNumeral
+        self.rn = roman.romanNumeralFromChord(self.chord_obj, key)
 
     def __str__(self):
-        message = f''
+        message = f'\n'
         message += f'{self.chord_obj.root()} {self.quality}'
         message += f' {self.rn}{(7 if self.isSeventh else "")}\n'
-        message += f'{self.chord_obj.fullName}\n'
+        message += f'{self.chord_obj.fullName}'
         return message
 
 class ScoreWrapper:
@@ -89,7 +90,7 @@ class ScoreWrapper:
     def __init__(self, score):
         self.score = score
         self.key = score.analyze("key")
-        self.key_signature = score[2][1].keySignature
+        self.key_signature = score.recurse().stream().keySignature
         self.key_interpretations = score.analyze("key").alternateInterpretations[0:3]
         self.parseScore()
         self.format_chord_wrappers()
@@ -162,7 +163,6 @@ if __name__ == '__main__':
     while(curr is not None):
         print(curr)
         curr = curr.next
-
     # s.show()
 
 
