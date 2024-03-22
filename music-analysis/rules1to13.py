@@ -264,12 +264,22 @@ def rule29(chord: mxp.ChordWrapper): # resolving V7
                 'title': "Unresolved V7",
                 'location': chord.location,
                 'description': f"V7 does not resolve.",
-                'suggestion': "Resolve V7 or change chord.",
+                'suggestion': "Resolve V7 or change it to another chord.",
                 'voices': [True] * 4,
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
-        elif True:
+        elif chord.next.rn.scaleDegree != 1:
+            ErrorParams = {
+                'title': "Unresolved V7",
+                'location': chord.location,
+                'description': f"V7 does not resolve to I or i.",
+                'suggestion': "Resolve to I or i, or the change V7 to another chord.",
+                'voices': [True] * 4,
+                'duration': 2.0,
+            }
+            errors.append(e.Error(**ErrorParams))
+        else:
             hasError = False
 
             suggestion = ""
@@ -287,7 +297,13 @@ def rule29(chord: mxp.ChordWrapper): # resolving V7
                 hasError = True
                 for v in chord.indicesOfDegree(2, sw.key):
                     voices[v] = True
-                    suggestion += f"Resolve {sw.key.pitchFromDegree(2).name} in {voice_names_lower[v]} to {sw.key.pitchFromDegree(1).name} by step."
+                    suggestion += f"Resolve {sw.key.pitchFromDegree(2).name} in {voice_names_lower[v]} to {sw.key.pitchFromDegree(1).name} by step (scale degree 2 to 1).\n"
+
+            if not chord.degreeResolvesTo(4, 3, sw.key):
+                hasError = True
+                for v in chord.indicesOfDegree(4, sw.key):
+                    voices[v] = True
+                    suggestion += f"Resolve {sw.key.pitchFromDegree(4).name} in {voice_names_lower[v]} to {sw.key.pitchFromDegree(3).name} by step (scale degree 4 to 3).\n"
 
             if hasError:
                 ErrorParams = {
@@ -296,7 +312,7 @@ def rule29(chord: mxp.ChordWrapper): # resolving V7
                     'description': f"V7 is resolved improperly.",
                     'suggestion': suggestion,
                     'voices': voices,
-                    'duration': 1.0,
+                    'duration': 2.0,
                 }
                 errors.append(e.Error(**ErrorParams))
 
