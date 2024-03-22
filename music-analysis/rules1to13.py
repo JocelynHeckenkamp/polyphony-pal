@@ -186,7 +186,7 @@ def rule5(chord: mxp.ChordWrapper): # melodic leaps
                 'title': "Large Melodic Leap",
                 'location': chord.location,
                 'description': f"{voice_names[a]} leaps an interval greater than P8.",
-                'suggestion': "",
+                'suggestion': "Change octaves or decrease the leap.",
                 'voices': voices,
                 'duration': 2.0,
             }
@@ -410,7 +410,7 @@ def rule28(chord: mxp.ChordWrapper): # cadences
 
 if __name__ == '__main__':
     #fn = "../music-xml-examples/voice-leading-1.musicxml"
-    fn = "../music-xml-examples/rule1.musicxml"
+    fn = "../music-xml-examples/rule5.musicxml"
     sw = mxp.getScoreWrapper(fn)
     curr = sw.chord_wrappers[0]
     errors = []
