@@ -198,10 +198,12 @@ def rule6(chord: mxp.ChordWrapper): # double leaps
     errors = []
 
     for a in range(len(chord.melodic_intervals)):
-        if (int(chord.melodic_intervals[a].name[1]) > 2 and chord.next is not None and chord.next.next is not None):
-            if (int(chord.next.melodic_intervals[a].name[1]) > 2):
+        if (int(chord.melodic_intervals[a].name[1]) > 2 and chord.next is not None and chord.next.next is not None): # leaps and two more chords
+            next_chord_leaps = (int(chord.next.melodic_intervals[a].name[1]) > 2)
+            same_direction = (chord.melodic_intervals[a].direction == chord.next.melodic_intervals[a].direction)
+            if (next_chord_leaps and same_direction):
                 melodic_chord = music21.chord.Chord([chord.notes[a], chord.next.notes[a], chord.next.next.notes[a]])
-                if (melodic_chord.isTriad and not (melodic_chord.isIncompleteMajorTriad or melodic_chord.isIncompleteMinorTriad)):
+                if (not (melodic_chord.isMajorTriad() or melodic_chord.isMinorTriad())):
                     voices = [False] * 4
                     voices[a] = True
                     ErrorParams = {
@@ -410,7 +412,7 @@ def rule28(chord: mxp.ChordWrapper): # cadences
 
 if __name__ == '__main__':
     #fn = "../music-xml-examples/voice-leading-1.musicxml"
-    fn = "../music-xml-examples/rule5.musicxml"
+    fn = "../music-xml-examples/rule6.musicxml"
     sw = mxp.getScoreWrapper(fn)
     curr = sw.chord_wrappers[0]
     errors = []
