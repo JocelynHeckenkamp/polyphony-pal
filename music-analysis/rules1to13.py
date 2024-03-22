@@ -266,27 +266,19 @@ def rule9(chord: mxp.ChordWrapper): # resolving the 7th
     errors = []
 
     for a in range(len(chord.notes)):
-        if (chord.notes[a].pitch == chord.chord_obj.seventh): # note is seventh
-            if (chord.next is None or
-                (not chord.melodic_intervals[a].isStep
-                or chord.prev is not None and chord.prev.melodic_intervals[a].direction != chord.melodic_intervals[a].direction)):
-
-                # conditions to skip
-                if (a != 0 # seventh is not in soprano
-                    and (chord.rn == 'i' or chord.rn == 1) # cadential 6/4
-                    and chord.inversion == 2
-                    and chord.next is not None
-                    and (chord.next.rn == 'v' or chord.next.rn == 5)
-                    and (chord.next[a].pitch == chord.chord_obj.getChordStep(5))):
-                    continue;
+        if (chord.notes[a].pitch == chord.chord_obj.seventh): # note is seventh of chord
+            if (chord.next is None or # can't end on a 7th chord
+                not (chord.melodic_intervals[a].isStep and chord.melodic_intervals[a].direction.value == -1)):
+                print(chord.melodic_intervals[a].direction)
+                print(chord.melodic_intervals[a].direction.value)
 
                 voices = [False] * 4
                 voices[a] = True
                 ErrorParams = {
-                    'title': "Improperly Resolved Seventh",
+                    'title': "Unresolved Seventh",
                     'location': chord.location,
-                    'description': f"Seventh {voice_names_lower[a]} does not resolve stepwise in opposite direction.",
-                    'suggestion': "Resolve stepwise in the opposite direction.",
+                    'description': f"Seventh of chord in {voice_names_lower[a]} ({chord.notes[a].pitch}) does not resolve stepwise down.",
+                    'suggestion': "Resolve the seventh of a chord stepwise down.",
                     'voices': voices,
                     'duration': 2.0,
                 }
@@ -412,7 +404,7 @@ def rule28(chord: mxp.ChordWrapper): # cadences
 
 if __name__ == '__main__':
     #fn = "../music-xml-examples/voice-leading-1.musicxml"
-    fn = "../music-xml-examples/rule8.musicxml"
+    fn = "../music-xml-examples/rule9.musicxml"
     sw = mxp.getScoreWrapper(fn)
     curr = sw.chord_wrappers[0]
     errors = []
