@@ -25,7 +25,7 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     all_errors.extend(rule10(chord)) # non-chords
     all_errors.extend(rule11(chord)) # parallel octaves
     all_errors.extend(rule12(chord)) # parallel fifths
-    # all_errors.extend(rule13(chord)) # hidden fifths and octaves
+    all_errors.extend(rule13(chord)) # hidden fifths and octaves
     # all_errors.extend(rule28(chord)) # cadences
     # all_errors.extend(rule29(chord))  # resolving V7
 
@@ -389,23 +389,19 @@ def rule13(chord: mxp.ChordWrapper): # hidden fifths and octaves
     errors = []
 
     if (chord.next is not None):
-        for a in range(len(chord.notes) - 1):
-            for b in range(a, len(chord.notes)):
-                vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[a], chord.notes[b], chord.next.notes[a], chord.next.notes[b])
-                if (vlq.hiddenInterval(music21.interval.Interval('P5'))
-                    or vlq.hiddenInterval(music21.interval.Interval('P8'))):
-                    voices = [False] * 4
-                    voices[a] = True
-                    voices[b] = True
-                    ErrorParams = {
-                        'title': "Parallel Octave or Fifth",
-                        'location': chord.location,
-                        'description': f"{voice_names[a]} and {voice_names_lower[b]} form a parallel octave or fifth.",
-                        'suggestion': "",
-                        'voices': voices,
-                        'duration': 2.0,
-                    }
-                    errors.append(e.Error(**ErrorParams))
+        vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[0], chord.next.notes[0], chord.notes[3], chord.next.notes[3])
+        if (vlq.hiddenInterval(music21.interval.Interval('P5'))
+            or vlq.hiddenInterval(music21.interval.Interval('P8'))):
+            voices = [True, False, False, True]
+            ErrorParams = {
+                'title': "Parallel Octave or Fifth",
+                'location': chord.location,
+                'description': f"Soprano and bass form a parallel octave or fifth.",
+                'suggestion': "",
+                'voices': voices,
+                'duration': 2.0,
+            }
+            errors.append(e.Error(**ErrorParams))
 
     return errors
 
@@ -435,7 +431,7 @@ def rule28(chord: mxp.ChordWrapper): # cadences
 
 if __name__ == '__main__':
     #fn = "../music-xml-examples/voice-leading-1.musicxml"
-    fn = "../music-xml-examples/rule12.musicxml"
+    fn = "../music-xml-examples/rule13.musicxml"
     sw = mxp.getScoreWrapper(fn)
     curr = sw.chord_wrappers[0]
     errors = []
