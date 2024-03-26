@@ -24,7 +24,7 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     all_errors.extend(rule9(chord)) # resolving the seventh of a chord
     all_errors.extend(rule10(chord)) # non-chords
     all_errors.extend(rule11(chord)) # parallel octaves
-    # all_errors.extend(rule12(chord)) # parallel fifths
+    all_errors.extend(rule12(chord)) # parallel fifths
     # all_errors.extend(rule13(chord)) # hidden fifths and octaves
     # all_errors.extend(rule28(chord)) # cadences
     # all_errors.extend(rule29(chord))  # resolving V7
@@ -367,10 +367,9 @@ def rule12(chord: mxp.ChordWrapper): # parallel fifths
 
     if (chord.next is not None):
         for a in range(len(chord.notes) - 1):
-            for b in range(a, len(chord.notes)):
-                vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[a], chord.notes[b], chord.next.notes[a], chord.next.notes[b])
-                if (vlq.parallelFifth
-                    and not ((chord.chord_obj.isDiminishedSeventh or chord.chord_obj.isHalfDiminishedSeventh) and vlq.isProperResolution())):
+            for b in range(a+1, len(chord.notes)):
+                vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[a], chord.next.notes[a], chord.notes[b], chord.next.notes[b])
+                if vlq.parallelFifth():
                     voices = [False] * 4
                     voices[a] = True
                     voices[b] = True
@@ -436,7 +435,7 @@ def rule28(chord: mxp.ChordWrapper): # cadences
 
 if __name__ == '__main__':
     #fn = "../music-xml-examples/voice-leading-1.musicxml"
-    fn = "../music-xml-examples/rule11.musicxml"
+    fn = "../music-xml-examples/rule12.musicxml"
     sw = mxp.getScoreWrapper(fn)
     curr = sw.chord_wrappers[0]
     errors = []
