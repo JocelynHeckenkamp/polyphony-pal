@@ -1,12 +1,12 @@
 
 import React, { useState } from 'react';
 import { Typography, Button, Grid, Paper } from '@mui/material';
-import logo from '../polypalLogo.svg';
+import logo from '../../polypalLogo.svg';
 //import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 
-function Upload() {
+function Upload({setVis, setXML} ) {
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
 
@@ -25,13 +25,14 @@ function Upload() {
         method: "PUT",
         body: file,
       })
-      .then(response => {
-        if(response.ok) {
-          navigate('/results');
-        } else {
-          console.error("Upload failed try again...");
-        }
-      })
+      .then(response => response.text())
+      .then(data => {
+        console.log(data);
+        setXML(data);
+        setVis(false);//success stop loading spinner state
+    })
+    
+      
       .catch(error => console.error("Error during the upload process:", error));
   }
 

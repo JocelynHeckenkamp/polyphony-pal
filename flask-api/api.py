@@ -11,14 +11,15 @@ def get_current_time():
 @app.route('/upload', methods=['PUT'])
 def music_upload():
     content = request.get_data(False, True, False)
-    print(content)
-    return jsonify(200)
+    #run script then return
+    
+    return content
 
-@app.route('/results', methods=['GET', 'POST'])
-def music_return():
-    f = open(r'voice-leading-1.mxml', "r")
-    x = f.read()
-    return x
+# @app.route('/results', methods=['GET', 'POST'])
+# def music_return():
+#     f = open(r'voice-leading-1.mxml', "r")
+#     x = f.read()
+#     return x
 
 
 if __name__ == '__main__':
