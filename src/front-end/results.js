@@ -21,6 +21,7 @@ function Results() {
     const [isLoading, setIsLoading] = useState(true); //loading spinner state
     const [error, setError] = useState(null); //error message state
     const [uploadVis, setUploadVis] = useState(true);
+    const [musicErrors, setMusicErrors] = useState([]);//contains array of music errors
     //fetch MusicXML data - if an error occurs check to make sure this fetches on mount
     //change fetch to delayedfetch to test loading bars
     // useEffect(() => {
@@ -45,7 +46,7 @@ function Results() {
 
     const renderContent = () => {
         if(uploadVis){
-            return <Upload setVis={setUploadVis} setXML={setMusicXml} setLoading={setIsLoading} />;
+            return <Upload setVis={setUploadVis} setXML={setMusicXml} setLoading={setIsLoading} setMusicErrors={setMusicErrors} />;
         }
         else{    
             if (error) {
@@ -68,29 +69,15 @@ function Results() {
 
                     <Grid container item xs={2} sm={2} md={2} lg={2} xl={2} direction="column"  wrap='nowrap' >
                         
+                        {musicErrors.map((error) => ( 
                         <Grid item pt={6} >
                         <Paper sx={{ padding: 3, pt:2, backgroundColor: "#e0e0e0" }} elevation={2}>
-                            TEST CONTENT
+                           {error}
                         </Paper>
                         </Grid>
 
-                        <Grid item pt={6} >
-                        <Paper sx={{ padding: 3, pt:2, backgroundColor: "#e0e0e0" }} elevation={2}>
-                        TEST CONTENT
-                        </Paper>
-                        </Grid>
-
-                        <Grid item pt={6} >
-                        <Paper sx={{ padding: 3, pt:2, backgroundColor: "#e0e0e0" }} elevation={2}>
-                        TEST CONTENT
-                        </Paper>
-                        </Grid>
-
-                        <Grid item pt={6} >
-                        <Paper sx={{ padding: 3, pt:2, backgroundColor: "#e0e0e0" }} elevation={2}>
-                        TEST CONTENT
-                        </Paper>
-                        </Grid>
+                        ))}
+                   
 
 
                     </Grid>

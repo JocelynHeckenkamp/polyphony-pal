@@ -4,7 +4,7 @@ import { Typography, Button, Grid, Paper } from '@mui/material';
 
 
 
-function Upload({setVis, setXML, setLoading} ) {
+function Upload({setVis, setXML, setLoading, setMusicErrors} ) {
   
   const [file, setFile] = useState(null);
 
@@ -25,7 +25,9 @@ function Upload({setVis, setXML, setLoading} ) {
       .then(response => response.text())
       .then(data => {
         //hide upload component, then set data
-        console.log(data.split(",")[0]);
+        //ndata[0] holds the musicXML, the rest of the array holds the errors
+        var ndata = data.split(",");
+        setMusicErrors(ndata.slice(1));
         setVis(false);
         setXML(data);
         
