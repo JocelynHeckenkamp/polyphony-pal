@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import SheetMusicComponent from './SheetMusicComponent';
-import CircularProgress from '@mui/material/CircularProgress';
+import { Paper, CircularProgress, Grid } from '@mui/material';
+import Upload from "./components/upload";
+import Header from './components/polypalHeader';
 
 //DONT DELETE
 //delay fetch to test loading bars
@@ -18,46 +20,97 @@ function Results() {
     const [musicXml, setMusicXml] = useState('');
     const [isLoading, setIsLoading] = useState(true); //loading spinner state
     const [error, setError] = useState(null); //error message state
+    const [uploadVis, setUploadVis] = useState(true);
     //fetch MusicXML data - if an error occurs check to make sure this fetches on mount
     //change fetch to delayedfetch to test loading bars
-    useEffect(() => {
-        setIsLoading(true);//start loading spinner
-        fetch("/results")
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error('Network response: (HTTP response had an error)');
-                }
-                return res.text()
-            })
-            .then(data => {
-                setMusicXml(data)
-                setIsLoading(false);//success stop loading spinner state
-            })
-            .catch(error => {
-                console.error("Error fetching MusicXML:", error);
-                setError('Failed to load sheet music. Please try again.');//set error message
-                setIsLoading(false);//error stop loading spinner state
-            });
-    }, []);
+    // useEffect(() => {
+    //     setIsLoading(true);//start loading spinner
+    //     fetch("/results")
+    //         .then(res => {
+    //             if (!res.ok) {
+    //                 throw new Error('Network response: (HTTP response had an error)');
+    //             }
+    //             return res.text()
+    //         })
+    //         .then(data => {
+    //             setMusicXml(data)
+    //             setIsLoading(false);//success stop loading spinner state
+    //         })
+    //         .catch(error => {
+    //             console.error("Error fetching MusicXML:", error);
+    //             setError('Failed to load sheet music. Please try again.');//set error message
+    //             setIsLoading(false);//error stop loading spinner state
+    //         });
+    // }, []);
 
     const renderContent = () => {
-        if (error) {
-            return <p>Error: {error}</p>;
-        } else if (isLoading) {
-            return <CircularProgress />;
-        } else if (musicXml) { //musicXML done loading
-            return <SheetMusicComponent musicXml={musicXml} />;
-        } else {
-            /// TODO: case of no loading but also no error and no musicXML
-            return <p>No sheet music data available.</p>;
+        if(uploadVis){
+            return <Upload setVis={setUploadVis} setXML={setMusicXml} setLoading={setIsLoading} />;
         }
+        else{    
+            if (error) {
+                return <p>Error: {error}</p>;
+            } else if (isLoading) {
+                return(<CircularProgress />);
+            } else if (musicXml) { //musicXML done loading
+                return(
+                <div> 
+                <Grid container spacing={2}>  
+                    <Grid container item xs={7} sm={7} md={7} lg={7} xl={7} direction="column"  >
+                        <Grid item  pt={6}>
+                            <Paper sx={{ padding: 3, pt:5, backgroundColor: "#e0e0e0", px: 10 }} elevation={2}>
+                            <SheetMusicComponent musicXml={musicXml} />
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={1} sm={1} md={1} lg={1} xl={1}></Grid>
+
+                    <Grid container item xs={2} sm={2} md={2} lg={2} xl={2} direction="column"  wrap='nowrap' >
+                        
+                        <Grid item pt={6} >
+                        <Paper sx={{ padding: 3, pt:2, backgroundColor: "#e0e0e0" }} elevation={2}>
+                            TEST CONTENT
+                        </Paper>
+                        </Grid>
+
+                        <Grid item pt={6} >
+                        <Paper sx={{ padding: 3, pt:2, backgroundColor: "#e0e0e0" }} elevation={2}>
+                        TEST CONTENT
+                        </Paper>
+                        </Grid>
+
+                        <Grid item pt={6} >
+                        <Paper sx={{ padding: 3, pt:2, backgroundColor: "#e0e0e0" }} elevation={2}>
+                        TEST CONTENT
+                        </Paper>
+                        </Grid>
+
+                        <Grid item pt={6} >
+                        <Paper sx={{ padding: 3, pt:2, backgroundColor: "#e0e0e0" }} elevation={2}>
+                        TEST CONTENT
+                        </Paper>
+                        </Grid>
+
+
+                    </Grid>
+                </Grid>  
+                </div>  
+                );
+            } else {
+                /// TODO: case of no loading but also no error and no musicXML
+                return <p>No sheet music data available.</p>;
+            }
+        }    
+        
     };
 
 
     return (
-        <div>
+         <div>
+            <Header />
+            
             {renderContent()}
-        </div>
+        </div> 
     );
 }
 export default Results;

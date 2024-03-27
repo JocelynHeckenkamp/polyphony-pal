@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
 import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Upload from "./front-end/upload";
+// import Upload from "./front-end/upload";
 import Landing from "./front-end/landing";
 import Results from "./front-end/results";
 
@@ -13,7 +13,7 @@ export default function Index() {
       <Routes>
 
 
-          <Route path="upload" element={<Upload />} />
+          {/* <Route path="upload" element={<Upload />} /> */}
           <Route path="results" element={<Results />} />
 
           <Route path="/" element={<Landing/>} />

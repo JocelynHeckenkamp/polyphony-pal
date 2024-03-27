@@ -1,13 +1,11 @@
 
 import React, { useState } from 'react';
 import { Typography, Button, Grid, Paper } from '@mui/material';
-import logo from '../polypalLogo.svg';
-//import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 
 
-function Upload() {
-  const navigate = useNavigate();
+
+function Upload({setVis, setXML, setLoading} ) {
+  
   const [file, setFile] = useState(null);
 
   function handleUpload() {
@@ -15,23 +13,24 @@ function Upload() {
       console.log("No file selected");
       return;
     }
-    //const fd = new FormData();
-    //fd.append('file',file);
+   
 
     //upload file to backend
-    //change fd to file if theres an error
+    //update visible components as well
     fetch("/upload",
       {
         method: "PUT",
         body: file,
       })
-      .then(response => {
-        if(response.ok) {
-          navigate('/results');
-        } else {
-          console.error("Upload failed try again...");
-        }
+      .then(response => response.text())
+      .then(data => {
+        //hide upload component, then set data
+        setVis(false);
+        setXML(data);
+        
+        //set loading bar false AFTER data has been set
       })
+      .then(setLoading(false))
       .catch(error => console.error("Error during the upload process:", error));
   }
 
@@ -40,20 +39,7 @@ function Upload() {
 
 
     <div className="upload-container" align="left">
-      <Grid container direction="row" className="top-bar">
-        <Grid item container xs={9} md={9} lg={9} direction="row" >
-
-          <img src={logo} alt="polypal logo" />
-        </Grid>
-
-
-        <Grid item xs={3} md={3} lg={3} pt={4} className="navigation-buttons" >
-          <Button size="large" sx={{ color: "black" }}>About</Button>
-          <Button size="large" sx={{ color: "black" }}>Features</Button>
-          <Button size="large" sx={{ color: "black" }}>Account</Button>
-          <Button size="large" sx={{ color: "black" }}>Upload</Button>
-        </Grid>
-      </Grid>
+      
 
       <Grid container mt={30} justifyContent="center" className="upload-Card" >
         <Grid item align="center" >
@@ -76,16 +62,6 @@ function Upload() {
       </Grid>
 
 
-
-
-
-
-
-
-
-
-
-
     </div>
 
   );
@@ -94,11 +70,3 @@ function Upload() {
 }
 
 export default Upload;
-
-/* <div className="Upload">
-        <h1>Upload Test</h1>
-
-        <input onChange={ (e) => {setFile(e.target.files[0])}} type='file' accept='.musicxml,.mxml, .mxl' ></input>
-        <Button variant="contained" onClick={handleUpload}>Upload</Button>
-
-    </div> */
