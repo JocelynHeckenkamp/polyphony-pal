@@ -28,6 +28,7 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     all_errors.extend(rule13(chord)) # hidden fifths and octaves
 
     # To be moved
+    # Test comment 2
     # all_errors.extend(rule28(chord)) # cadences
     # all_errors.extend(rule29(chord))  # resolving V7
 
