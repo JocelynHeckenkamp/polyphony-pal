@@ -22,12 +22,6 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'duration': 1.0,
             }
         errors.append(e.Error(**ErrorParams))
-    # Leadingtones counter := 0
-    # foreach note in notes:
-    #     if note == four of key or note == seven of key:
-    #         Leadingtones counter += 1
-    # if Leadingtones counter > 2
-    #     Mark "Never double the leading tone" error (voice # & #)
 
 
     # 15
@@ -72,8 +66,8 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 
     # 17
     if (chord.next is not None 
-        and str(chord.rn) == "V" 
-        and str(chord.next.rn) == "VI" 
+        and str(chord.rn.romanNumeral) == "V" 
+        and str(chord.next.rn.romanNumeral) == "VI" 
         and not chord.next.isSeventh 
         and str(score.key)[-5:] == "minor"):
 
@@ -97,7 +91,7 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     if (chord.inversion == 1 
         and chord.quality != "diminished" 
         and not chord.isSeventh
-        and not str(chord.rn) == "bII"):
+        and not str(chord.rn.romanNumeral) == "bII"):
 
         bass_note = chord.notes[3].name
         bass_counter = 0
@@ -161,7 +155,7 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 
     # 21 
     if (chord.next is not None 
-        and str(chord.rn) == "bII" 
+        and str(chord.rn.romanNumeral) == "bII" 
         and chord.inversion == 1):
 
         bass_note = chord.notes[3].name
@@ -223,24 +217,25 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 
 
     # 23
-    if chord.chord_obj.fifth is None:
+    if (chord.chord_obj.seventh is not None 
+        and (chord.chord_obj.third is None or chord.chord_obj.fifth is None)):
 
         root_counter = 0
         voices = [False, False, False, False]
+        if chord.chord_obj.fifth is not None:
+            voices[i] = True
+            ErrorParams = {
+                'title': 'Rule 23',
+                'location': chord.location,
+                'description': "Rule 23: In incomplete 7th chords, omit the 5th",
+                'suggestion': f'Omit the 5th: {chord.chord_obj.fifth}',
+                'voices': voices,
+                'duration': 1.0,
+            }
+            errors.append(e.Error(**ErrorParams))
         for i, note in enumerate(chord.notes):
             if chord.chord_obj.root().name == note.name:
                 root_counter += 1
-            if chord.chord_obj.fifth is not None:
-                voices[i] = True
-                ErrorParams = {
-                    'title': 'Rule 23',
-                    'location': chord.location,
-                    'description': "Rule 23: In incomplete 7th chords, omit the 5th",
-                    'suggestion': f'Omit the 5th: {note.name}',
-                    'voices': voices,
-                    'duration': 1.0,
-                }
-                errors.append(e.Error(**ErrorParams))
         if root_counter < 2:
             ErrorParams = {
                 'title': 'Rule 23',
@@ -255,8 +250,8 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 
     # 24
     if (chord.next is not None 
-        and str(chord.rn) == "V" 
-        and str(chord.next.rn) == "VI" 
+        and str(chord.rn.romanNumeral) == "V" 
+        and str(chord.next.rn.romanNumeral) == "VI" 
         and not chord.next.isSeventh 
         and str(score.key)[-5:] == "minor"):
 
@@ -277,6 +272,39 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                     
 
     # 25
+    # if (chord.quality == "augmented" and str(chord.rn.romanNumeral) == "VI"):
+    #     voices = [False, False, False, False]
+    #     sharp_four = score.key_signature.pitchFromDegree(4).transpose("A1").name
+    #     target_index = -1
+    #     for i, note in enumerate(chord.notes):
+    #         if note.name == sharp_four:
+    #             target_index = i
+    #             voices[i] = True
+    #             break
+    #     if target_index == -1:
+    #         print("FATAL ERROR augmented VI chord chould not find sharp four")
+    #         return
+    #     if chord.next.rn.romanNumeral == "V7" and chord.next.notes[target_index] != score.key_signature.pitchFromDegree(4):
+    #         ErrorParams = {
+    #             'title': 'Rule 25',
+    #             'location': chord.location,
+    #             'description': "Rule 25: The #4^ of an augmented 6th chord that resolves to V7 must resolve down to natural 4^",
+    #             'suggestion': f'The #4^ must resolve down to natural 4: {score.key_signature.pitchFromDegree(4)}',
+    #             'voices': voices,
+    #             'duration': 2.0,
+    #         }
+    #         errors.append(e.Error(**ErrorParams))    
+    #     elif chord.next.notes[target_index] != score.key_signature.pitchFromDegree(5):
+    #         ErrorParams = {
+    #             'title': 'Rule 25',
+    #             'location': chord.location,
+    #             'description': "Rule 25: The #4^ of an augmented 6th chord must resolve to 5^ unless the chord resolves to V7",
+    #             'suggestion': f'The #4^ must resolve to 5^: {score.key_signature.pitchFromDegree(5)}',
+    #             'voices': voices,
+    #             'duration': 2.0,
+    #         }
+    #         errors.append(e.Error(**ErrorParams))  
+        
     # ***pass in two chords next and curr into this function***
     # if curr.quality == augmented and curr.numeral == VI:
     #     sharp_four := sharp four from key
@@ -313,21 +341,23 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 def cadential64(chord: mxp.ChordWrapper):
     return (chord.next is not None 
             and chord.next.next is not None 
-            and (str(chord.next.rn) == "V") # can be normal or seventh chord 
-            and str(chord.next.next.rn) == "I")
+            and (str(chord.next.rn.romanNumeral) == "V") # can be normal or seventh chord 
+            and str(chord.next.next.rn.romanNumeral) == "I")
 
-
+# TODO: FIX ME
 def passingInBass(chord: mxp.ChordWrapper):
     return (chord.prev is not None                                                          # ensure previous chord exists 
             and chord.next is not None                                                      # ensure next chord exists
-            and str(chord.prev.harmonic_intervals[3].name)[1] == "2"                        # ensure stepwise motion btween prev and curr chords
-            and str(chord.harmonic_intervals[3].name)[1] == "2"                             # ensure stepwise motion btween curr and next chords
-            and chord.prev.harmonic_intervals[3].direction == chord.harmonic_intervals[3].direction)  # ensure motion is in the same direction
+            and str(chord.prev.melodic_intervals[3].name)[1] == "2"                        # ensure stepwise motion btween prev and curr chords
+            and str(chord.melodic_intervals[3].name)[1] == "2"                             # ensure stepwise motion btween curr and next chords
+            and chord.prev.melodic_intervals[3].direction == chord.melodic_intervals[3].direction)  # ensure motion is in the same direction
 
 
 def pedalPoint(chord: mxp.ChordWrapper):
     return (chord.prev is not None                                                          # ensure previous chord exists
             and chord.next is not None                                                      # ensure next chord exists
-            and chord.prev.notes[3] is chord.notes[3]                                       # ensure previous bass is the same as current bass
-            and chord.notes[3] is chord.next.notes[3])                                      # ensure current bass is the same as next bass
+            and chord.prev.notes[3].name == chord.notes[3].name                                       # ensure previous bass is the same as current bass
+            and chord.notes[3].name == chord.next.notes[3].name)                                      # ensure current bass is the same as next bass
+
+
     
