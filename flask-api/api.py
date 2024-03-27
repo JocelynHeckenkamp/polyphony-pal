@@ -12,7 +12,6 @@ def get_current_time():
 def music_upload():
     content = request.get_data(False, True, False)
     #run script then return
-    
     return content
 
 # @app.route('/results', methods=['GET', 'POST'])

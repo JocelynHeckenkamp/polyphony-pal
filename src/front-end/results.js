@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SheetMusicComponent from './SheetMusicComponent';
-import CircularProgress from '@mui/material/CircularProgress';
+import { Paper, CircularProgress, Grid } from '@mui/material';
 import Upload from "./components/upload";
 import Header from './components/polypalHeader';
 
@@ -53,7 +53,49 @@ function Results() {
             } else if (isLoading) {
                 return(<CircularProgress />);
             } else if (musicXml) { //musicXML done loading
-                return <SheetMusicComponent musicXml={musicXml} />;
+                return(
+                <div> 
+                <Grid container spacing={2}>  
+                    <Grid container item xs={7} sm={7} md={7} lg={7} xl={7} direction="column"  >
+                        <Grid item  pt={6}>
+                            <Paper sx={{ padding: 3, pt:5, backgroundColor: "#e0e0e0", px: 10 }} elevation={2}>
+                            <SheetMusicComponent musicXml={musicXml} />
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={1} sm={1} md={1} lg={1} xl={1}></Grid>
+
+                    <Grid container item xs={2} sm={2} md={2} lg={2} xl={2} direction="column"  wrap='nowrap' >
+                        
+                        <Grid item pt={6} >
+                        <Paper sx={{ padding: 3, pt:2, backgroundColor: "#e0e0e0" }} elevation={2}>
+                            TEST CONTENT
+                        </Paper>
+                        </Grid>
+
+                        <Grid item pt={6} >
+                        <Paper sx={{ padding: 3, pt:2, backgroundColor: "#e0e0e0" }} elevation={2}>
+                        TEST CONTENT
+                        </Paper>
+                        </Grid>
+
+                        <Grid item pt={6} >
+                        <Paper sx={{ padding: 3, pt:2, backgroundColor: "#e0e0e0" }} elevation={2}>
+                        TEST CONTENT
+                        </Paper>
+                        </Grid>
+
+                        <Grid item pt={6} >
+                        <Paper sx={{ padding: 3, pt:2, backgroundColor: "#e0e0e0" }} elevation={2}>
+                        TEST CONTENT
+                        </Paper>
+                        </Grid>
+
+
+                    </Grid>
+                </Grid>  
+                </div>  
+                );
             } else {
                 /// TODO: case of no loading but also no error and no musicXML
                 return <p>No sheet music data available.</p>;
@@ -66,6 +108,7 @@ function Results() {
     return (
          <div>
             <Header />
+            
             {renderContent()}
         </div> 
     );
