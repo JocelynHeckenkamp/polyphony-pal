@@ -25,6 +25,7 @@ function Upload({setVis, setXML, setLoading} ) {
       .then(response => response.text())
       .then(data => {
         //hide upload component, then set data
+        console.log(data.split(",")[0]);
         setVis(false);
         setXML(data);
         

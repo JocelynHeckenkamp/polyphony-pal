@@ -1,5 +1,5 @@
 import time
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import sys
 sys.path.insert(0, '../music-analysis/')
 import rules1to13 as r113
@@ -16,9 +16,9 @@ def get_current_time():
 #Currently Prints the File sent to this route
 @app.route('/upload', methods=['PUT'])
 def music_upload():
-    content = request.get_data(False, True, False)
+    musicXML = request.get_data(False, True, False)
     #run script then return
-    errors(content)
+    content = "{} {}".format(musicXML, errors(musicXML))
     return content
 
 # @app.route('/results', methods=['GET', 'POST'])
