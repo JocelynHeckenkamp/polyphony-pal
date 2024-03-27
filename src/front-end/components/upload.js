@@ -6,7 +6,7 @@ import logo from '../../polypalLogo.svg';
 import { useNavigate } from 'react-router-dom';
 
 
-function Upload({setVis, setXML} ) {
+function Upload({setVis, setXML, setLoading} ) {
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
 
@@ -15,11 +15,10 @@ function Upload({setVis, setXML} ) {
       console.log("No file selected");
       return;
     }
-    //const fd = new FormData();
-    //fd.append('file',file);
+   
 
     //upload file to backend
-    //change fd to file if theres an error
+    //update visible components as well
     fetch("/upload",
       {
         method: "PUT",
@@ -27,12 +26,13 @@ function Upload({setVis, setXML} ) {
       })
       .then(response => response.text())
       .then(data => {
-        console.log(data);
+        //hide upload component, then set data
+        setVis(false);
         setXML(data);
-        setVis(false);//success stop loading spinner state
-    })
-    
-      
+        
+        //set loading bar false AFTER data has been set
+      })
+      .then(setLoading(false))
       .catch(error => console.error("Error during the upload process:", error));
   }
 

@@ -17,7 +17,7 @@ import Upload from "./components/upload";
 //fetch musicXML data to give to SheetMusicComponent
 function Results() {
     const [musicXml, setMusicXml] = useState('');
-    const [isLoading, setIsLoading] = useState(false); //loading spinner state
+    const [isLoading, setIsLoading] = useState(true); //loading spinner state
     const [error, setError] = useState(null); //error message state
     const [uploadVis, setUploadVis] = useState(true);
     //fetch MusicXML data - if an error occurs check to make sure this fetches on mount
@@ -44,7 +44,7 @@ function Results() {
 
     const renderContent = () => {
         if(uploadVis){
-            return <Upload setVis={setUploadVis} setXML={setMusicXml} />;
+            return <Upload setVis={setUploadVis} setXML={setMusicXml} setLoading={setIsLoading} />;
         }
         else{    
             if (error) {
