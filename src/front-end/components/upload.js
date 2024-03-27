@@ -30,7 +30,8 @@ function Upload({setVis, setXML, setLoading, setMusicErrors} ) {
         setMusicErrors(ndata.slice(1));
         setVis(false);
         setXML(data);
-        
+
+        console.log(ndata.slice(1))
         //set loading bar false AFTER data has been set
       })
       .then(setLoading(false))

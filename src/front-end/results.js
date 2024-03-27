@@ -67,11 +67,11 @@ function Results() {
                     
                     <Grid item xs={1} sm={1} md={1} lg={1} xl={1}></Grid>
 
-                    <Grid container item xs={2} sm={2} md={2} lg={2} xl={2} direction="column"  wrap='nowrap' >
+                    <Grid container item mt={6} xs={2} sm={2} md={2} lg={2} xl={2}   wordWrap="break-word" sx={{ overflowY: "scroll", maxHeight: "500px" }}  >
                         
                         {musicErrors.map((error) => ( 
-                        <Grid item pt={6} >
-                        <Paper sx={{ padding: 3, pt:2, backgroundColor: "#e0e0e0" }} elevation={2}>
+                        <Grid item pb={2} >
+                        <Paper sx={{ padding: 3,  backgroundColor: "#e0e0e0" }} elevation={2} >
                            {error}
                         </Paper>
                         </Grid>
