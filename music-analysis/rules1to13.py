@@ -1,7 +1,6 @@
 import error as e
 import music21
 import music_xml_parser as mxp
-import music21_method_extensions
 WHOLE_CHORD = [True, True, True, True]
 voice_names = ["Soprano", "Alto", "Tenor", "Bass"]
 voice_names_lower = ["soprano", "alto", "tenor", "bass"]
@@ -9,7 +8,8 @@ voice_names_lower = ["soprano", "alto", "tenor", "bass"]
 
 # Parse chorddatas and check rules
 def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
-    music21_method_extensions.extend()
+    music21.note.Note.higherThan = higherThan
+    music21.note.Note.lessThan = lessThan
 
     all_errors = []
 
@@ -26,10 +26,38 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     all_errors.extend(rule11(chord)) # parallel octaves
     all_errors.extend(rule12(chord)) # parallel fifths
     all_errors.extend(rule13(chord)) # hidden fifths and octaves
-    # all_errors.extend(rule28(chord)) # cadences
-    # all_errors.extend(rule29(chord))  # resolving V7
+    all_errors.extend(rule28(chord)) # cadences
 
     return all_errors
+
+def higherThan(self, note):
+    i = music21.interval.Interval(note, self)
+    return i.semitones > 0
+
+def lessThan(self, note):
+    i = music21.interval.Interval(note, self)
+    return i.semitones < 0
+
+def cadential64(chord: mxp.ChordWrapper):
+    return (chord.next is not None
+            and chord.next.next is not None
+            and (str(chord.next.rn) == "V") # can be normal or seventh chord
+            and str(chord.next.next.rn) == "I")
+
+
+def passingInBass(chord: mxp.ChordWrapper):
+    return (chord.prev is not None                                                          # ensure previous chord exists
+            and chord.next is not None                                                      # ensure next chord exists
+            and str(chord.prev.harmonic_intervals[3].name)[1] == "2"                        # ensure stepwise motion btween prev and curr chords
+            and str(chord.harmonic_intervals[3].name)[1] == "2"                             # ensure stepwise motion btween curr and next chords
+            and chord.prev.harmonic_intervals[3].direction == chord.harmonic_intervals[3])  # ensure motion is in the same direction
+
+
+def pedalPoint(chord: mxp.ChordWrapper):
+    return (chord.prev is not None                                                          # ensure previous chord exists
+            and chord.next is not None                                                      # ensure next chord exists
+            and chord.prev.notes[3] is chord.notes[3]                                       # ensure previous bass is the same as current bass
+            and chord.notes[3] is chord.next.notes[3])
 
 def rule1(chord: mxp.ChordWrapper): # range
     errors = []
@@ -158,7 +186,7 @@ def rule5(chord: mxp.ChordWrapper): # melodic leaps
                 'title': "Large Melodic Leap",
                 'location': chord.location,
                 'description': f"{voice_names[a]} leaps an interval greater than P8.",
-                'suggestion': "Change octaves or decrease the leap.",
+                'suggestion': "",
                 'voices': voices,
                 'duration': 2.0,
             }
@@ -170,12 +198,10 @@ def rule6(chord: mxp.ChordWrapper): # double leaps
     errors = []
 
     for a in range(len(chord.melodic_intervals)):
-        if (int(chord.melodic_intervals[a].name[1]) > 2 and chord.next is not None and chord.next.next is not None): # leaps and two more chords
-            next_chord_leaps = (int(chord.next.melodic_intervals[a].name[1]) > 2)
-            same_direction = (chord.melodic_intervals[a].direction == chord.next.melodic_intervals[a].direction)
-            if (next_chord_leaps and same_direction):
+        if (int(chord.melodic_intervals[a].name[1]) > 2 and chord.next is not None and chord.next.next is not None):
+            if (int(chord.next.melodic_intervals[a].name[1]) > 2):
                 melodic_chord = music21.chord.Chord([chord.notes[a], chord.next.notes[a], chord.next.next.notes[a]])
-                if (not (melodic_chord.isMajorTriad() or melodic_chord.isMinorTriad())):
+                if (melodic_chord.isTriad and not (melodic_chord.isIncompleteMajorTriad or melodic_chord.isIncompleteMinorTriad)):
                     voices = [False] * 4
                     voices[a] = True
                     ErrorParams = {
@@ -238,79 +264,27 @@ def rule9(chord: mxp.ChordWrapper): # resolving the 7th
     errors = []
 
     for a in range(len(chord.notes)):
-        if (chord.notes[a].pitch == chord.chord_obj.seventh): # note is seventh of chord
-            if (chord.next is None or # can't end on a 7th chord
-                not (chord.melodic_intervals[a].isStep and chord.melodic_intervals[a].direction.value == -1)):
+        if (chord.notes[a].pitch == chord.chord_obj.seventh): # note is seventh
+            if (chord.next is None or
+                (not chord.melodic_intervals[a].isStep
+                or chord.prev is not None and chord.prev.melodic_intervals[a].direction != chord.melodic_intervals[a].direction)):
+
+                # conditions to skip
+                if (a != 0 # seventh is not in soprano
+                    and (chord.rn == 'i' or chord.rn == 1) # cadential 6/4
+                    and chord.inversion == 2
+                    and chord.next is not None
+                    and (chord.next.rn == 'v' or chord.next.rn == 5)
+                    and (chord.next[a].pitch == chord.chord_obj.getChordStep(5))):
+                    continue;
+
                 voices = [False] * 4
                 voices[a] = True
                 ErrorParams = {
-                    'title': "Unresolved Seventh",
+                    'title': "Improperly Resolved Seventh",
                     'location': chord.location,
-                    'description': f"Seventh of chord in {voice_names_lower[a]} ({chord.notes[a].pitch}) does not resolve stepwise down.",
-                    'suggestion': "Resolve the seventh of a chord stepwise down.",
-                    'voices': voices,
-                    'duration': 2.0,
-                }
-                errors.append(e.Error(**ErrorParams))
-
-    return errors
-
-def rule29(chord: mxp.ChordWrapper): # resolving V7
-    errors = []
-
-    if (chord.rn.romanNumeralAlone == "V" and chord.chord_obj.isDominantSeventh): #V7
-        if chord.next is None: # ending on V7
-            ErrorParams = {
-                'title': "Unresolved V7",
-                'location': chord.location,
-                'description': f"V7 does not resolve.",
-                'suggestion': "Resolve V7 or change it to another chord.",
-                'voices': [True] * 4,
-                'duration': 1.0,
-            }
-            errors.append(e.Error(**ErrorParams))
-        elif chord.next.rn.scaleDegree != 1:
-            ErrorParams = {
-                'title': "Unresolved V7",
-                'location': chord.location,
-                'description': f"V7 does not resolve to I or i.",
-                'suggestion': "Resolve to I or i, or the change V7 to another chord.",
-                'voices': [True] * 4,
-                'duration': 2.0,
-            }
-            errors.append(e.Error(**ErrorParams))
-        else:
-            hasError = False
-
-            suggestion = ""
-            voices = [False] * 4
-
-            lt1 = chord.degreeResolvesToByStep(7, 1, sw.key)
-            lt5xs = chord.degreeResolvesTo(7, 5, sw.key) and chord.indicesOfDegree(7, sw.key)[0] != 0
-            if not (lt1 or lt5xs):
-                hasError = True
-                for v in chord.indicesOfDegree(7, sw.key):
-                    voices[v] = True
-                suggestion += f"Resolve {sw.key.pitchFromDegree(7).name} to {sw.key.pitchFromDegree(1).name} by step (leading tone to tonic), or to {sw.key.pitchFromDegree(5).name} if it's not in the soprano voice.\n"
-
-            if not chord.degreeResolvesTo(2, 1, sw.key):
-                hasError = True
-                for v in chord.indicesOfDegree(2, sw.key):
-                    voices[v] = True
-                    suggestion += f"Resolve {sw.key.pitchFromDegree(2).name} in {voice_names_lower[v]} to {sw.key.pitchFromDegree(1).name} by step (scale degree 2 to 1).\n"
-
-            if not chord.degreeResolvesTo(4, 3, sw.key):
-                hasError = True
-                for v in chord.indicesOfDegree(4, sw.key):
-                    voices[v] = True
-                    suggestion += f"Resolve {sw.key.pitchFromDegree(4).name} in {voice_names_lower[v]} to {sw.key.pitchFromDegree(3).name} by step (scale degree 4 to 3).\n"
-
-            if hasError:
-                ErrorParams = {
-                    'title': "Unresolved V7",
-                    'location': chord.location,
-                    'description': f"V7 is resolved improperly.",
-                    'suggestion': suggestion,
+                    'description': f"Seventh {voice_names_lower[a]} does not resolve stepwise in opposite direction.",
+                    'suggestion': "Resolve stepwise in the opposite direction.",
                     'voices': voices,
                     'duration': 2.0,
                 }
@@ -319,7 +293,7 @@ def rule29(chord: mxp.ChordWrapper): # resolving V7
     return errors
 
 # test for augented sixth chords
-def rule10(chord: mxp.ChordWrapper): # valid chords
+def rule10(chord: mxp.ChordWrapper): # resolving the 7th
     errors = []
 
     co = chord.chord_obj
@@ -343,9 +317,9 @@ def rule11(chord: mxp.ChordWrapper): # parallel octaves
 
     if (chord.next is not None):
         for a in range(len(chord.notes) - 1):
-            for b in range(a+1, len(chord.notes)):
-                vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[a], chord.next.notes[a], chord.notes[b], chord.next.notes[b])
-                if vlq.parallelUnisonOrOctave():
+            for b in range(a, len(chord.notes)):
+                vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[a], chord.notes[b], chord.next.notes[a], chord.next.notes[b])
+                if (vlq.parallelUnisonOrOctave):
                     voices = [False] * 4
                     voices[a] = True
                     voices[b] = True
@@ -367,9 +341,10 @@ def rule12(chord: mxp.ChordWrapper): # parallel fifths
 
     if (chord.next is not None):
         for a in range(len(chord.notes) - 1):
-            for b in range(a+1, len(chord.notes)):
-                vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[a], chord.next.notes[a], chord.notes[b], chord.next.notes[b])
-                if vlq.parallelFifth():
+            for b in range(a, len(chord.notes)):
+                vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[a], chord.notes[b], chord.next.notes[a], chord.next.notes[b])
+                if (vlq.parallelFifth
+                    and not ((chord.chord_obj.isDiminishedSeventh or chord.chord_obj.isHalfDiminishedSeventh) and vlq.isProperResolution())):
                     voices = [False] * 4
                     voices[a] = True
                     voices[b] = True
@@ -389,19 +364,23 @@ def rule13(chord: mxp.ChordWrapper): # hidden fifths and octaves
     errors = []
 
     if (chord.next is not None):
-        vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[0], chord.next.notes[0], chord.notes[3], chord.next.notes[3])
-        if (vlq.hiddenInterval(music21.interval.Interval('P5'))
-            or vlq.hiddenInterval(music21.interval.Interval('P8'))):
-            voices = [True, False, False, True]
-            ErrorParams = {
-                'title': "Parallel Octave or Fifth",
-                'location': chord.location,
-                'description': f"Soprano and bass form a parallel octave or fifth.",
-                'suggestion': "",
-                'voices': voices,
-                'duration': 2.0,
-            }
-            errors.append(e.Error(**ErrorParams))
+        for a in range(len(chord.notes) - 1):
+            for b in range(a, len(chord.notes)):
+                vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[a], chord.notes[b], chord.next.notes[a], chord.next.notes[b])
+                if (vlq.hiddenInterval(music21.interval.Interval('P5'))
+                    or vlq.hiddenInterval(music21.interval.Interval('P8'))):
+                    voices = [False] * 4
+                    voices[a] = True
+                    voices[b] = True
+                    ErrorParams = {
+                        'title': "Parallel Octave or Fifth",
+                        'location': chord.location,
+                        'description': f"{voice_names[a]} and {voice_names_lower[b]} form a parallel octave or fifth.",
+                        'suggestion': "",
+                        'voices': voices,
+                        'duration': 2.0,
+                    }
+                    errors.append(e.Error(**ErrorParams))
 
     return errors
 
@@ -431,7 +410,7 @@ def rule28(chord: mxp.ChordWrapper): # cadences
 
 if __name__ == '__main__':
     #fn = "../music-xml-examples/voice-leading-1.musicxml"
-    fn = "../music-xml-examples/rule13.musicxml"
+    fn = "../music-xml-examples/rule1.musicxml"
     sw = mxp.getScoreWrapper(fn)
     curr = sw.chord_wrappers[0]
     errors = []

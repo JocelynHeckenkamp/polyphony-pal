@@ -27,12 +27,12 @@ Could separate error types as melodic or harmonic corresponding with highlight v
 '''
 
 class Error:
-    title = None # always has a value
-    location = None # tuple of (measure, offset); measure is int 1-indexed; offset is float from 0.0-3.0
-    description = None # description of the error; always has a value
-    voices = [False] * 4 # array of 4 booleans; soprano, alto, tenor, bass; true means there's an error
-    suggestion = None # does not always have a value
-    duration = None # float; number of beats, usually 1.0, 2.0, or 3.0; -1 only for key signature error
+    title = None
+    location = None
+    description = None
+    voices = [False] * 4
+    suggestion = None
+    duration = None
     def __init__(self, title: str, location: tuple, description: str, suggestion: str, voices: list, duration: float):
         self.title = title
         self.location = location
