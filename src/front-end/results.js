@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SheetMusicComponent from './SheetMusicComponent';
 import CircularProgress from '@mui/material/CircularProgress';
 import Upload from "./components/upload";
+import Header from './components/polypalHeader';
 
 //DONT DELETE
 //delay fetch to test loading bars
@@ -50,7 +51,7 @@ function Results() {
             if (error) {
                 return <p>Error: {error}</p>;
             } else if (isLoading) {
-                return <CircularProgress />;
+                return(<CircularProgress />);
             } else if (musicXml) { //musicXML done loading
                 return <SheetMusicComponent musicXml={musicXml} />;
             } else {
@@ -64,6 +65,7 @@ function Results() {
 
     return (
          <div>
+            <Header />
             {renderContent()}
         </div> 
     );

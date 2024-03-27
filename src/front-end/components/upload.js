@@ -1,13 +1,11 @@
 
 import React, { useState } from 'react';
 import { Typography, Button, Grid, Paper } from '@mui/material';
-import logo from '../../polypalLogo.svg';
-//import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+
 
 
 function Upload({setVis, setXML, setLoading} ) {
-  const navigate = useNavigate();
+  
   const [file, setFile] = useState(null);
 
   function handleUpload() {
@@ -41,20 +39,7 @@ function Upload({setVis, setXML, setLoading} ) {
 
 
     <div className="upload-container" align="left">
-      <Grid container direction="row" className="top-bar">
-        <Grid item container xs={9} md={9} lg={9} direction="row" >
-
-          <img src={logo} alt="polypal logo" />
-        </Grid>
-
-
-        <Grid item xs={3} md={3} lg={3} pt={4} className="navigation-buttons" >
-          <Button size="large" sx={{ color: "black" }}>About</Button>
-          <Button size="large" sx={{ color: "black" }}>Features</Button>
-          <Button size="large" sx={{ color: "black" }}>Account</Button>
-          <Button size="large" sx={{ color: "black" }}>Upload</Button>
-        </Grid>
-      </Grid>
+      
 
       <Grid container mt={30} justifyContent="center" className="upload-Card" >
         <Grid item align="center" >
@@ -77,16 +62,6 @@ function Upload({setVis, setXML, setLoading} ) {
       </Grid>
 
 
-
-
-
-
-
-
-
-
-
-
     </div>
 
   );
@@ -95,11 +70,3 @@ function Upload({setVis, setXML, setLoading} ) {
 }
 
 export default Upload;
-
-/* <div className="Upload">
-        <h1>Upload Test</h1>
-
-        <input onChange={ (e) => {setFile(e.target.files[0])}} type='file' accept='.musicxml,.mxml, .mxl' ></input>
-        <Button variant="contained" onClick={handleUpload}>Upload</Button>
-
-    </div> */
