@@ -6,7 +6,6 @@ WHOLE_CHORD = [True, True, True, True]
 voice_names = ["Soprano", "Alto", "Tenor", "Bass"]
 voice_names_lower = ["soprano", "alto", "tenor", "bass"]
 
-
 # Parse chorddatas and check rules
 def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     music21_method_extensions.extend()
@@ -26,6 +25,8 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     all_errors.extend(rule11(chord)) # parallel octaves
     all_errors.extend(rule12(chord)) # parallel fifths
     all_errors.extend(rule13(chord)) # hidden fifths and octaves
+
+    # To be moved to another file
     # all_errors.extend(rule28(chord)) # cadences
     # all_errors.extend(rule29(chord))  # resolving V7
 
