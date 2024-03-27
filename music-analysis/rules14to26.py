@@ -356,8 +356,8 @@ def passingInBass(chord: mxp.ChordWrapper):
 def pedalPoint(chord: mxp.ChordWrapper):
     return (chord.prev is not None                                                          # ensure previous chord exists
             and chord.next is not None                                                      # ensure next chord exists
-            and chord.prev.notes[3] is chord.notes[3]                                       # ensure previous bass is the same as current bass
-            and chord.notes[3] is chord.next.notes[3])                                      # ensure current bass is the same as next bass
+            and chord.prev.notes[3].name == chord.notes[3].name                                       # ensure previous bass is the same as current bass
+            and chord.notes[3].name == chord.next.notes[3].name)                                      # ensure current bass is the same as next bass
 
 
     
