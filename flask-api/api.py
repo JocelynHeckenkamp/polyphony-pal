@@ -35,7 +35,7 @@ def errors(musicXML):
         errors.extend(r113.check_rules_1_to_13(curr, sw))
         errors.extend(r1426.check_rules_14_to_26(curr, sw))
         curr = curr.next
-    return errors
+    return [error.__dict__ for error in errors]
 
 
 if __name__ == '__main__':
