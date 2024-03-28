@@ -26,12 +26,13 @@ function Upload({setVis, setXML, setLoading, setMusicErrors} ) {
       .then(data => {
         //hide upload component, then set data
         //ndata[0] holds the musicXML, the rest of the array holds the errors
-        var ndata = data.split(",");
-        setMusicErrors(ndata.slice(1));
+        var errors_str = data.split("[{")[1]
+        var ndata = errors_str.substring(0, errors_str.length - 2).split("}, {")
+        setMusicErrors(ndata);
         setVis(false);
         setXML(data);
 
-        console.log(ndata.slice(1))
+        console.log(ndata)
         //set loading bar false AFTER data has been set
       })
       .then(setLoading(false))
