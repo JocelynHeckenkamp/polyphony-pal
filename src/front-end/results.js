@@ -67,7 +67,7 @@ function Results() {
                     
                     <Grid item xs={1} sm={1} md={1} lg={1} xl={1}></Grid>
 
-                    <Grid container item mt={6} xs={2} sm={2} md={2} lg={2} xl={2}   wordWrap="break-word" sx={{ overflowY: "scroll", maxHeight: "500px" }}  >
+                    <Grid container item mt={6} xs={2} sm={2} md={2} lg={2} xl={2}   wordWrap="break-word" sx={{ overflowY: "scroll", maxHeight: "650px" }}  >
                         
                         {musicErrors.map((error) => ( 
                         <Grid item pb={2} >
