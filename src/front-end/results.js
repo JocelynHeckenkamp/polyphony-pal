@@ -72,7 +72,10 @@ function Results() {
                         {musicErrors.map((error) => ( 
                         <Grid item pb={2} >
                         <Paper sx={{ padding: 3,  backgroundColor: "#e0e0e0" }} elevation={2} >
-                           {error}
+                           Title: {error.title} <br/><br/> 
+                           Measure Number: {error.location[0]} <br/> Offset:{error.location[1]} <br/><br/> 
+                           Description: {error.description} <br/><br/> 
+                           Suggestion: {error.suggestion} 
                         </Paper>
                         </Grid>
 
