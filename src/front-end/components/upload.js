@@ -51,7 +51,7 @@ function Upload({setVis, setXML, setLoading, setMusicErrors} ) {
     <div className="upload-container" align="left">
       
 
-      <Grid container mt={30} justifyContent="center" className="upload-Card" >
+      <Grid container mt={{xs:20, sm:20, md:20, lg:20 , xl:20}} justifyContent="center" className="upload-Card" >
         <Grid item align="center" >
           <Paper sx={{ padding: 3, backgroundColor: "#f7f7f7", px: 10 }} elevation={2} >
 
