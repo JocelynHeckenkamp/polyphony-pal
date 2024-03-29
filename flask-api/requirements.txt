@@ -1,2 +1,4 @@
 flask
 python-dotenv
+music21
+urllib3==1.26.6
