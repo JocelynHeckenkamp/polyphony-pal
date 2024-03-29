@@ -1,0 +1,6 @@
+backend
+flask-api
+music-analysis
+music-xml-examples
+node_modules
+.vscode
