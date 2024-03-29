@@ -56,9 +56,9 @@ function Results() {
                 return(
                 <div> 
                 <Grid container spacing={2}>  
-                    <Grid container item xs={7} sm={7} md={7} lg={7} xl={7} direction="column"  >
+                    <Grid container item xs={7} sm={7} md={7} lg={7} xl={7} direction="column" sx={{ overflow: 'visible'}} >
                         <Grid item  pt={6}>
-                            <Paper sx={{ padding: 3, pt:5, backgroundColor: "#e0e0e0", px: 10 }} elevation={2}>
+                            <Paper sx={{ justifyContent: "center", pt:5, backgroundColor: "#e0e0e0", borderRadius: 5,  }} elevation={4} >
                             <SheetMusicComponent musicXml={musicXml} />
                             </Paper>
                         </Grid>
@@ -66,7 +66,7 @@ function Results() {
                     
                     <Grid item xs={1} sm={1} md={1} lg={1} xl={1}></Grid>
 
-                    <Grid container item xs={2} sm={2} md={2} lg={2} xl={2} direction="column"  wrap='nowrap' >
+                    <Grid container item xs={2} sm={2} md={2} lg={2} xl={2} direction="column"  wrap='nowrap'  >
                         
                         <Grid item pt={6} >
                         <Paper sx={{ padding: 3, pt:2, backgroundColor: "#e0e0e0" }} elevation={2}>
