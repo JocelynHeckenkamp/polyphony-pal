@@ -1,7 +1,18 @@
 from music21 import *
 
-key = key.KeySignature(0)
-chords = ["vi", "ii", "V", "iii", "IV", "I", "V", "V", "I", "IV", "I", "ii", "ii", "V", "I"]
+# user input
+key = key.Key("C")
+roman_numerals = ["vi", "ii", "V6", "iii6", "IV6", "I", "V", "V", "I", "IV6", "I6", "ii743", "ii65", "V", "I"]
+
+bassline = []
 
 if __name__ == '__main__':
     print(key)
+
+    # write bassline
+    for rn in roman_numerals:
+        c = roman.RomanNumeral(rn, key).pitches
+        ch = chord.Chord(c)
+        bassline.append(ch.root())
+
+    print(bassline)
