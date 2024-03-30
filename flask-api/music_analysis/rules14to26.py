@@ -4,6 +4,27 @@ WHOLE_CHORD = [True, True, True, True]
 
 # Parse chorddatas and check rules
 def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    all_errors = []
+
+    all_errors.extend(rule1(chord)) # range
+    all_errors.extend(rule2(chord)) # spacing
+    all_errors.extend(rule3(chord)) # voice crossing
+    all_errors.extend(rule4(chord)) # voice overlapping
+    all_errors.extend(rule5(chord)) # large melodic leaps
+    all_errors.extend(rule6(chord)) # double melodic leaps
+    all_errors.extend(rule7(chord)) # resolving leaps
+    all_errors.extend(rule8(chord)) # resolving diminished movement
+    all_errors.extend(rule9(chord)) # resolving the seventh of a chord
+    all_errors.extend(rule10(chord)) # non-chords
+    all_errors.extend(rule11(chord)) # parallel octaves
+    all_errors.extend(rule12(chord)) # parallel fifths
+    all_errors.extend(rule13(chord)) # hidden fifths and octaves
+    # all_errors.extend(rule28(chord)) # cadences
+    # all_errors.extend(rule29(chord))  # resolving V7
+
+    return all_errors
+
+def rule14(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     errors = []
     # 14
     leading_tone_counter = 0
@@ -22,8 +43,11 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'duration': 1.0,
             }
         errors.append(e.Error(**ErrorParams))
+    return errors
 
 
+def rule15(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 15
     if (chord.inversion == 0
         and str(chord.quality) != "diminished"
@@ -43,8 +67,10 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
-
+def rule16(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 16
     if str(chord.quality) == "diminished" and not chord.isSeventh:
 
@@ -62,8 +88,10 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
-
+def rule14(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 17
     if (chord.next is not None
         and str(chord.rn.romanNumeral) == "V"
@@ -85,8 +113,11 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'duration': 2.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
 
+def rule14(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 18
     if (chord.inversion == 1
         and chord.quality != "diminished"
@@ -110,8 +141,10 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
-
+def rule19(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 19
     if (chord.inversion == 2
         and chord.quality != "diminished"
@@ -132,8 +165,11 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
 
+def rule20(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 20
     if chord.inversion == 2:
 
@@ -151,8 +187,10 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
-
+def rule21(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 21
     if (chord.next is not None
         and str(chord.rn.romanNumeral) == "bII"
@@ -183,8 +221,11 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'duration': 2.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
 
+def rule14(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 22
     if chord.incomplete and not chord.isSeventh:
 
@@ -214,8 +255,11 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
 
+def rule23(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 23
     if (chord.chord_obj.seventh is not None
         and (chord.chord_obj.third is None or chord.chord_obj.fifth is None)):
@@ -246,8 +290,11 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
 
+def rule24(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 24
     if (chord.next is not None
         and str(chord.rn.romanNumeral) == "V"
@@ -269,55 +316,11 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                         'duration': 2.0,
                     }
                     errors.append(e.Error(**ErrorParams))
+    return errors
 
 
-    # 25
-    # if (chord.quality == "augmented" and str(chord.rn.romanNumeral) == "VI"):
-    #     voices = [False, False, False, False]
-    #     sharp_four = score.key_signature.pitchFromDegree(4).transpose("A1").name
-    #     target_index = -1
-    #     for i, note in enumerate(chord.notes):
-    #         if note.name == sharp_four:
-    #             target_index = i
-    #             voices[i] = True
-    #             break
-    #     if target_index == -1:
-    #         print("FATAL ERROR augmented VI chord chould not find sharp four")
-    #         return
-    #     if chord.next.rn.romanNumeral == "V7" and chord.next.notes[target_index] != score.key_signature.pitchFromDegree(4):
-    #         ErrorParams = {
-    #             'title': 'Rule 25',
-    #             'location': chord.location,
-    #             'description': "Rule 25: The #4^ of an augmented 6th chord that resolves to V7 must resolve down to natural 4^",
-    #             'suggestion': f'The #4^ must resolve down to natural 4: {score.key_signature.pitchFromDegree(4)}',
-    #             'voices': voices,
-    #             'duration': 2.0,
-    #         }
-    #         errors.append(e.Error(**ErrorParams))
-    #     elif chord.next.notes[target_index] != score.key_signature.pitchFromDegree(5):
-    #         ErrorParams = {
-    #             'title': 'Rule 25',
-    #             'location': chord.location,
-    #             'description': "Rule 25: The #4^ of an augmented 6th chord must resolve to 5^ unless the chord resolves to V7",
-    #             'suggestion': f'The #4^ must resolve to 5^: {score.key_signature.pitchFromDegree(5)}',
-    #             'voices': voices,
-    #             'duration': 2.0,
-    #         }
-    #         errors.append(e.Error(**ErrorParams))
-
-    # ***pass in two chords next and curr into this function***
-    # if curr.quality == augmented and curr.numeral == VI:
-    #     sharp_four := sharp four from key
-    #     target index := 0
-    #     foreach i, note in enumerate(curr.notes):
-    #         if note == sharp four:
-    #             target index := i
-    #     if next.numeral == V7 and next.notes[target index] != four of key:
-    #         Mark "The #4^ of an augmented 6th chord must resolve to 5^ unless the chord resolves to V7 in which case it resolves to natural 4" error (whole chord)
-    #     else if next.notes[target index] != five of key:
-    #         Mark "The #4^ of an augmented 6th chord must resolve to 5^ unless the chord resolves to V7 in which case it resolves to natural 4" error (whole chord)
-
-
+def rule26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 26
     if (chord.inversion == 2
         and not chord.isSeventh
@@ -334,7 +337,6 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
             'duration': 1.0,
         }
         errors.append(e.Error(**ErrorParams))
-
     return errors
 
 

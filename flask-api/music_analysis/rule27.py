@@ -1,5 +1,5 @@
-import error as e
-import music_xml_parser as mxp
+from . import error as e
+from . import music_xml_parser as mxp
 WHOLE_CHORD = [True, True, True, True]
 def check_rule_27(score: mxp.ScoreWrapper):
         errors = []

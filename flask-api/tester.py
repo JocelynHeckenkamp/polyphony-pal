@@ -1,8 +1,8 @@
-import music_xml_parser as mxp
-import error as e
-import rule27 as r27
+import music_analysis.music_xml_parser as mxp
+import music_analysis.error as e
+import music_analysis.rule27 as r27
 # import rules1to13 as r113
-import rules14to26 as r1426
+import music_analysis.rules14to26 as r1426
 
 fn = "./music-xml-examples/UnitTest26.musicxml"
 
