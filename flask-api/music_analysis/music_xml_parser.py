@@ -87,13 +87,21 @@ class ScoreWrapper:
     chord_wrappers = []
     score = None
 
-    def __init__(self, score):
+    def __init__(self):
+        self.key = None
+
+    def initScore(self, score):
         self.score = score
         self.key = score.analyze("key")
         self.key_signature = score.recurse().stream().keySignature
         self.key_interpretations = score.analyze("key").alternateInterpretations[0:3]
         self.parseScore()
         self.format_chord_wrappers()
+        return self
+
+    def initKey(self, keyStr: str):
+        self.key_signature = key.Key(keyStr)
+        return self
 
     def __str__(self):
         return f"score({self.key})"
@@ -147,8 +155,7 @@ class ScoreWrapper:
 
 def getScoreWrapper(filename):
     s = converter.parse(filename)
-    sw = ScoreWrapper(s)
-    return sw
+    return ScoreWrapper().initScore(s)
 
 # if __name__ == '__main__':
     # sw = getScoreWrapper(fn)
