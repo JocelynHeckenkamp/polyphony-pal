@@ -1,7 +1,7 @@
-import error as e
+from . import error as e
 import music21
-import music_xml_parser as mxp
-import music21_method_extensions
+from . import music_xml_parser as mxp
+from . import music21_method_extensions
 WHOLE_CHORD = [True, True, True, True]
 voice_names = ["Soprano", "Alto", "Tenor", "Bass"]
 voice_names_lower = ["soprano", "alto", "tenor", "bass"]

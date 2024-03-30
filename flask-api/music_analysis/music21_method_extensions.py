@@ -1,5 +1,5 @@
 import music21
-import music_xml_parser
+from . import music_xml_parser
 
 def higherThan(self, note):
     i = music21.interval.Interval(note, self)

@@ -1,5 +1,5 @@
-import error as e
-import music_xml_parser as mxp
+from . import error as e
+from . import music_xml_parser as mxp
 WHOLE_CHORD = [True, True, True, True]
 
 # Parse chorddatas and check rules
@@ -25,8 +25,8 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 
 
     # 15
-    if (chord.inversion == 0 
-        and str(chord.quality) != "diminished" 
+    if (chord.inversion == 0
+        and str(chord.quality) != "diminished"
         and not chord.isSeventh):
 
         root_counter = 0
@@ -65,10 +65,10 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 
 
     # 17
-    if (chord.next is not None 
-        and str(chord.rn.romanNumeral) == "V" 
-        and str(chord.next.rn.romanNumeral) == "VI" 
-        and not chord.next.isSeventh 
+    if (chord.next is not None
+        and str(chord.rn.romanNumeral) == "V"
+        and str(chord.next.rn.romanNumeral) == "VI"
+        and not chord.next.isSeventh
         and str(score.key)[-5:] == "minor"):
 
         third_counter = 0
@@ -88,8 +88,8 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 
 
     # 18
-    if (chord.inversion == 1 
-        and chord.quality != "diminished" 
+    if (chord.inversion == 1
+        and chord.quality != "diminished"
         and not chord.isSeventh
         and not str(chord.rn.romanNumeral) == "bII"):
 
@@ -113,8 +113,8 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 
 
     # 19
-    if (chord.inversion == 2 
-        and chord.quality != "diminished" 
+    if (chord.inversion == 2
+        and chord.quality != "diminished"
         and not chord.isSeventh):
 
         bass_note = chord.notes[3].name
@@ -151,11 +151,11 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
-    
 
-    # 21 
-    if (chord.next is not None 
-        and str(chord.rn.romanNumeral) == "bII" 
+
+    # 21
+    if (chord.next is not None
+        and str(chord.rn.romanNumeral) == "bII"
         and chord.inversion == 1):
 
         bass_note = chord.notes[3].name
@@ -183,9 +183,9 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'duration': 2.0,
             }
             errors.append(e.Error(**ErrorParams))
-    
 
-    # 22 
+
+    # 22
     if chord.incomplete and not chord.isSeventh:
 
         root_counter = 0
@@ -213,11 +213,11 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'voices': WHOLE_CHORD,
                 'duration': 1.0,
             }
-            errors.append(e.Error(**ErrorParams))   
+            errors.append(e.Error(**ErrorParams))
 
 
     # 23
-    if (chord.chord_obj.seventh is not None 
+    if (chord.chord_obj.seventh is not None
         and (chord.chord_obj.third is None or chord.chord_obj.fifth is None)):
 
         root_counter = 0
@@ -245,14 +245,14 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'voices': WHOLE_CHORD,
                 'duration': 1.0,
             }
-            errors.append(e.Error(**ErrorParams))  
- 
+            errors.append(e.Error(**ErrorParams))
+
 
     # 24
-    if (chord.next is not None 
-        and str(chord.rn.romanNumeral) == "V" 
-        and str(chord.next.rn.romanNumeral) == "VI" 
-        and not chord.next.isSeventh 
+    if (chord.next is not None
+        and str(chord.rn.romanNumeral) == "V"
+        and str(chord.next.rn.romanNumeral) == "VI"
+        and not chord.next.isSeventh
         and str(score.key)[-5:] == "minor"):
 
         voices = [False] * 4
@@ -268,8 +268,8 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                         'voices': voices,
                         'duration': 2.0,
                     }
-                    errors.append(e.Error(**ErrorParams))  
-                    
+                    errors.append(e.Error(**ErrorParams))
+
 
     # 25
     # if (chord.quality == "augmented" and str(chord.rn.romanNumeral) == "VI"):
@@ -293,7 +293,7 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     #             'voices': voices,
     #             'duration': 2.0,
     #         }
-    #         errors.append(e.Error(**ErrorParams))    
+    #         errors.append(e.Error(**ErrorParams))
     #     elif chord.next.notes[target_index] != score.key_signature.pitchFromDegree(5):
     #         ErrorParams = {
     #             'title': 'Rule 25',
@@ -303,8 +303,8 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     #             'voices': voices,
     #             'duration': 2.0,
     #         }
-    #         errors.append(e.Error(**ErrorParams))  
-        
+    #         errors.append(e.Error(**ErrorParams))
+
     # ***pass in two chords next and curr into this function***
     # if curr.quality == augmented and curr.numeral == VI:
     #     sharp_four := sharp four from key
@@ -319,10 +319,10 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 
 
     # 26
-    if (chord.inversion == 2 
-        and not chord.isSeventh 
-        and not cadential64(chord) 
-        and not passingInBass(chord) 
+    if (chord.inversion == 2
+        and not chord.isSeventh
+        and not cadential64(chord)
+        and not passingInBass(chord)
         and not pedalPoint(chord)):
 
         ErrorParams = {
@@ -333,20 +333,20 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
             'voices': WHOLE_CHORD,
             'duration': 1.0,
         }
-        errors.append(e.Error(**ErrorParams))  
+        errors.append(e.Error(**ErrorParams))
 
     return errors
 
 
 def cadential64(chord: mxp.ChordWrapper):
-    return (chord.next is not None 
-            and chord.next.next is not None 
-            and (str(chord.next.rn.romanNumeral) == "V") # can be normal or seventh chord 
+    return (chord.next is not None
+            and chord.next.next is not None
+            and (str(chord.next.rn.romanNumeral) == "V") # can be normal or seventh chord
             and str(chord.next.next.rn.romanNumeral) == "I")
 
 # TODO: FIX ME
 def passingInBass(chord: mxp.ChordWrapper):
-    return (chord.prev is not None                                                          # ensure previous chord exists 
+    return (chord.prev is not None                                                          # ensure previous chord exists
             and chord.next is not None                                                      # ensure next chord exists
             and str(chord.prev.melodic_intervals[3].name)[1] == "2"                        # ensure stepwise motion btween prev and curr chords
             and str(chord.melodic_intervals[3].name)[1] == "2"                             # ensure stepwise motion btween curr and next chords
@@ -360,4 +360,3 @@ def pedalPoint(chord: mxp.ChordWrapper):
             and chord.notes[3].name == chord.next.notes[3].name)                                      # ensure current bass is the same as next bass
 
 
-    

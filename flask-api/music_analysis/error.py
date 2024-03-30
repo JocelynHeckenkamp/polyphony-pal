@@ -1,5 +1,5 @@
 from music21 import *
-import music_xml_parser
+from .music_xml_parser import *
 
 #filename = "../music-xml-examples/voice-leading-7.musicxml"
 filename = "../music-xml-examples/key-signature-error.musicxml"

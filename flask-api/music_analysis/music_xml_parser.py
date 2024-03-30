@@ -1,5 +1,5 @@
 from music21 import *
-from collections import defaultdict 
+from collections import defaultdict
 from functools import cmp_to_key
 
 # filename = "AP Music Theory 2022 Q5.mxl"
@@ -97,7 +97,7 @@ class ScoreWrapper:
 
     def __str__(self):
         return f"score({self.key})"
-    
+
     def parseScore(self):
         voice_map = {}
         note_matrix = {}
@@ -116,9 +116,9 @@ class ScoreWrapper:
 
         chords = []
         for location in locations:
-            chords.append(ChordWrapper(note_matrix[(location[0], location[1], 0)], 
-                                    note_matrix[(location[0], location[1], 1)], 
-                                    note_matrix[(location[0], location[1], 2)], 
+            chords.append(ChordWrapper(note_matrix[(location[0], location[1], 0)],
+                                    note_matrix[(location[0], location[1], 1)],
+                                    note_matrix[(location[0], location[1], 2)],
                                     note_matrix[(location[0], location[1], 3)]))
             chords[-1].set_location()
         self.chord_wrappers = chords
@@ -136,7 +136,7 @@ class ScoreWrapper:
         for i in range(len(self.chord_wrappers)):
             if i != 0:
                 self.chord_wrappers[i].prev = self.chord_wrappers[i-1]
-            
+
             if i != len(self.chord_wrappers)-1:
                 self.chord_wrappers[i].next = self.chord_wrappers[i+1]
 
@@ -150,19 +150,17 @@ def getScoreWrapper(filename):
     sw = ScoreWrapper(s)
     return sw
 
-if __name__ == '__main__':
-    sw = getScoreWrapper(fn)
-    print(sw)
+# if __name__ == '__main__':
+    # sw = getScoreWrapper(fn)
+    # print(sw)
 
     #for c in sw.chord_wrappers:
         #print(c.location, c.chord_obj.fullName)
         #print(c.melodic_intervals)
 
     # chords iterated through by next pointer
-    curr = sw.chord_wrappers[0]
-    while(curr is not None):
-        print(curr)
-        curr = curr.next
+    # curr = sw.chord_wrappers[0]
+    # while(curr is not None):
+    #     print(curr)
+    #     curr = curr.next
     # s.show()
-
-

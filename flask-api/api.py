@@ -1,11 +1,9 @@
 import time
 from flask import Flask, request, jsonify, render_template
-import sys
-sys.path.insert(0, '../music-analysis/')
-import rules1to13 as r113
-import rules14to26 as r1426
-import music_xml_parser as mxp
-import error as e
+import music_analysis.rules1to13 as r113
+import music_analysis.rules14to26 as r1426
+import music_analysis.music_xml_parser as mxp
+from music_analysis.error import Error as e
 app = Flask(__name__)
 
 
