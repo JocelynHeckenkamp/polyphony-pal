@@ -1,10 +1,93 @@
 from music21 import *
 from . import music_xml_parser as mxp
 from . import music21_method_extensions
-from itertools import product
+from . import rules14to26 as r1426
+from . import rules1to13 as r113
 import re
 
 music21_method_extensions.extend()
+
+
+# given list of possible combos and score wrapper, try every chord
+def score_bfs(sw: mxp.ScoreWrapper, chordCombos: list[list[list[note.Note]]]):
+    goodChordLists = [[]]
+    for combosPerChord in chordCombos:
+        newGoodChordLists = []
+        for combo in combosPerChord:
+            for goodChordList in goodChordLists:
+                currChordList = goodChordList+[combo]
+                if isValid(sw, currChordList):
+                    newGoodChordLists.append(currChordList)
+                    if len(currChordList) == 7:
+                        print(currChordList)
+        goodChordLists = newGoodChordLists
+    return goodChordLists
+
+
+# given list of possible combos and score wrapper, try every chord
+def score_dfs(sw: mxp.ScoreWrapper, lists: list[list[list[note.Note]]], index=0, prefix=[]):
+    if index == len(lists):
+        return [prefix]
+    
+    combinations = []
+    for item in lists[index]:
+        new_prefix = prefix + [item]
+        # Add a condition here to check if new_prefix meets your criteria
+        if isValid(sw, new_prefix):
+            combinations.extend(score_dfs(sw, lists, index + 1, new_prefix))
+            if len(new_prefix) == 7:
+                print(new_prefix)
+    
+    return combinations
+
+
+# checks if sw has errors
+def isValid(sw: mxp.ScoreWrapper, chordList: list[list[note.Note]]):
+    sw = addChords(sw, chordList)
+    all_errors = []
+
+    # single chord rules
+    if len(sw.chord_wrappers) > 0:
+        if len(r113.rule1(sw.chord_wrappers[-1])) != 0: return False  # curr, range
+        if len(r113.rule2(sw.chord_wrappers[-1])) != 0: return False  # curr, spacing
+        if len(r113.rule3(sw.chord_wrappers[-1])) != 0: return False  # curr, voice crossing
+        # if len(r113.rule10(sw.chord_wrappers[-1])) != 0: return False  # curr, non-chords
+        if len(r1426.rule14(sw.chord_wrappers[-1], sw)) != 0: return False  # Curr
+        if len(r1426.rule15(sw.chord_wrappers[-1], sw)) != 0: return False  # Curr
+        if len(r1426.rule16(sw.chord_wrappers[-1], sw)) != 0: return False  # Curr
+        if len(r1426.rule18(sw.chord_wrappers[-1], sw)) != 0: return False  # Curr
+        if len(r1426.rule19(sw.chord_wrappers[-1], sw)) != 0: return False  # Curr
+        if len(r1426.rule20(sw.chord_wrappers[-1], sw)) != 0: return False  # Curr
+        if len(r1426.rule22(sw.chord_wrappers[-1], sw)) != 0: return False  # Curr
+        if len(r1426.rule23(sw.chord_wrappers[-1], sw)) != 0: return False  # Curr
+
+    # two chord rules
+    if len(sw.chord_wrappers) > 1:
+        if len(r113.rule4(sw.chord_wrappers[-2])) != 0: return False  # curr, next, voice overlapping
+        if len(r113.rule5(sw.chord_wrappers[-2])) != 0: return False  # curr, next, large melodic leaps
+        if len(r113.rule9(sw.chord_wrappers[-2])) != 0: return False  # curr, next, resolving the seventh of a chord
+        if len(r113.rule11(sw.chord_wrappers[-2])) != 0: return False  # curr, next, parallel octaves
+        if len(r113.rule12(sw.chord_wrappers[-2])) != 0: return False  # curr, next, parallel fifths
+        if len(r113.rule13(sw.chord_wrappers[-2])) != 0: return False  # curr, next, hidden fifths and octaves
+        if len(r1426.rule17(sw.chord_wrappers[-2], sw)) != 0: return False  # Curr, Next
+        if len(r1426.rule21(sw.chord_wrappers[-2], sw)) != 0: return False  # Curr, Next
+        if len(r1426.rule24(sw.chord_wrappers[-2], sw)) != 0: return False  # Curr, Next
+        if len(r1426.rule26(sw.chord_wrappers[-2], sw)) != 0: return False  # Prev, Curr, Next
+
+    # three chord rules
+    if len(sw.chord_wrappers) > 2:
+        if len(r113.rule6(sw.chord_wrappers[-3])) != 0: return False  # curr, next, nextnext, double melodic leaps
+        if len(r113.rule7(sw.chord_wrappers[-3])) != 0: return False  # curr, next, nextnext, resolving leaps
+        if len(r113.rule8(sw.chord_wrappers[-3])) != 0: return False  # curr, next, nextnext, resolving diminished movement
+    
+    return True
+
+
+# format score wrappers given score and chordlist
+def addChords(sw: mxp.ScoreWrapper, chordList: list[list[note.Note]]):
+    sw.chord_wrappers = [mxp.ChordWrapper(*chord) for chord in chordList]
+    sw.format_chord_wrappers(sorted=False)
+    return sw
 
 
 # gets every combination given list of lists

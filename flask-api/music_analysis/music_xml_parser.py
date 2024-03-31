@@ -101,6 +101,7 @@ class ScoreWrapper:
 
     def initKey(self, keyStr: str):
         self.key_signature = key.Key(keyStr)
+        self.key = key.Key(keyStr)
         return self
 
     def __str__(self):
@@ -131,14 +132,16 @@ class ScoreWrapper:
             chords[-1].set_location()
         self.chord_wrappers = chords
 
-    def format_chord_wrappers(self):
+    def format_chord_wrappers(self, sorted = True):
         # sort chordwrappers by measure number first then offset number second
         def compare_chordWrapper(chord1, chord2):
             if chord1.location[0] == chord2.location[0]:
                 return chord1.location[1] - chord2.location[1]
             else:
                 return chord1.location[0] - chord2.location[0]
-        self.chord_wrappers.sort(key=cmp_to_key(compare_chordWrapper))
+            
+        if sorted:
+            self.chord_wrappers.sort(key=cmp_to_key(compare_chordWrapper))
 
         # link prev and next chord attributes
         for i in range(len(self.chord_wrappers)):

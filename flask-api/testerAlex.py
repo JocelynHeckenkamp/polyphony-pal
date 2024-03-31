@@ -15,7 +15,6 @@ if __name__ == '__main__':
     keyStr = "C"
     # roman_numerals = ["vi", "ii", "V6", "iii6", "IV6", "I", "V", "V", "I", "IV6", "I6", "ii743", "ii65", "V", "I"]
     roman_numerals = ["vi", "ii", "V6", "iii6", "IV6", "I", "V"]
-    sw = mxp.ScoreWrapper().initKey(keyStr)
 
     # write bassline
     bassline, chordPitches = gen.analyzeRN(roman_numerals, keyStr)
@@ -55,3 +54,7 @@ if __name__ == '__main__':
         chordCombos.append(combos)
     if verbose:
         print("total number of chord note combos filtered by roman numerals:", totalF)
+
+    # get all good chordlists
+    sw = mxp.ScoreWrapper().initKey(keyStr)
+    goodChordLists = gen.score_dfs(sw, filtered)
