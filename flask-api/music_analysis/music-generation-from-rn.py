@@ -17,3 +17,7 @@ if __name__ == '__main__':
         bassline.append(ch.root())
 
     print(bassline)
+
+    # chords
+    for i in range(len(roman_numerals)):
+        continue
