@@ -1,11 +1,70 @@
 from music21 import *
 from . import music_xml_parser as mxp
 from . import music21_method_extensions
+from itertools import product
+import re
 
 music21_method_extensions.extend()
 
 
-# TODO: Try different approach: maybe try to assign the octaves to the chord tones based on the voice range?
+# gets every combination given list of lists
+def all_combinations(lists):
+    if not lists:
+        return [[]]
+    
+    result = [[]]
+    for lst in lists:
+        new_result = []
+        for item in lst:
+            for res in result:
+                if len(res) == 0 or res[-1].geq(item): # prevent voice crossings
+                    new_result.append(res + [item])
+        result = new_result
+    
+    return result
+
+
+# filters combinations by 
+def filter_combinations_by_roman(chordCombos, rnStr, key):
+    def remove_numbers(input_string):
+        return re.sub(r'\d+', '', input_string)
+    def filter_func(c: list, rn: str):
+        return remove_numbers(roman.romanNumeralFromChord(chord.Chord(c), key).romanNumeral) == remove_numbers(rn)
+    chordCombosFiltered = []
+    for i, chordCombo in enumerate(chordCombos):
+        chordCombosFiltered.append([combo for combo in chordCombo if filter_func(combo, rnStr[i])])
+    return chordCombosFiltered
+
+
+# gets all notes within vocal range fron chord tones
+def getPossibleNotes(chordPitches: list, bassline: list):
+    ranges = [
+        (note.Note('C4'), note.Note('G5'), 4, 5),  # soprano
+        (note.Note('G3'), note.Note('C5'), 3, 5),  # alto
+        (note.Note('C3'), note.Note('G4'), 3, 4),  # tenor
+        (note.Note('E2'), note.Note('C4'), 2, 4)  # bass
+    ]
+    possibleNotes = []
+    for i, chord in enumerate(chordPitches):
+        possibleNotesPerChord = []
+        for voice in range(4):
+            possibleNotesPerVoice = []
+            for octave in range(ranges[voice][2], ranges[voice][3]+1, 1):
+                if voice == 3:
+                    currNote = note.Note(bassline[i].name+str(octave))
+                    if currNote.leq(ranges[voice][1]) and currNote.geq(ranges[voice][0]):
+                        possibleNotesPerVoice.append(currNote)
+                else:
+                    for pitch in chord:
+                        currNote = note.Note(pitch+str(octave))
+                        if currNote.leq(ranges[voice][1]) and currNote.geq(ranges[voice][0]):
+                            possibleNotesPerVoice.append(currNote) 
+            possibleNotesPerChord.append(possibleNotesPerVoice)
+        possibleNotes.append(possibleNotesPerChord)
+    return(possibleNotes)
+
+
+# gets all notes in vocal range
 def getVoiceRanges():
     ranges = [
         ('C4', 'C#4', 
@@ -68,7 +127,8 @@ def getVoiceRanges():
     return noteRanges
 
 
-def analyzeRN(rnStr, keyStr):
+# gets bassline and chord tones from roman numerals and key
+def analyzeRN(rnStr: str, keyStr: str):
     # write bassline
     bassline = []
     chordPitches = []
@@ -76,5 +136,7 @@ def analyzeRN(rnStr, keyStr):
         c = roman.RomanNumeral(rn, key.Key(keyStr)).pitches
         ch = chord.Chord(c)
         chordPitches.append( list(map((lambda x : x.name), ch.notes)) )
-        bassline.append(ch.root())
+        bassline.append(ch[0])
     return bassline, chordPitches
+
+
