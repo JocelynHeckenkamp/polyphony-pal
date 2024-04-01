@@ -14,6 +14,7 @@ def check_rules_25_28to31(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     all_errors.extend(rule25(chord, score)) # resolving augmented sixth chords
     all_errors.extend(rule28(chord))  # cadences
     all_errors.extend(rule29(chord, score))  # resolving V7
+    all_errors.extend(rule30(chord, score)) # resolving (half) diminished seventh chords
     all_errors.extend(rule31(chord))  # augmented melodic intervals
 
     return all_errors
@@ -71,7 +72,6 @@ def rule25(chord: mxp.ChordWrapper, sw):
 
     return errors
 
-# double check specific rules for these
 def rule28(chord: mxp.ChordWrapper): # cadences
     errors = []
 
@@ -155,6 +155,45 @@ def rule29(chord: mxp.ChordWrapper, sw): # resolving V7
                     'duration': 2.0,
                 }
                 errors.append(e.Error(**ErrorParams))
+
+    return errors
+
+def rule30(chord: mxp.ChordWrapper, sw):
+    errors = []
+
+    if (chord.chord_obj.isDiminishedSeventh() or chord.chord_obj.isHalfDiminishedSeventh()):
+
+        seventhAboveThird = False
+        for n in chord.notes:
+            if n.name == chord.chord_obj.third.name:
+                break;
+            elif n.name == chord.chord_obj.seventh.name:
+                seventhAboveThird = True
+                break;
+
+        if chord.next is None:
+            ErrorParams = {
+                'title': "Unresolved Diminisehd Seventh Chord",
+                'location': chord.location,
+                'description': f"Diminished seventh chord does  not resolve.",
+                'suggestion': "Do not end on a chord of diminished quality.",
+                'voices': [True] * 4,
+                'duration': 1.0,
+            }
+            errors.append(e.Error(**ErrorParams))
+        elif not (chord.degreeResolvesToByStep(4, 3, sw.key)
+                  and chord.degreeResolvesToByStep(6, 5, sw.key)
+                  and chord.degreeResolvesToByStep(7, 8, sw.key)
+                  and ((chord.degreeResolvesToByStep(2, 1, sw.key) and seventhAboveThird) or (chord.degreeResolvesToByStep(2, 1, sw.key) and not seventhAboveThird))):
+            ErrorParams = {
+                'title': "Improperly Resolved Diminished Seventh Chord",
+                'location': chord.location,
+                'description': f"All tendency tones of a diminished seventh chord must resolve properly.",
+                'suggestion': f"Resolve scale degrees 4 to 3, 6, to 5, 7 to 8, and 2 to 1 (or to 3 if the 7th is above the 3rd).",
+                'voices': [True] * 4,
+                'duration': 2.0,
+            }
+            errors.append(e.Error(**ErrorParams))
 
     return errors
 
