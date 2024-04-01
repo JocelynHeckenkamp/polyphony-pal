@@ -11,10 +11,64 @@ def check_rules_25_28to31(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 
     all_errors = []
 
+    all_errors.extend(rule25(chord, score)) # resolving augmented sixth chords
     all_errors.extend(rule29(chord, score))  # resolving V7
     all_errors.extend(rule31(chord))  # augmented melodic intervals
 
     return all_errors
+
+def rule25(chord: mxp.ChordWrapper, sw):
+    errors = []
+    if chord.chord_obj.isAugmentedSixth():
+        #print(chord)
+        if chord.next is None:
+            ErrorParams = {
+                'title': "Unresolved Augmented 6th Chord",
+                'location': chord.location,
+                'description': f"Augmented 6th chord does not resolve",
+                'suggestion': "Do not end on an augmented sixth chord.",
+                'voices': [True] * 4,
+                'duration': 1.0,
+            }
+            errors.append(e.Error(**ErrorParams))
+        elif not (chord.next.rn.romanNumeralAlone == "V" or (chord.next.rn.romanNumeralAlone.lower() == "i" and chord.next.inversion == 2)):
+            ErrorParams = {
+                'title': "Unresolved Augmented 6th Chord",
+                'location': chord.location,
+                'description': f"Augmented 6th chord must resolve to i64, I64, V, or V7.",
+                'suggestion': f"Change {chord.next.rn.romanNumeralAlone} chord to i64, I64, V, or V7.",
+                'voices': [True] * 4,
+                'duration': 2.0,
+            }
+            errors.append(e.Error(**ErrorParams))
+        else:
+            s4 = sw.key.pitchFromDegree(4).transpose("A1")
+            aug_4th_indices = chord.indicesOfNote(s4)
+            for i in aug_4th_indices:
+                if (chord.next.rn.romanNumeralAlone == "V" and chord.next.chord_obj.isDominantSeventh()):
+                    if chord.next.notes[i].name != sw.key.pitchFromDegree(4):
+                        ErrorParams = {
+                            'title': "Improperly Resolved Augmented 6th Chord",
+                            'location': chord.location,
+                            'description': f"#4 in augmented 6th chord must resolve to degree 4 in V7 or 5 in i64 or I64.",
+                            'suggestion': f"Resolve {s4.name} in {voice_names_lower[i]} to {sw.key.pitchFromDegree(4).name}.",
+                            'voices': [True] * 4,
+                            'duration': 2.0,
+                        }
+                        errors.append(e.Error(**ErrorParams))
+                elif (chord.next.rn.romanNumeralAlone == "i" or chord.next.rn.romanNumeralAlone == "I"):
+                    if chord.next.notes[i].name != sw.key.pitchFromDegree(5):
+                        ErrorParams = {
+                            'title': "Improperly Resolved Augmented 6th Chord",
+                            'location': chord.location,
+                            'description': f"#4 in augmented 6th chord must resolve to degree 4 in V7 or 5 in i64 or I64.",
+                            'suggestion': f"Resolve {s4.name} in {voice_names_lower[i]} to {sw.key.pitchFromDegree(5).name}.",
+                            'voices': [True] * 4,
+                            'duration': 2.0,
+                        }
+                        errors.append(e.Error(**ErrorParams))
+
+    return errors
 
 def rule29(chord: mxp.ChordWrapper, sw): # resolving V7
     errors = []
