@@ -1,5 +1,5 @@
 import React from 'react';
-import {  Button, Grid } from '@mui/material';
+import {  Button, Grid, Link } from '@mui/material';
 import logo from '../../polypalLogo.svg';
 
 function Header()
@@ -8,16 +8,16 @@ function Header()
     <Grid container  className="top-bar" >
       <Grid item  xs={2} md={2} lg={2} mt={-6}  >
 
-        <img src={logo} alt="polypal logo"  style={{ width: "200px", height: "200px" }}  />
+      <Link href="/"><img src={logo} alt="polypal logo"  style={{ width: "200px", height: "200px" }}  /></Link>
       </Grid>
 
       
       <Grid container item xs={10} md={10} lg={10} pt={4.6} className="navigation-buttons" justifyContent="end">
         <Grid item >
-        <Button size="large" sx={{ color: "black" }}>About</Button>
-        <Button size="large" sx={{ color: "black" }}>Features</Button> 
-        <Button size="large" sx={{ color: "black" }}>Account</Button>
-        <Button size="large" sx={{ color: "black" }}>Upload</Button>
+        <Link href="/"><Button size="large" sx={{ color: "black" }}>About</Button></Link>
+        <Link href="/"><Button size="large" sx={{ color: "black" }}>Features</Button></Link>  
+                        <Button size="large" sx={{ color: "black" }}>Account</Button>
+        <Link href="/results"><Button size="large" sx={{ color: "black" }}>Upload</Button> </Link>
         </Grid>
       </Grid>
   </Grid>
