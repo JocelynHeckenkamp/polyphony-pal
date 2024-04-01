@@ -26,8 +26,6 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     all_errors.extend(rule11(chord)) # curr, next, parallel octaves
     all_errors.extend(rule12(chord)) # curr, next, parallel fifths
     all_errors.extend(rule13(chord)) # curr, next, hidden fifths and octaves
-    # all_errors.extend(rule28(chord)) # curr, next cadences
-    # all_errors.extend(rule29(chord))  # curr, next, resolving V7
 
     return all_errors
 
@@ -255,75 +253,12 @@ def rule9(chord: mxp.ChordWrapper): # resolving the 7th
 
     return errors
 
-def rule29(chord: mxp.ChordWrapper): # resolving V7
-    errors = []
-
-    if (chord.rn.romanNumeralAlone == "V" and chord.chord_obj.isDominantSeventh): #V7
-        if chord.next is None: # ending on V7
-            ErrorParams = {
-                'title': "Unresolved V7",
-                'location': chord.location,
-                'description': f"V7 does not resolve.",
-                'suggestion': "Resolve V7 or change it to another chord.",
-                'voices': [True] * 4,
-                'duration': 1.0,
-            }
-            errors.append(e.Error(**ErrorParams))
-        elif chord.next.rn.scaleDegree != 1:
-            ErrorParams = {
-                'title': "Unresolved V7",
-                'location': chord.location,
-                'description': f"V7 does not resolve to I or i.",
-                'suggestion': "Resolve to I or i, or the change V7 to another chord.",
-                'voices': [True] * 4,
-                'duration': 2.0,
-            }
-            errors.append(e.Error(**ErrorParams))
-        else:
-            hasError = False
-
-            suggestion = ""
-            voices = [False] * 4
-
-            lt1 = chord.degreeResolvesToByStep(7, 1, sw.key)
-            lt5xs = chord.degreeResolvesTo(7, 5, sw.key) and chord.indicesOfDegree(7, sw.key)[0] != 0
-            if not (lt1 or lt5xs):
-                hasError = True
-                for v in chord.indicesOfDegree(7, sw.key):
-                    voices[v] = True
-                suggestion += f"Resolve {sw.key.pitchFromDegree(7).name} to {sw.key.pitchFromDegree(1).name} by step (leading tone to tonic), or to {sw.key.pitchFromDegree(5).name} if it's not in the soprano voice.\n"
-
-            if not chord.degreeResolvesTo(2, 1, sw.key):
-                hasError = True
-                for v in chord.indicesOfDegree(2, sw.key):
-                    voices[v] = True
-                    suggestion += f"Resolve {sw.key.pitchFromDegree(2).name} in {voice_names_lower[v]} to {sw.key.pitchFromDegree(1).name} by step (scale degree 2 to 1).\n"
-
-            if not chord.degreeResolvesTo(4, 3, sw.key):
-                hasError = True
-                for v in chord.indicesOfDegree(4, sw.key):
-                    voices[v] = True
-                    suggestion += f"Resolve {sw.key.pitchFromDegree(4).name} in {voice_names_lower[v]} to {sw.key.pitchFromDegree(3).name} by step (scale degree 4 to 3).\n"
-
-            if hasError:
-                ErrorParams = {
-                    'title': "Unresolved V7",
-                    'location': chord.location,
-                    'description': f"V7 is resolved improperly.",
-                    'suggestion': suggestion,
-                    'voices': voices,
-                    'duration': 2.0,
-                }
-                errors.append(e.Error(**ErrorParams))
-
-    return errors
-
 # test for augented sixth chords
 def rule10(chord: mxp.ChordWrapper): # valid chords
     errors = []
 
     co = chord.chord_obj
-    if (not (co.isTriad() == True or co.isSeventh() == True)):
+    if (not (co.isTriad() or co.isSeventh())):
         voices = [True] * 4
         ErrorParams = {
             'title': "Impermissable Chord Type",
@@ -398,30 +333,6 @@ def rule13(chord: mxp.ChordWrapper): # hidden fifths and octaves
                 'location': chord.location,
                 'description': f"Soprano and bass form a parallel octave or fifth.",
                 'suggestion': "",
-                'voices': voices,
-                'duration': 2.0,
-            }
-            errors.append(e.Error(**ErrorParams))
-
-    return errors
-
-# double check specific rules for these
-def rule28(chord: mxp.ChordWrapper): # cadences
-    errors = []
-
-    if (chord.next is None):
-        pen_rn = chord.prev.rn.scaleDegree
-        last_rn = chord.rn.scaleDegree
-
-        if (not (pen_rn == 5 and last_rn in (1, 6) # PAC, IAC, Deceptive
-                or (pen_rn == 4 and last_rn == 1) # Plagal
-                or last_rn == 5)): # Half
-            voices = [False] * 4
-            ErrorParams = {
-                'title': "Improper Cadence",
-                'location': chord.location,
-                'description': f"No proper cadence.",
-                'suggestion': "Rewrite last two chords with authentic cadence, plagal cadence, or deceptive cadence.",
                 'voices': voices,
                 'duration': 2.0,
             }

@@ -1,7 +1,22 @@
 from music21 import *
 
-filename = "../music-xml-examples/voice-leading-1.musicxml"
+#filename = "../music-xml-examples/voice-leading-1.musicxml"
+filename = "../music-generation/voice-leading-1-rns.mxl"
 s = converter.parse(filename)
+
+"""
+print(len(s))
+
+for n in s:
+    print(n)
+
+print()
+
+for el in s.recurse():
+    print(el)
+
+s.write("MusicXML", "testing.musicxml")
+"""
 
 """
 s is a score object
@@ -139,4 +154,4 @@ If melodic_intervals[0].name[1] to int > 2 AND c'.harmonic_intervals[2] == (P5 o
 dump() error list to json format and return
 """
 
-s.show()
+#s.show()

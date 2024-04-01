@@ -51,7 +51,7 @@ def degreeResolvesToByStep(self, d1, d2, key):
         return True
 
     for voice in voices:
-        if not (self.next.notes[voice].name == key.pitchFromDegree(d2).name or self.melodic_intervals[voice].isStep):
+        if not (self.next.notes[voice].name == key.pitchFromDegree(d2).name and self.melodic_intervals[voice].isStep):
             return False
 
     return True
