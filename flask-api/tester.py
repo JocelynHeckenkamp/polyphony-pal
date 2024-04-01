@@ -6,7 +6,7 @@ import music_analysis.rules1to13 as r113
 import music_analysis.rules14to26 as r1426
 import music_analysis.rules25_28_31 as r2531
 
-fn = "../music-xml-examples/rule30.musicxml"
+fn = "../music-xml-examples/rule10.musicxml"
 
 if __name__ == '__main__':
     sw = mxp.getScoreWrapper(fn)
