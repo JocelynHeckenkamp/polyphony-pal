@@ -4,6 +4,26 @@ WHOLE_CHORD = [True, True, True, True]
 
 # Parse chorddatas and check rules
 def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    all_errors = []
+
+    all_errors.extend(rule14(chord, score)) # Curr
+    all_errors.extend(rule15(chord, score)) # Curr
+    all_errors.extend(rule16(chord, score)) # Curr
+    all_errors.extend(rule17(chord, score)) # Curr, Next
+    all_errors.extend(rule18(chord, score)) # Curr
+    all_errors.extend(rule19(chord, score)) # Curr
+    all_errors.extend(rule20(chord, score)) # Curr
+    all_errors.extend(rule21(chord, score)) # Curr, Next
+    all_errors.extend(rule22(chord, score)) # Curr
+    all_errors.extend(rule23(chord, score)) # Curr
+    all_errors.extend(rule24(chord, score)) # Curr, Next
+    all_errors.extend(rule26(chord, score)) # Prev, Curr, Next
+
+
+    return all_errors
+
+
+def rule14(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     errors = []
     # 14
     leading_tone_counter = 0
@@ -14,16 +34,19 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
             vox[i] = True
     if leading_tone_counter > 1:
         ErrorParams = {
-                'title': 'Rule 14',
+                'title': 'Doubling Leading Tone',
                 'location': chord.location,
-                'description': "Rule 14: Never double the leading tone",
+                'description': "Never double the leading tone",
                 'suggestion': f'leading tone: {score.key_signature.getScale().pitches[6].name}',
                 'voices': vox,
                 'duration': 1.0,
             }
         errors.append(e.Error(**ErrorParams))
+    return errors
 
 
+def rule15(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 15
     if (chord.inversion == 0
         and str(chord.quality) != "diminished"
@@ -35,16 +58,19 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 root_counter += 1
         if root_counter < 2:
             ErrorParams = {
-                'title': 'Rule 15',
+                'title': 'Doubling Root Position Triads',
                 'location': chord.location,
-                'description': "Rule 15: In root position non-diminished triads, double the root.",
+                'description': "In root position non-diminished triads, double the root.",
                 'suggestion': f'double the root: {chord.chord_obj.root().name}',
                 'voices': WHOLE_CHORD,
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
 
+def rule16(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 16
     if str(chord.quality) == "diminished" and not chord.isSeventh:
 
@@ -54,16 +80,19 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 third_counter += 1
         if third_counter < 2:
             ErrorParams = {
-                'title': 'Rule 16',
+                'title': 'Doubling Diminished Triads',
                 'location': chord.location,
-                'description': "Rule 16: In diminished triads, double the 3rd (not a value in the tritone).",
+                'description': "In diminished triads, double the 3rd (not a value in the tritone).",
                 'suggestion': f'double the third: {chord.chord_obj.third.name}',
                 'voices': WHOLE_CHORD,
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
 
+def rule17(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 17
     if (chord.next is not None
         and str(chord.rn.romanNumeral) == "V"
@@ -77,7 +106,7 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 third_counter += 1
         if third_counter < 2:
             ErrorParams = {
-                'title': 'Rule 17',
+                'title': 'Doubling Deceptive Progression',
                 'location': chord.location,
                 'description': "Rule 17: In the Deceptive Progression (V to VI in minor keys), double the 3rd of the VI chord.",
                 'suggestion': f'double the third: {chord.next.chord_obj.third.name}',
@@ -85,8 +114,11 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'duration': 2.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
 
+def rule18(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 18
     if (chord.inversion == 1
         and chord.quality != "diminished"
@@ -102,16 +134,19 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 voices[i] = True
         if bass_counter > 1:
             ErrorParams = {
-                'title': 'Rule 18',
+                'title': 'Doubling First Inversion',
                 'location': chord.location,
-                'description': "Rule 18: In a first inversion non-diminished triads, do not double the bass note.",
+                'description': "In a first inversion non-diminished triads, do not double the bass note.",
                 'suggestion': f'do not double the bass note: {bass_note}',
                 'voices': voices,
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
 
+def rule19(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 19
     if (chord.inversion == 2
         and chord.quality != "diminished"
@@ -124,16 +159,19 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 bass_counter += 1
         if bass_counter < 2:
             ErrorParams = {
-                'title': 'Rule 19',
+                'title': 'Doubling Second Inversion',
                 'location': chord.location,
-                'description': "Rule 19: In second inversion non-diminished triads, double the bass.",
+                'description': "In second inversion non-diminished triads, double the bass.",
                 'suggestion': f'double the bass note: {bass_note}',
                 'voices': WHOLE_CHORD,
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
 
+def rule20(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 20
     if chord.inversion == 2:
 
@@ -143,16 +181,19 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 fifth_counter += 1
         if fifth_counter < 2:
             ErrorParams = {
-                'title': 'Rule 20',
+                'title': 'Doubling Second Inversion',
                 'location': chord.location,
-                'description': "Rule 20: In second inversion, double the 5th (bass note)",
+                'description': "In second inversion, double the 5th (bass note)",
                 'suggestion': f'double the 5th: {chord.chord_obj.fifth.name}',
                 'voices': WHOLE_CHORD,
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
 
+def rule21(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 21
     if (chord.next is not None
         and str(chord.rn.romanNumeral) == "bII"
@@ -165,9 +206,9 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 bass_counter += 1
         if bass_counter < 2:
             ErrorParams = {
-                'title': 'Rule 21',
+                'title': 'Doubling Neapolitan',
                 'location': chord.location,
-                'description': "Rule 21: In a Neapolitan chord, double the bass",
+                'description': "In a Neapolitan chord, double the bass",
                 'suggestion': f'double the bass: {bass_note}',
                 'voices': WHOLE_CHORD,
                 'duration': 1.0,
@@ -175,16 +216,19 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
             errors.append(e.Error(**ErrorParams))
         if chord.melodic_intervals[2].direction == "Direction.ASCENDING":
             ErrorParams = {
-                'title': 'Rule 21',
+                'title': 'Resolve Neapolitan',
                 'location': chord.location,
-                'description': "Rule 21: In a Neapolitan chord, resolve b2^ down to the nearest note of the next chord",
+                'description': "In a Neapolitan chord, resolve b2^ down to the nearest note of the next chord",
                 'suggestion': f'resolve b2^ note down: {chord.notes[2].name}',
                 'voices': [False, False, True, False],
                 'duration': 2.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
 
+def rule22(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 22
     if chord.incomplete and not chord.isSeventh:
 
@@ -196,9 +240,9 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
             if chord.chord_obj.fifth is not None:
                 voices[i] = True
                 ErrorParams = {
-                    'title': 'Rule 22',
+                    'title': 'Incomplete Triad Omission',
                     'location': chord.location,
-                    'description': "Rule 22: In incomplete triads, omit the 5th",
+                    'description': "In incomplete triads, omit the 5th",
                     'suggestion': f'Omit the 5th: {note.name}',
                     'voices': voices,
                     'duration': 1.0,
@@ -206,16 +250,19 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 errors.append(e.Error(**ErrorParams))
         if root_counter < 3:
             ErrorParams = {
-                'title': 'Rule 22',
+                'title': 'Tripling Incomplete Triad',
                 'location': chord.location,
-                'description': "Rule 22: In incomplete triads, triple the root",
+                'description': "In incomplete triads, triple the root",
                 'suggestion': f'Triple the root: {chord.chord_obj.root().name}',
                 'voices': WHOLE_CHORD,
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
 
+def rule23(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 23
     if (chord.chord_obj.seventh is not None
         and (chord.chord_obj.third is None or chord.chord_obj.fifth is None)):
@@ -223,13 +270,12 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
         root_counter = 0
         voices = [False, False, False, False]
         if chord.chord_obj.fifth is not None:
-            voices[i] = True
             ErrorParams = {
-                'title': 'Rule 23',
+                'title': 'Incomplete Seventh Omission',
                 'location': chord.location,
-                'description': "Rule 23: In incomplete 7th chords, omit the 5th",
+                'description': "In incomplete 7th chords, omit the 5th",
                 'suggestion': f'Omit the 5th: {chord.chord_obj.fifth}',
-                'voices': voices,
+                'voices': WHOLE_CHORD,
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
@@ -238,16 +284,19 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 root_counter += 1
         if root_counter < 2:
             ErrorParams = {
-                'title': 'Rule 23',
+                'title': 'Doubling Incomplete Seventh',
                 'location': chord.location,
-                'description': "Rule 23: In incomplete 7th chords, double the root",
+                'description': "In incomplete 7th chords, double the root",
                 'suggestion': f'Double the root: {chord.chord_obj.root().name}',
                 'voices': WHOLE_CHORD,
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
+    return errors
 
 
+def rule24(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 24
     if (chord.next is not None
         and str(chord.rn.romanNumeral) == "V"
@@ -261,63 +310,19 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 voices[i] = True
                 if chord.melodic_intervals[i].direction < 1:
                     ErrorParams = {
-                        'title': 'Rule 24',
+                        'title': 'Resolve Deceptive Progression',
                         'location': chord.location,
-                        'description': "Rule 24: In the Deceptive Progression (V to VI in minor keys), the 3rd of V must resolve up",
+                        'description': "In the Deceptive Progression (V to VI in minor keys), the 3rd of V must resolve up",
                         'suggestion': f'3rd of V must resolve up: {note.name}',
                         'voices': voices,
                         'duration': 2.0,
                     }
                     errors.append(e.Error(**ErrorParams))
+    return errors
 
 
-    # 25
-    # if (chord.quality == "augmented" and str(chord.rn.romanNumeral) == "VI"):
-    #     voices = [False, False, False, False]
-    #     sharp_four = score.key_signature.pitchFromDegree(4).transpose("A1").name
-    #     target_index = -1
-    #     for i, note in enumerate(chord.notes):
-    #         if note.name == sharp_four:
-    #             target_index = i
-    #             voices[i] = True
-    #             break
-    #     if target_index == -1:
-    #         print("FATAL ERROR augmented VI chord chould not find sharp four")
-    #         return
-    #     if chord.next.rn.romanNumeral == "V7" and chord.next.notes[target_index] != score.key_signature.pitchFromDegree(4):
-    #         ErrorParams = {
-    #             'title': 'Rule 25',
-    #             'location': chord.location,
-    #             'description': "Rule 25: The #4^ of an augmented 6th chord that resolves to V7 must resolve down to natural 4^",
-    #             'suggestion': f'The #4^ must resolve down to natural 4: {score.key_signature.pitchFromDegree(4)}',
-    #             'voices': voices,
-    #             'duration': 2.0,
-    #         }
-    #         errors.append(e.Error(**ErrorParams))
-    #     elif chord.next.notes[target_index] != score.key_signature.pitchFromDegree(5):
-    #         ErrorParams = {
-    #             'title': 'Rule 25',
-    #             'location': chord.location,
-    #             'description': "Rule 25: The #4^ of an augmented 6th chord must resolve to 5^ unless the chord resolves to V7",
-    #             'suggestion': f'The #4^ must resolve to 5^: {score.key_signature.pitchFromDegree(5)}',
-    #             'voices': voices,
-    #             'duration': 2.0,
-    #         }
-    #         errors.append(e.Error(**ErrorParams))
-
-    # ***pass in two chords next and curr into this function***
-    # if curr.quality == augmented and curr.numeral == VI:
-    #     sharp_four := sharp four from key
-    #     target index := 0
-    #     foreach i, note in enumerate(curr.notes):
-    #         if note == sharp four:
-    #             target index := i
-    #     if next.numeral == V7 and next.notes[target index] != four of key:
-    #         Mark "The #4^ of an augmented 6th chord must resolve to 5^ unless the chord resolves to V7 in which case it resolves to natural 4" error (whole chord)
-    #     else if next.notes[target index] != five of key:
-    #         Mark "The #4^ of an augmented 6th chord must resolve to 5^ unless the chord resolves to V7 in which case it resolves to natural 4" error (whole chord)
-
-
+def rule26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
+    errors = []
     # 26
     if (chord.inversion == 2
         and not chord.isSeventh
@@ -326,25 +331,22 @@ def check_rules_14_to_26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
         and not pedalPoint(chord)):
 
         ErrorParams = {
-            'title': 'Rule 26',
+            'title': '6/4 Chords',
             'location': chord.location,
-            'description': "Rule 26: 6/4 Chords can only be used in four cases: cadential 6/4, passing in bass, arpeggio staying on same chord, pedal point",
+            'description': "6/4 Chords can only be used in four cases: cadential 6/4, passing in bass, arpeggio staying on same chord, pedal point",
             'suggestion': f'6/4 Chords can only be used in four cases: cadential 6/4, passing in bass, arpeggio staying on same chord, pedal point',
             'voices': WHOLE_CHORD,
             'duration': 1.0,
         }
         errors.append(e.Error(**ErrorParams))
-
     return errors
 
 
 def cadential64(chord: mxp.ChordWrapper):
     return (chord.next is not None
-            and chord.next.next is not None
-            and (str(chord.next.rn.romanNumeral) == "V") # can be normal or seventh chord
-            and str(chord.next.next.rn.romanNumeral) == "I")
+            and (str(chord.next.rn.romanNumeralAlone) == "V")) # can be normal or seventh chord
 
-# TODO: FIX ME
+
 def passingInBass(chord: mxp.ChordWrapper):
     return (chord.prev is not None                                                          # ensure previous chord exists
             and chord.next is not None                                                      # ensure next chord exists

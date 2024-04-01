@@ -13,21 +13,21 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 
     all_errors = []
 
-    all_errors.extend(rule1(chord)) # range
-    all_errors.extend(rule2(chord)) # spacing
-    all_errors.extend(rule3(chord)) # voice crossing
-    all_errors.extend(rule4(chord)) # voice overlapping
-    all_errors.extend(rule5(chord)) # large melodic leaps
-    all_errors.extend(rule6(chord)) # double melodic leaps
-    all_errors.extend(rule7(chord)) # resolving leaps
-    all_errors.extend(rule8(chord)) # resolving diminished movement
-    all_errors.extend(rule9(chord)) # resolving the seventh of a chord
-    all_errors.extend(rule10(chord)) # non-chords
-    all_errors.extend(rule11(chord)) # parallel octaves
-    all_errors.extend(rule12(chord)) # parallel fifths
-    all_errors.extend(rule13(chord)) # hidden fifths and octaves
-    # all_errors.extend(rule28(chord)) # cadences
-    # all_errors.extend(rule29(chord))  # resolving V7
+    all_errors.extend(rule1(chord)) # curr, range
+    all_errors.extend(rule2(chord)) # curr, spacing
+    all_errors.extend(rule3(chord)) # curr, voice crossing
+    all_errors.extend(rule4(chord)) # curr, next, voice overlapping
+    all_errors.extend(rule5(chord)) # curr, next, large melodic leaps
+    all_errors.extend(rule6(chord)) # curr, next, nextnext, double melodic leaps
+    all_errors.extend(rule7(chord)) # curr, next, nextnext, resolving leaps
+    all_errors.extend(rule8(chord)) # curr, next, nextnext, resolving diminished movement
+    all_errors.extend(rule9(chord)) # curr, next, resolving the seventh of a chord
+    all_errors.extend(rule10(chord)) # curr, non-chords
+    all_errors.extend(rule11(chord)) # curr, next, parallel octaves
+    all_errors.extend(rule12(chord)) # curr, next, parallel fifths
+    all_errors.extend(rule13(chord)) # curr, next, hidden fifths and octaves
+    # all_errors.extend(rule28(chord)) # curr, next cadences
+    # all_errors.extend(rule29(chord))  # curr, next, resolving V7
 
     return all_errors
 
@@ -323,7 +323,7 @@ def rule10(chord: mxp.ChordWrapper): # valid chords
     errors = []
 
     co = chord.chord_obj
-    if (not (co.isTriad == True or co.isSeventh == True)):
+    if (not (co.isTriad() == True or co.isSeventh() == True)):
         voices = [True] * 4
         ErrorParams = {
             'title': "Impermissable Chord Type",
