@@ -9,6 +9,14 @@ def lessThan(self, note):
     i = music21.interval.Interval(note, self)
     return i.semitones < 0
 
+def geq(self, note):
+    i = music21.interval.Interval(note, self)
+    return i.semitones >= 0
+
+def leq(self, note):
+    i = music21.interval.Interval(note, self)
+    return i.semitones <= 0
+
 def indicesOfNote(self, note):
     indices = []
     for a in range(len(self.notes)):
@@ -51,6 +59,8 @@ def degreeResolvesToByStep(self, d1, d2, key):
 def extend():
     music21.note.Note.higherThan = higherThan
     music21.note.Note.lessThan = lessThan
+    music21.note.Note.geq = geq
+    music21.note.Note.leq = leq
     music_xml_parser.ChordWrapper.indicesOfNote = indicesOfNote
     music_xml_parser.ChordWrapper.indicesOfDegree = indicesOfDegree
     music_xml_parser.ChordWrapper.degreeResolvesTo = degreeResolvesTo

@@ -270,13 +270,12 @@ def rule23(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
         root_counter = 0
         voices = [False, False, False, False]
         if chord.chord_obj.fifth is not None:
-            voices[i] = True
             ErrorParams = {
                 'title': 'Incomplete Seventh Omission',
                 'location': chord.location,
                 'description': "In incomplete 7th chords, omit the 5th",
                 'suggestion': f'Omit the 5th: {chord.chord_obj.fifth}',
-                'voices': voices,
+                'voices': WHOLE_CHORD,
                 'duration': 1.0,
             }
             errors.append(e.Error(**ErrorParams))
