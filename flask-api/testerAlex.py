@@ -8,13 +8,13 @@ from music21 import *
 
 if __name__ == '__main__':
     # toggle debug
-    verbose = True
+    verbose = False
     verboseLong = False
 
     # user input
     keyStr = "C"
-    # roman_numerals = ["vi", "ii", "V6", "iii6", "IV6", "I", "V", "V", "I", "IV6", "I6", "ii743", "ii65", "V", "I"]
-    roman_numerals = ["vi", "ii", "V6", "iii6", "IV6", "I", "V"]
+    roman_numerals = ["vi", "ii", "V6", "iii6", "IV6", "I", "V", "V", "I", "IV6", "I6", "ii743", "ii65", "V", "I"]
+    # roman_numerals = ["vi", "ii", "V6", "iii6", "IV6", "I", "V"]
 
     # write bassline
     bassline, chordPitches = gen.analyzeRN(roman_numerals, keyStr)
@@ -57,4 +57,4 @@ if __name__ == '__main__':
 
     # get all good chordlists
     sw = mxp.ScoreWrapper().initKey(keyStr)
-    goodChordLists = gen.score_dfs(sw, filtered)
+    goodChordLists = gen.score_dfs(roman_numerals, sw, filtered)

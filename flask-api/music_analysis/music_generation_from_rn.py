@@ -18,14 +18,14 @@ def score_bfs(sw: mxp.ScoreWrapper, chordCombos: list[list[list[note.Note]]]):
                 currChordList = goodChordList+[combo]
                 if isValid(sw, currChordList):
                     newGoodChordLists.append(currChordList)
-                    if len(currChordList) == 7:
+                    if len(currChordList) == 15:
                         print(currChordList)
         goodChordLists = newGoodChordLists
     return goodChordLists
 
 
 # given list of possible combos and score wrapper, try every chord
-def score_dfs(sw: mxp.ScoreWrapper, lists: list[list[list[note.Note]]], index=0, prefix=[]):
+def score_dfs(rn, sw: mxp.ScoreWrapper, lists: list[list[list[note.Note]]], index=0, prefix=[]):
     if index == len(lists):
         return [prefix]
     
@@ -34,17 +34,63 @@ def score_dfs(sw: mxp.ScoreWrapper, lists: list[list[list[note.Note]]], index=0,
         new_prefix = prefix + [item]
         # Add a condition here to check if new_prefix meets your criteria
         if isValid(sw, new_prefix):
-            combinations.extend(score_dfs(sw, lists, index + 1, new_prefix))
+            print(new_prefix)
             if len(new_prefix) == 7:
-                print(new_prefix)
+                # print(new_prefix)
+                createMXL(new_prefix, rn, sw.key)
+                return
+            combinations.extend(score_dfs(rn, sw, lists, index + 1, new_prefix))
     
     return combinations
 
 
+def createMXL(chordList, roman_numerals, key):
+    s = stream.Score() 
+    partStaves = [stream.PartStaff(),stream.PartStaff()]
+    partStaves[0].clef = clef.TrebleClef()
+    partStaves[1].clef = clef.BassClef()
+
+    count = 0
+    measures = None
+    voices = None
+    for chord in chordList:
+        if count % 4 == 0:
+            measures = [stream.Measure(), stream.Measure()]
+            voices = [stream.Voice(), stream.Voice(), stream.Voice(), stream.Voice()]
+            rn = []
+        # h = harmony.ChordSymbol(key.tonic.name)
+        # h.romanNumeral = roman.RomanNumeral(roman_numerals[count])
+        # h.writeAsChord = False
+        # rn.append(h)
+        if count == 0:
+            measures[0].insert(0, meter.TimeSignature('4/4'))  # Set time signature
+            measures[0].insert(0, key) 
+            measures[1].insert(0, meter.TimeSignature('4/4'))  # Set time signature
+            measures[1].insert(0, key) 
+        for i, note in enumerate(chord):
+            if i == 3:
+                h = harmony.ChordSymbol(key.tonic.name)
+                h.romanNumeral = roman.RomanNumeral(roman_numerals[count])
+                h.writeAsChord = False
+                voices[i].append(h)
+            currNote = note
+            currNote.duration.type = 'quarter'
+            voices[i].append(currNote)
+        if count % 4 == 3 or count == len(chordList)-1:
+            measures[0].append([voices[0], voices[1]])
+            measures[1].append([voices[2], voices[3]])
+            # measures[1].append(rn)
+            partStaves[0].append(measures[0])
+            partStaves[1].append(measures[1])
+        count+=1
+    
+    s.append(partStaves)
+    s.show('text')
+    s.show()
+
 # checks if sw has errors
 def isValid(sw: mxp.ScoreWrapper, chordList: list[list[note.Note]]):
     sw = addChords(sw, chordList)
-    all_errors = []
 
     # single chord rules
     if len(sw.chord_wrappers) > 0:
