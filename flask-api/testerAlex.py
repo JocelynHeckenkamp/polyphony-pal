@@ -8,13 +8,14 @@ from music21 import *
 
 if __name__ == '__main__':
     # toggle debug
-    verbose = False
+    verbose = True
     verboseLong = False
 
     # user input
     keyStr = "C"
     # roman_numerals = ["vi", "ii", "V6", "iii6", "IV6", "I", "V", "V", "I", "IV6", "I6", "ii743", "ii65", "V", "I"]
-    roman_numerals = ["vi", "ii", "V6", "iii6", "IV6", "I", "V"]
+    # roman_numerals = ["vi", "ii", "V6", "iii6", "IV6", "I", "V"]
+    roman_numerals = ["I", "iio", "I", "vi", "I64", "V7", "I"]
 
     # write bassline
     bassline, chordPitches = gen.analyzeRN(roman_numerals, keyStr)

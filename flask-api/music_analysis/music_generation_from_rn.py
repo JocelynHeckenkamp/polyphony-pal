@@ -80,7 +80,7 @@ def createMXL(chordList, roman_numerals, key):
     
     s.append(partStaves)
     global globalCount
-    s.write('musicXML', f'test{globalCount}.musicXML')
+    s.write('musicXML', f'secondTest{globalCount}.musicXML')
     globalCount += 1
     # s.show('text')
     # s.show()
@@ -154,8 +154,10 @@ def all_combinations(lists):
 # filters combinations by 
 def filter_combinations_by_roman(chordCombos, rnStr, key):
     def remove_numbers(input_string):
-        return re.sub(r'\d+', '', input_string)
+        return re.sub(r'o', '', re.sub(r'\d+', '', input_string))
     def filter_func(c: list, rn: str):
+        if (remove_numbers(roman.romanNumeralFromChord(chord.Chord(c), key).romanNumeral) != remove_numbers(rn)):
+            print(remove_numbers(roman.romanNumeralFromChord(chord.Chord(c), key).romanNumeral) , remove_numbers(rn))
         return remove_numbers(roman.romanNumeralFromChord(chord.Chord(c), key).romanNumeral) == remove_numbers(rn)
     chordCombosFiltered = []
     for i, chordCombo in enumerate(chordCombos):
