@@ -26,7 +26,6 @@ def check_rules_1_to_13(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     all_errors.extend(rule11(chord)) # parallel octaves
     all_errors.extend(rule12(chord)) # parallel fifths
     all_errors.extend(rule13(chord)) # hidden fifths and octaves
-    all_errors.extend(rule28(chord)) # cadences
 
     return all_errors
 
@@ -334,30 +333,6 @@ def rule13(chord: mxp.ChordWrapper): # hidden fifths and octaves
                 'location': chord.location,
                 'description': f"Soprano and bass form a parallel octave or fifth.",
                 'suggestion': "",
-                'voices': voices,
-                'duration': 2.0,
-            }
-            errors.append(e.Error(**ErrorParams))
-
-    return errors
-
-# double check specific rules for these
-def rule28(chord: mxp.ChordWrapper): # cadences
-    errors = []
-
-    if (chord.next is None):
-        pen_rn = chord.prev.rn.scaleDegree
-        last_rn = chord.rn.scaleDegree
-
-        if (not (pen_rn == 5 and last_rn in (1, 6) # PAC, IAC, Deceptive
-                or (pen_rn == 4 and last_rn == 1) # Plagal
-                or last_rn == 5)): # Half
-            voices = [False] * 4
-            ErrorParams = {
-                'title': "Improper Cadence",
-                'location': chord.location,
-                'description': f"No proper cadence.",
-                'suggestion': "Rewrite last two chords with authentic cadence, plagal cadence, or deceptive cadence.",
                 'voices': voices,
                 'duration': 2.0,
             }

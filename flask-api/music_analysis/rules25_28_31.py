@@ -12,6 +12,7 @@ def check_rules_25_28to31(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     all_errors = []
 
     all_errors.extend(rule25(chord, score)) # resolving augmented sixth chords
+    all_errors.extend(rule28(chord))  # cadences
     all_errors.extend(rule29(chord, score))  # resolving V7
     all_errors.extend(rule31(chord))  # augmented melodic intervals
 
@@ -70,10 +71,34 @@ def rule25(chord: mxp.ChordWrapper, sw):
 
     return errors
 
+# double check specific rules for these
+def rule28(chord: mxp.ChordWrapper): # cadences
+    errors = []
+
+    if (chord.next is None):
+        pen_rn = chord.prev.rn.scaleDegree
+        last_rn = chord.rn.scaleDegree
+
+        if (not (pen_rn == 5 and (last_rn == 1 or last_rn == 6) # PAC, IAC, Deceptive
+                or (pen_rn == 4 and last_rn == 1) # Plagal
+                or last_rn == 5)): # Half
+            voices = [False] * 4
+            ErrorParams = {
+                'title': "Improper Cadence",
+                'location': chord.location,
+                'description': f"No proper cadence.",
+                'suggestion': "Rewrite last two chords with authentic cadence, plagal cadence, or deceptive cadence.",
+                'voices': voices,
+                'duration': 2.0,
+            }
+            errors.append(e.Error(**ErrorParams))
+
+    return errors
+
 def rule29(chord: mxp.ChordWrapper, sw): # resolving V7
     errors = []
 
-    if (chord.rn.romanNumeralAlone == "V" and chord.chord_obj.isDominantSeventh): #V7
+    if (chord.rn.romanNumeralAlone == "V" and chord.chord_obj.isDominantSeventh()): #V7
         if chord.next is None: # ending on V7
             ErrorParams = {
                 'title': "Unresolved V7",
