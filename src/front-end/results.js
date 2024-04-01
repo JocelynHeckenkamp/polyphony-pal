@@ -75,7 +75,8 @@ function Results() {
                         <Grid item pb={2} pr={2}>
                         <Paper sx={{ padding: 3,  backgroundColor: "#e0e0e0", borderRadius: 5 }} elevation={2} >
                            Title: {error.title} <br/><br/> 
-                           Measure Number: {error.location[0]} <br/> Offset:{error.location[1]} <br/><br/> 
+                           Measure Number: {error.location[0]} <br/>
+                           Offset:{error.location[1]} <br/><br/> 
                            Description: {error.description} <br/><br/> 
                            Suggestion: {error.suggestion} 
                         </Paper>
