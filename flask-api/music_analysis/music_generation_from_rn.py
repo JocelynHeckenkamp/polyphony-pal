@@ -6,8 +6,8 @@ from . import rules1to13 as r113
 import re
 
 music21_method_extensions.extend()
-
-
+global globalCount
+globalCount = 0
 # given list of possible combos and score wrapper, try every chord
 def score_bfs(sw: mxp.ScoreWrapper, chordCombos: list[list[list[note.Note]]]):
     goodChordLists = [[]]
@@ -34,16 +34,16 @@ def score_dfs(rn, sw: mxp.ScoreWrapper, lists: list[list[list[note.Note]]], inde
         new_prefix = prefix + [item]
         # Add a condition here to check if new_prefix meets your criteria
         if isValid(sw, new_prefix):
-            print(new_prefix)
+            # print(new_prefix)
             if len(new_prefix) == 7:
-                # print(new_prefix)
+                print(new_prefix)
                 createMXL(new_prefix, rn, sw.key)
-                return
             combinations.extend(score_dfs(rn, sw, lists, index + 1, new_prefix))
     
     return combinations
 
 
+# create a score and save it as musicXML
 def createMXL(chordList, roman_numerals, key):
     s = stream.Score() 
     partStaves = [stream.PartStaff(),stream.PartStaff()]
@@ -57,11 +57,6 @@ def createMXL(chordList, roman_numerals, key):
         if count % 4 == 0:
             measures = [stream.Measure(), stream.Measure()]
             voices = [stream.Voice(), stream.Voice(), stream.Voice(), stream.Voice()]
-            rn = []
-        # h = harmony.ChordSymbol(key.tonic.name)
-        # h.romanNumeral = roman.RomanNumeral(roman_numerals[count])
-        # h.writeAsChord = False
-        # rn.append(h)
         if count == 0:
             measures[0].insert(0, meter.TimeSignature('4/4'))  # Set time signature
             measures[0].insert(0, key) 
@@ -79,14 +74,17 @@ def createMXL(chordList, roman_numerals, key):
         if count % 4 == 3 or count == len(chordList)-1:
             measures[0].append([voices[0], voices[1]])
             measures[1].append([voices[2], voices[3]])
-            # measures[1].append(rn)
             partStaves[0].append(measures[0])
             partStaves[1].append(measures[1])
         count+=1
     
     s.append(partStaves)
-    s.show('text')
-    s.show()
+    global globalCount
+    s.write('musicXML', f'test{globalCount}.musicXML')
+    globalCount += 1
+    # s.show('text')
+    # s.show()
+
 
 # checks if sw has errors
 def isValid(sw: mxp.ScoreWrapper, chordList: list[list[note.Note]]):
@@ -97,7 +95,7 @@ def isValid(sw: mxp.ScoreWrapper, chordList: list[list[note.Note]]):
         if len(r113.rule1(sw.chord_wrappers[-1])) != 0: return False  # curr, range
         if len(r113.rule2(sw.chord_wrappers[-1])) != 0: return False  # curr, spacing
         if len(r113.rule3(sw.chord_wrappers[-1])) != 0: return False  # curr, voice crossing
-        # if len(r113.rule10(sw.chord_wrappers[-1])) != 0: return False  # curr, non-chords
+        if len(r113.rule10(sw.chord_wrappers[-1])) != 0: return False  # curr, non-chords
         if len(r1426.rule14(sw.chord_wrappers[-1], sw)) != 0: return False  # Curr
         if len(r1426.rule15(sw.chord_wrappers[-1], sw)) != 0: return False  # Curr
         if len(r1426.rule16(sw.chord_wrappers[-1], sw)) != 0: return False  # Curr

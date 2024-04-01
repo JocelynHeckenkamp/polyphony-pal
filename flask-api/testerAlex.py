@@ -13,8 +13,8 @@ if __name__ == '__main__':
 
     # user input
     keyStr = "C"
-    roman_numerals = ["vi", "ii", "V6", "iii6", "IV6", "I", "V", "V", "I", "IV6", "I6", "ii743", "ii65", "V", "I"]
-    # roman_numerals = ["vi", "ii", "V6", "iii6", "IV6", "I", "V"]
+    # roman_numerals = ["vi", "ii", "V6", "iii6", "IV6", "I", "V", "V", "I", "IV6", "I6", "ii743", "ii65", "V", "I"]
+    roman_numerals = ["vi", "ii", "V6", "iii6", "IV6", "I", "V"]
 
     # write bassline
     bassline, chordPitches = gen.analyzeRN(roman_numerals, keyStr)

@@ -323,7 +323,7 @@ def rule10(chord: mxp.ChordWrapper): # valid chords
     errors = []
 
     co = chord.chord_obj
-    if (not (co.isTriad == True or co.isSeventh == True)):
+    if (not (co.isTriad() == True or co.isSeventh() == True)):
         voices = [True] * 4
         ErrorParams = {
             'title': "Impermissable Chord Type",
