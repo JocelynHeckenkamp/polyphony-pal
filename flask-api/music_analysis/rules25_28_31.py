@@ -11,11 +11,11 @@ def check_rules_25_28to31(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 
     all_errors = []
 
-    all_errors.extend(rule25(chord, score)) # resolving augmented sixth chords
-    all_errors.extend(rule28(chord))  # cadences
-    all_errors.extend(rule29(chord, score))  # resolving V7
-    all_errors.extend(rule30(chord, score)) # resolving (half) diminished seventh chords
-    all_errors.extend(rule31(chord))  # augmented melodic intervals
+    all_errors.extend(rule25(chord, score))     # curr, next & last | resolving augmented sixth chords
+    all_errors.extend(rule28(chord))            # last | cadences
+    all_errors.extend(rule29(chord, score))     # curr, next & last | resolving V7
+    all_errors.extend(rule30(chord, score))     # curr, next & last | resolving (half) diminished seventh chords
+    all_errors.extend(rule31(chord))            # curr, next | augmented melodic intervals
 
     return all_errors
 
@@ -75,7 +75,7 @@ def rule25(chord: mxp.ChordWrapper, sw):
 def rule28(chord: mxp.ChordWrapper): # cadences
     errors = []
 
-    if (chord.next is None):
+    if (chord.next is None and chord.prev is not None):
         pen_rn = chord.prev.rn.scaleDegree
         last_rn = chord.rn.scaleDegree
 
@@ -166,14 +166,14 @@ def rule30(chord: mxp.ChordWrapper, sw):
         seventhAboveThird = False
         for n in chord.notes:
             if n.name == chord.chord_obj.third.name:
-                break;
+                break
             elif n.name == chord.chord_obj.seventh.name:
                 seventhAboveThird = True
-                break;
+                break
 
         if chord.next is None:
             ErrorParams = {
-                'title': "Unresolved Diminisehd Seventh Chord",
+                'title': "Unresolved Diminished Seventh Chord",
                 'location': chord.location,
                 'description': f"Diminished seventh chord does  not resolve.",
                 'suggestion': "Do not end on a chord of diminished quality.",
