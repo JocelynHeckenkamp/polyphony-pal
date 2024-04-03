@@ -35,19 +35,7 @@ import '../Landing.css';
 
 
 function Landing() {
-  const [currentTime, setCurrentTime] = useState(0);
-
-  useEffect(() => {
-    fetch('/time')
-      .then(res => res.json())
-      .then(data => {
-        const date = new Date(data.time * 1000);
-
-        const formattedDateTime = date.toLocaleString('en-US', { hour12: true });
-        setCurrentTime(formattedDateTime);
-
-      });
-  }, []);
+ 
 
   const teamMembers = [
     { name: 'Alexander N. Chin', role: 'Software Engineer', email: 'anc202000@utdallas.edu', initials: 'AC' },

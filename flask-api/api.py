@@ -7,9 +7,7 @@ from music_analysis.error import Error as e
 app = Flask(__name__)
 
 
-@app.route('/time')
-def get_current_time():
-    return {'time': time.time()}
+
 
 #Currently Prints the File sent to this route
 @app.route('/upload', methods=['PUT'])
