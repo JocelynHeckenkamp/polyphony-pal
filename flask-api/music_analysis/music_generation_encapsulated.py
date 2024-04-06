@@ -1,5 +1,5 @@
-import music_analysis.music_xml_parser as mxp
-import music_analysis.music_generation_from_rn as gen
+from . import music_xml_parser as mxp
+from . import music_generation_from_rn as gen
 from music21 import *
 
 def musicGenerationFromRomanToFiles(roman_numerals: list[str], keyStr:str, limit = 10, verbose = False, verboseLong = False):
