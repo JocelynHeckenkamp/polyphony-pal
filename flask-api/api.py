@@ -23,8 +23,8 @@ def music_generation():
     romanNumerals = request.get_data(False, True, False)
     print(romanNumerals)
     #run script then return
-    xml = gen.musicGenerationFromRomanToStr(romanNumerals, "C", verbose=False)
-    print(xml)
+    romanNumerals = romanNumerals.split(",")
+    xml = gen.musicGenerationFromRomanToStr(romanNumerals, "C", verbose=True)
     return xml
 
 
