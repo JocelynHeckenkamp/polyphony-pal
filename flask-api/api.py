@@ -20,11 +20,12 @@ def music_upload():
 
 @app.route('/musicGeneration', methods=['POST'])
 def music_generation():
-    romanNumerals = request.get_data(False, True, False)
-    print(romanNumerals)
+    req = request.get_data(False, True, False)
     #run script then return
-    romanNumerals = romanNumerals.split(",")
-    xml = gen.musicGenerationFromRomanToStr(romanNumerals, "C", verbose=False)
+    req = req.split(",")
+    romanNumerals = req[1:]
+    key = req[0]
+    xml = gen.musicGenerationFromRomanToStr(romanNumerals, key, verbose=True)
     return xml
 
 

@@ -88,7 +88,7 @@ outStr = out.decode('utf-8')  # now is string
 # create a score and save it as musicXML
 def createMXL(chordList, roman_numerals, key):
     s = stream.Score() 
-    partStaves = [stream.PartStaff(),stream.PartStaff()]
+    partStaves = [stream.PartStaff(instrument.Piano()),stream.PartStaff(instrument.Piano())]
     partStaves[0].clef = clef.TrebleClef()
     partStaves[1].clef = clef.BassClef()
 
@@ -106,11 +106,11 @@ def createMXL(chordList, roman_numerals, key):
             measures[1].insert(0, meter.TimeSignature('4/4'))  # Set time signature
             measures[1].insert(0, key) 
         for i, note in enumerate(chord):
-            if i == 3:
-                h = harmony.ChordSymbol(key.tonic.name)
-                h.romanNumeral = roman.RomanNumeral(roman_numerals[count])
-                h.writeAsChord = False
-                voices[i].append(h)
+            # if i == 3:
+            #     h = harmony.ChordSymbol(key.tonic.name)
+            #     h.romanNumeral = roman.RomanNumeral(roman_numerals[count])
+            #     h.writeAsChord = False
+            #     voices[i].append(h)
             currNote = note
             currNote.duration.type = 'quarter'
             currNote.offset = count%4
