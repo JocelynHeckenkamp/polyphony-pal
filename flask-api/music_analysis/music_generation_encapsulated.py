@@ -12,8 +12,6 @@ def musicGenerationFromRomanToFiles(roman_numerals: list[str], keyStr:str, limit
     # get possible notes (with octave) per voice
     possibleNotes = gen.getPossibleNotes(chordPitches, bassline)
 
-    # set first chord
-    possibleNotes[0] = [[note.Note("B4")], [note.Note("D4")], [note.Note("G3")], [note.Note("G3")]] 
     if verbose:
         print("Possible Notes:")
         for chordPN in possibleNotes:
@@ -51,8 +49,6 @@ def musicGenerationFromRomanToStr(roman_numerals: list[str], keyStr:str, limit =
     # get possible notes (with octave) per voice
     possibleNotes = gen.getPossibleNotes(chordPitches, bassline)
 
-    # set first chord
-    possibleNotes[0] = [[note.Note("B4")], [note.Note("D4")], [note.Note("G3")], [note.Note("G3")]] 
     if verbose:
         print("Possible Notes:")
         for chordPN in possibleNotes:
