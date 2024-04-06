@@ -4,8 +4,9 @@ import { TextField, Select,MenuItem, Button, Grid } from '@mui/material';
 import Header from './components/polypalHeader';
 
 function Generation(){
-    //ddvalue being sent to backend
-    //const [ddValue, setDD] = useState([]);
+    //ddvalue = key
+    //text value = roman numerals
+    const [ddValue, setDD] = useState([]);
     const [textVal, setTextVal] = useState("");
     const [data, setData] = useState();
     const [musicXML, setMusicXML] = useState('');
@@ -14,12 +15,19 @@ const handleTextChange = (e) => {
     setTextVal(e.target.value);
     console.log(textVal)
 }
+
+const handleDDchange = (e) => {
+    setDD(e.target.value);
+    console.log(textVal)
+}
 //upload to api music_generation function
 const upload = () => {
+
+    const values = [ ddValue, textVal ]
     fetch("/musicGeneration",
       {
         method: "POST",
-        body: textVal,
+        body: values ,
       })
       .then(response => response.text())
       .then(data => {
@@ -37,6 +45,31 @@ const upload = () => {
     {musicXML ? ( <SheetMusicComponent musicXml={musicXML} />) : 
         <Grid>
             <TextField id="outlined-basic" label="Roman Numerals" variant="outlined" value={textVal} onChange={handleTextChange}/>
+            <Select value={ddValue} onChange={handleDDchange} multiple>
+                <MenuItem value={"A"}>A</MenuItem>
+                <MenuItem value={"B"}>B</MenuItem>
+                <MenuItem value={"C"}>C</MenuItem>
+                <MenuItem value={"D"}>D</MenuItem>
+                <MenuItem value={"E"}>E</MenuItem>
+                <MenuItem value={"F"}>F</MenuItem>
+                <MenuItem value={"G"}>G</MenuItem>
+
+                <MenuItem value={"A#"}>A#</MenuItem>
+                <MenuItem value={"B#"}>B#</MenuItem>
+                <MenuItem value={"C#"}>C#</MenuItem>
+                <MenuItem value={"D#"}>D#</MenuItem>
+                <MenuItem value={"E#"}>E#</MenuItem>
+                <MenuItem value={"F#"}>F#</MenuItem>
+                <MenuItem value={"G#"}>G#</MenuItem>
+
+                <MenuItem value={"A-"}>A-</MenuItem>
+                <MenuItem value={"B-"}>B-</MenuItem>
+                <MenuItem value={"C-"}>C-</MenuItem>
+                <MenuItem value={"D-"}>D-</MenuItem>
+                <MenuItem value={"E-"}>E-</MenuItem>
+                <MenuItem value={"F-"}>F-</MenuItem>
+                <MenuItem value={"G-"}>G-</MenuItem>
+            </Select> 
             
             <Button onClick={upload}>Upload</Button>
         </Grid>
@@ -48,12 +81,3 @@ const upload = () => {
 export default Generation;
 
 
-/* <Select value={ddValue} onChange={handleDDchange} multiple>
-                <MenuItem value={"I"}>I</MenuItem>
-                <MenuItem value={"II"}>II</MenuItem>
-                <MenuItem value={"III"}>III</MenuItem>
-                <MenuItem value={"IV"}>IV</MenuItem>
-                <MenuItem value={"V"}>V</MenuItem>
-                <MenuItem value={"VI"}>VI</MenuItem>
-                <MenuItem value={"VII"}>VII</MenuItem>
-            </Select> */

@@ -24,7 +24,7 @@ def music_generation():
     print(romanNumerals)
     #run script then return
     romanNumerals = romanNumerals.split(",")
-    xml = gen.musicGenerationFromRomanToStr(romanNumerals, "C", verbose=True)
+    xml = gen.musicGenerationFromRomanToStr(romanNumerals, "C", verbose=False)
     return xml
 
 
