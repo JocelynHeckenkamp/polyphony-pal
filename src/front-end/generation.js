@@ -38,7 +38,7 @@ const upload = () => {
         <Grid>
             <TextField id="outlined-basic" label="Roman Numerals" variant="outlined" value={textVal} onChange={handleTextChange}/>
             
-            <Button onClick={upload}>Hello world</Button>
+            <Button onClick={upload}>Upload</Button>
         </Grid>
     }
 
