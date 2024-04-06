@@ -46,8 +46,8 @@ def score_dfs_recursive(rn, sw: mxp.ScoreWrapper, lists: list[list[list[note.Not
     return combinations
 
 
-# iterative
-def score_dfs_iterative(rn, sw: mxp.ScoreWrapper, lists: list[list[list[note.Note]]]):
+# iterative 
+def score_dfs_iterative(rn, sw: mxp.ScoreWrapper, lists: list[list[list[note.Note]]], limit=10, verbose=False, verboseLong=False, strOut=False):
     stack = [(0, [])]  # Initialize stack with initial index and empty prefix
     combinations = []
     maxLength = len(lists)
@@ -58,17 +58,32 @@ def score_dfs_iterative(rn, sw: mxp.ScoreWrapper, lists: list[list[list[note.Not
         else:
             for item in lists[index]:
                 new_prefix = prefix + [item]
-                # print(new_prefix)
-                if runningValidation(sw, new_prefix, verbose=False):
+                if verboseLong:
+                    print(new_prefix)
+                if runningValidation(sw, new_prefix, verboseLong=verboseLong):
                     if len(new_prefix) == maxLength:
-                        if not lastValidation(sw, new_prefix):
-                            return []
-                        print(new_prefix)
-                        createMXL(new_prefix, rn, sw.key)
+                        if not lastValidation(sw, new_prefix, verbose=verbose):
+                            return ""
+                        
+                        if verbose:
+                            print(new_prefix)
+
+                        xml = createMXL(new_prefix, rn, sw.key)
+                        if strOut:
+                            return xml
+
+                        limit -= 1
+                        if limit == 0:
+                            return combinations
+                        
                     stack.append((index + 1, new_prefix))
 
     return combinations
 
+p = pitch.Pitch('D#4')
+GEX = musicxml.m21ToXml.GeneralObjectExporter(p)
+out = GEX.parse()  # out is bytes
+outStr = out.decode('utf-8')  # now is string
 
 # create a score and save it as musicXML
 def createMXL(chordList, roman_numerals, key):
@@ -91,11 +106,11 @@ def createMXL(chordList, roman_numerals, key):
             measures[1].insert(0, meter.TimeSignature('4/4'))  # Set time signature
             measures[1].insert(0, key) 
         for i, note in enumerate(chord):
-            if i == 3:
-                h = harmony.ChordSymbol(key.tonic.name)
-                h.romanNumeral = roman.RomanNumeral(roman_numerals[count])
-                h.writeAsChord = False
-                voices[i].append(h)
+            # if i == 3:
+            #     h = harmony.ChordSymbol(key.tonic.name)
+            #     h.romanNumeral = roman.RomanNumeral(roman_numerals[count])
+            #     h.writeAsChord = False
+            #     voices[i].append(h)
             currNote = note
             currNote.duration.type = 'quarter'
             currNote.offset = count%4
@@ -112,136 +127,140 @@ def createMXL(chordList, roman_numerals, key):
     global globalCount
     s.write('musicXML', f'secondTest{globalCount}.musicXML')
     globalCount += 1
-    # s.show('text')
-    # s.show()
+
+    # return string
+    GEX = musicxml.m21ToXml.GeneralObjectExporter(s)
+    out = GEX.parse()
+    outStr = out.decode('utf-8')
+    return outStr
 
 
 # checks if sw has errors
-def runningValidation(sw: mxp.ScoreWrapper, chordList: list[list[note.Note]], verbose = False):
+def runningValidation(sw: mxp.ScoreWrapper, chordList: list[list[note.Note]], verboseLong = False):
     sw = addChords(sw, chordList)
 
     # single chord rules
     if len(sw.chord_wrappers) > 0:
         if len(r113.rule1(sw.chord_wrappers[-1])) != 0:
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 1")
             return False   # curr | range
         if len(r113.rule2(sw.chord_wrappers[-1])) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 2")
             return False   # curr | spacing
         if len(r113.rule3(sw.chord_wrappers[-1])) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 3")
             return False   # curr | voice crossing
         if len(r113.rule10(sw.chord_wrappers[-1])) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 10")
             return False   # curr | non-chords
         if len(r1426.rule14(sw.chord_wrappers[-1], sw)) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 14")
             return False   # Curr
         if len(r1426.rule15(sw.chord_wrappers[-1], sw)) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 15")
             return False   # Curr
         if len(r1426.rule16(sw.chord_wrappers[-1], sw)) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 16")
             return False   # Curr
         if len(r1426.rule18(sw.chord_wrappers[-1], sw)) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 18")
             return False   # Curr
         if len(r1426.rule19(sw.chord_wrappers[-1], sw)) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 19")
             return False   # Curr
         if len(r1426.rule20(sw.chord_wrappers[-1], sw)) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 20")
             return False   # Curr
         if len(r1426.rule22(sw.chord_wrappers[-1], sw)) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 22")
             return False   # Curr
         if len(r1426.rule23(sw.chord_wrappers[-1], sw)) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 23")
             return False   # Curr
 
     # two chord rules
     if len(sw.chord_wrappers) > 1:
         if len(r113.rule4(sw.chord_wrappers[-2])) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 4")
             return False   # curr, next | voice overlapping
         if len(r113.rule5(sw.chord_wrappers[-2])) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 5")
             return False   # curr, next | large melodic leaps
         if len(r113.rule9(sw.chord_wrappers[-2])) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 9")
             return False   # curr, next | resolving the seventh of a chord
         if len(r113.rule11(sw.chord_wrappers[-2])) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 11")
             return False   # curr, next | parallel octaves
         if len(r113.rule12(sw.chord_wrappers[-2])) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 12")
             return False   # curr, next | parallel fifths
         if len(r113.rule13(sw.chord_wrappers[-2])) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 13")
             return False   # curr, next | hidden fifths and octaves
         if len(r1426.rule17(sw.chord_wrappers[-2], sw)) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 17")
             return False   # Curr, Next
         if len(r1426.rule21(sw.chord_wrappers[-2], sw)) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 21")
             return False   # Curr, Next
         if len(r1426.rule24(sw.chord_wrappers[-2], sw)) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 24")
             return False   # Curr, Next
         if len(r1426.rule26(sw.chord_wrappers[-2], sw)) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 26")
             return False   # Prev, Curr, Next
         if len(r252831.rule25(sw.chord_wrappers[-2], sw)): 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 25")
             return False   # curr, next & last | resolving augmented sixth chords
         if len(r252831.rule29(sw.chord_wrappers[-2], sw)): 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 29")
             return False   # curr, next & last | resolving V7
         if len(r252831.rule30(sw.chord_wrappers[-2], sw)): 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 30")
             return False   # curr, next & last | resolving (half) diminished seventh chords
         if len(r252831.rule31(sw.chord_wrappers[-2])): 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 31")
             return False   # curr, next | augmented melodic intervals
 
     # three chord rules
     if len(sw.chord_wrappers) > 2:
         if len(r113.rule6(sw.chord_wrappers[-3])) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 6")
             return False   # curr, next, nextnext | double melodic leaps
         if len(r113.rule7(sw.chord_wrappers[-3])) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 7")
             return False   # curr, next, nextnext | resolving leaps
         if len(r113.rule8(sw.chord_wrappers[-3])) != 0: 
-            if verbose: 
+            if verboseLong: 
                 print("ERROR: rule 8")
             return False   # curr, next, nextnext | resolving diminished movement
     
@@ -270,6 +289,7 @@ def lastValidation(sw: mxp.ScoreWrapper, chordList: list[list[note.Note]], verbo
             return False          # curr, next & last | resolving (half) diminished seventh chords
 
     return True
+
 
 # format score wrappers given score and chordlist
 def addChords(sw: mxp.ScoreWrapper, chordList: list[list[note.Note]]):
