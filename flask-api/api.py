@@ -1,4 +1,4 @@
-import time
+
 from flask import Flask, request, jsonify, render_template
 import music_analysis.rules1to13 as r113
 import music_analysis.rules14to26 as r1426
@@ -17,11 +17,14 @@ def music_upload():
     content = "{} {}".format(musicXML, errors(musicXML))
     return content
 
-# @app.route('/results', methods=['GET', 'POST'])
-# def music_return():
-#     f = open(r'voice-leading-1.mxml', "r")
-#     x = f.read()
-#     return x
+@app.route('/musicGeneration', methods=['POST'])
+def music_generation():
+    romanNumerals = request.get_data(False, True, False)
+    #run script then return
+    #content = "{} {}".format(musicXML, errors(musicXML))
+    print(romanNumerals)
+    return jsonify(200)
+
 
 def errors(musicXML):
     errors = []
