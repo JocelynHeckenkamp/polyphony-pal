@@ -22,6 +22,7 @@ def music_upload():
 def music_generation():
     romanNumerals = request.get_data(False, True, False)
     #run script then return
+    romanNumerals = romanNumerals.split(",")
     xml = gen.musicGenerationFromRomanToStr(romanNumerals, "C", verbose=True)
     return xml
 
