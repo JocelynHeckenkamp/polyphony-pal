@@ -31,7 +31,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Typography, Button, Grid, Avatar } from '@mui/material';
 import logo from '../polypalLogo.svg';
-import '../Landing.css';
+import styles from "../Landing.module.css";
 
 
 function Landing() {
@@ -62,7 +62,7 @@ function Landing() {
             With PolyphonyPal, compose confidently, correct errors swiftly, and
             elevate your musical creations to new heights of excellence.
           </Typography>
-          <Button variant="contained" component={Link} to="/results" className="get-started-btn" sx={{backgroundColor: "black"}}>
+          <Button variant="contained" component={Link} to="/results" className={styles["get-started-btn"]} >
             Get Started
           </Button>
         </Grid>
