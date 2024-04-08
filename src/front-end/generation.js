@@ -92,10 +92,10 @@ const render_content = () =>
 
 }
     return(
-            <div>
+        <div>
             <Header/>
             {render_content()}
-            </div>
+        </div>
     );
 }
 export default Generation;
