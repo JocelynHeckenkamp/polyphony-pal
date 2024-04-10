@@ -15,7 +15,7 @@ function Header()
       <Grid container item xs={10} md={10} lg={10} pt={4.6} className="navigation-buttons" justifyContent="end">
         <Grid item >
         <Link href="/"><Button size="large" sx={{ color: "black" }}>About</Button></Link>
-        <Link href="/"><Button size="large" sx={{ color: "black" }}>Features</Button></Link>  
+        <Link href="/generation"><Button size="large" sx={{ color: "black" }}>Generate</Button></Link>  
                         <Button size="large" sx={{ color: "black" }}>Account</Button>
         <Link href="/results"><Button size="large" sx={{ color: "black" }}>Upload</Button> </Link>
         </Grid>

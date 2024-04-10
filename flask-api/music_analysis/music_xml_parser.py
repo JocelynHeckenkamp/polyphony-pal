@@ -111,7 +111,9 @@ class ScoreWrapper:
         voice_map = {}
         note_matrix = {}
         locations = set()
+        self.score.show("text")
         for voice in self.score.recurse().voices: # 2 staffs per score; n measures per staff, 2 voices per measure
+            print(voice)
             # map voice to number
             vox = str(voice)[-2]
             if vox not in voice_map:
@@ -122,7 +124,7 @@ class ScoreWrapper:
                 offset = no.offset
                 locations.add((measure_num, offset))
                 note_matrix[(measure_num, offset, voice_map[vox])] = no
-
+        # print(note_matrix)
         chords = []
         for location in locations:
             chords.append(ChordWrapper(note_matrix[(location[0], location[1], 0)],
