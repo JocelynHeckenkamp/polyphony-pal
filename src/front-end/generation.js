@@ -3,6 +3,7 @@ import SheetMusicComponent from './SheetMusicComponent';
 import { TextField, Select,MenuItem, Button, Grid, CircularProgress } from '@mui/material';
 import Header from './components/polypalHeader';
 
+
 function Generation(){
     //ddvalue = key
     //text value = roman numerals
@@ -57,6 +58,7 @@ const render_content = () =>
         else{//wait for user input
             return(
                 <Grid>
+                
                 <TextField id="outlined-basic" label="Roman Numerals" variant="outlined" value={textVal} onChange={handleTextChange}/>
                 <Select value={ddValue} onChange={handleDDchange} multiple>
                     <MenuItem value={"A"}>A</MenuItem>

@@ -3,6 +3,7 @@ import SheetMusicComponent from './SheetMusicComponent';
 import { Paper, CircularProgress, Grid } from '@mui/material';
 import Upload from "./components/upload";
 import Header from './components/polypalHeader';
+import {StyledEngineProvider} from "@mui/styled-engine"
 
 //DONT DELETE
 //delay fetch to test loading bars
