@@ -32,7 +32,7 @@ import { Link } from 'react-router-dom';
 import { Container, Typography, Button, Grid, Avatar } from '@mui/material';
 import logo from '../polypalLogo.svg';
 import  "../Landing.css";
-import {StyledEngineProvider} from "@mui/styled-engine"
+
 
 
 
@@ -47,7 +47,7 @@ function Landing() {
   ];
 
   return (
-    <StyledEngineProvider injectFirst>
+    
     
     <Container maxWidth="lg" className="landing-container">
 
@@ -99,7 +99,7 @@ function Landing() {
       </Grid>
 
     </Container>
-    </StyledEngineProvider>
+    
   );
 }
 

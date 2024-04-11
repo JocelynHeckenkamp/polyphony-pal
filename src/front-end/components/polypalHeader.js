@@ -5,7 +5,7 @@ import logo from '../../polypalLogo.svg';
 function Header()
 {
     return(
-    <Grid container  className="top-bar" >
+    <Grid container   >
       <Grid item  xs={2} md={2} lg={2} mt={-6}  >
 
       <Link href="/"><img src={logo} alt="polypal logo"  style={{ width: "200px", height: "200px" }}  /></Link>
