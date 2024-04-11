@@ -58,7 +58,7 @@ function Results() {
                 return(<CircularProgress />);
             } else if (musicXml) { //musicXML done loading
                 return(
-                <div> 
+                <div > 
                 <Grid container spacing={2}>  
                     <Grid container item xs={7} sm={7} md={7} lg={7} xl={7} direction="column"   sx={{ overflow: 'visible'}} >
                         <Grid item mt={-2}>
@@ -71,11 +71,9 @@ function Results() {
                     <Grid item xs={1} sm={1} md={1} lg={1} xl={1}></Grid>
 
 
-                    <Grid container item mt={-2} xs={2} sm={2} md={2} lg={2} xl={2}  sx={{ overflowY: "scroll", maxHeight: "650px" }}  >
-
-                        
+                    <Grid container item     className={css.error_scroller} >
                         {musicErrors.map((error) => ( 
-                        <Grid item pb={2} pr={2}>
+                        <Grid item pb={2} pr={2} >
                         <Paper sx={{ padding: 3,  backgroundColor: "#e0e0e0", borderRadius: 5 }} elevation={2} >
                            Title: {error.title} <br/><br/> 
                            Measure Number: {error.location[0]} <br/>
@@ -103,16 +101,16 @@ function Results() {
 
 
     return (
-        <div >
+        <div  className={css.flex_container}>
          
           
-        <Grid>
+        <Grid >
          
              <Header />
             
             {renderContent()}
         </Grid>
-
+        <div className={css.upload_background}></div>
         
         </div>
        
