@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Typography, Button, Grid, Paper } from '@mui/material';
+import css from "./frontEnd.module.css"
 
 
 
@@ -47,32 +48,33 @@ function Upload({setVis, setXML, setLoading, setMusicErrors} ) {
 
   return (
 
-
-    <div className="upload-container" align="left">
-      
-
-      <Grid container mt={{xs:20, sm:20, md:20, lg:20 , xl:20}} justifyContent="center" className="upload-Card" >
+    
+    <div  align="left"  >
+    
+      <Grid container mt={{xs:20, sm:20, md:20, lg:20 , xl:20}} justifyContent="center"  >
         <Grid item align="center" >
-          <Paper sx={{ padding: 3, backgroundColor: "#f7f7f7", px: 10 }} elevation={2} >
+          <Paper className={css.upload_paper} elevation={3}>
 
-            <Typography variant="h2" color="black" sx={{ fontWeight: "bold" }} className="upload-subtitle">
+            <Typography className={css.upload_title} >
               Upload Music XML File
             </Typography>
-            <Typography pb={3} pt={1} variant="h6" color="textSecondary" className="upload-subtitle">
+            <Typography className={css.upload_subtitle} >
               Export Music XML file from Musescore or any other editor
             </Typography>
 
             <input onChange={(e) => { setFile(e.target.files[0]) }} type='file' accept='.musicxml,.mxml, .mxl' ></input>
-            <Button variant="contained" onClick={handleUpload}
-              sx={{ backgroundColor: "black", '&:hover': { backgroundColor: "grey" } }}
-            >Upload</Button>
+            <Button variant="contained" onClick={handleUpload} className={css["btn"]}>Upload</Button>
 
           </Paper>
         </Grid>
       </Grid>
 
-
+      <div className={css.upload_background}>
+      
+      </div>
     </div>
+    
+    
 
   );
 

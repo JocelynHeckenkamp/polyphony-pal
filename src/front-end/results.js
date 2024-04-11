@@ -3,7 +3,9 @@ import SheetMusicComponent from './SheetMusicComponent';
 import { Paper, CircularProgress, Grid } from '@mui/material';
 import Upload from "./components/upload";
 import Header from './components/polypalHeader';
-import {StyledEngineProvider} from "@mui/styled-engine"
+import css from "./components/frontEnd.module.css"
+
+
 
 //DONT DELETE
 //delay fetch to test loading bars
@@ -101,11 +103,19 @@ function Results() {
 
 
     return (
-         <div>
-            <Header />
+        <div >
+         
+          
+        <Grid>
+         
+             <Header />
             
             {renderContent()}
-        </div> 
+        </Grid>
+
+        
+        </div>
+       
     );
 }
 export default Results;
