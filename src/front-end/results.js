@@ -86,7 +86,7 @@ function Results() {
                         ))}
                    
 
-
+                   <div  className={css.flex_container}> </div>
                     </Grid>
                 </Grid>  
                 </div>  
