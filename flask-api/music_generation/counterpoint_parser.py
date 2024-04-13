@@ -11,6 +11,7 @@ consonant_intervals = ["P1", "m3", "M3", "P5", "m6", "M6",
                        "P8", "m10", "M10", "P12", "m13", "M13",
                        "P15", "m17", "M17", "P19", "m20", "M20",
                        "P22", "m24", "M24", "P26"]
+unison_intervals = ["P1", "P8", "P15", "P22"]
 
 fn1 = "./melody2.musicxml"
 fn2 = "./harmony2.musicxml"
@@ -26,8 +27,12 @@ class ScoreWrapper:
         self.cf = cantus_firmus
         self.cp = int(not cantus_firmus)
 
-        for n in score.recurse().getElementsByClass(note.Note):
-            iw = IntervalWrapper(n, self.cf)
+        all_notes = score.recurse().getElementsByClass(note.Note)
+        for n in range(len(all_notes)):
+            unison = False
+            if n == 0 or n == len(all_notes)-1:
+                unison = True
+            iw = IntervalWrapper(all_notes[n], self.cf, unison)
             self.interval_wrappers.append(iw)
 
         for i in range(len(self.interval_wrappers)):
@@ -43,11 +48,12 @@ class ScoreWrapper:
                 iw.vlq = voiceLeading.VoiceLeadingQuartet(iw.notes[0], iw.next.notes[0], iw.notes[1], iw.next.notes[1])
                 iw.vlq.key = key.Key(self.interval_wrappers[len(self.interval_wrappers)-1].notes[0].name.lower())
 
+
 class IntervalWrapper:
     cf = None # cantus firmus index (0 or 1)
     cp = None # counterpoint index (0 or 1)
 
-    def __init__(self, n, cantus_firmus):
+    def __init__(self, n, cantus_firmus, unison):
         self.cf = cantus_firmus
         self.cp = int(not cantus_firmus)
         self.notes = [None, None]
@@ -65,7 +71,10 @@ class IntervalWrapper:
             mel = (n if cantus_firmus == 0 else note.Note(n2))
             har = (n if cantus_firmus == 1 else note.Note(n2))
             i = interval.Interval(har, mel)
-            if i.name in consonant_intervals:
+            if unison:
+                if i.name in unison_intervals:
+                    self.counterpoints.append(n2)
+            elif i.name in consonant_intervals:
                 self.counterpoints.append(n2)
 
     def __str__(self):

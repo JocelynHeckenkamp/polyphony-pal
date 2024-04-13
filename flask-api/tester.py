@@ -18,7 +18,6 @@ if __name__ == '__main__':
     errors = cpr.check_counterpoint(sw)
     print(errors)
 
-
     # sw = mxp.getScoreWrapper(fn)
     #print(sw)
     
