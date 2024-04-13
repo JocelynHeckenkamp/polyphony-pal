@@ -36,6 +36,13 @@ class ScoreWrapper:
             if i != len(self.interval_wrappers)-1:
                 self.interval_wrappers[i].next = self.interval_wrappers[i+1]
 
+    def calc_vlqs(self):
+        for iw in self.interval_wrappers:
+            if iw.next is not None:
+                iw.melodic_intervals = [interval.Interval(iw.notes[0], iw.next.notes[0]), interval.Interval(iw.notes[1], iw.next.notes[1])]
+                iw.vlq = voiceLeading.VoiceLeadingQuartet(iw.notes[0], iw.next.notes[0], iw.notes[1], iw.next.notes[1])
+                iw.vlq.key = key.Key(self.interval_wrappers[len(self.interval_wrappers)-1].notes[0].name.lower())
+
 class IntervalWrapper:
     cf = None # cantus firmus index (0 or 1)
     cp = None # counterpoint index (0 or 1)
@@ -51,6 +58,7 @@ class IntervalWrapper:
         self.next = None
         self.counterpoints = []
         self.melodic_intervals = None
+        self.vlq = None
 
         # possible harmonies
         for n2 in notes_in_range[self.cp]:
@@ -68,10 +76,6 @@ class IntervalWrapper:
         self.interval_obj = interval.Interval(self.notes[0], self.notes[1])
         self.intervalClass = self.interval_obj.intervalClass
 
-    def calc_melodic_intervals(self):
-        if self.next is not None:
-            self.melodic_intervals = [interval.Interval(self.notes[0], self.next.notes[0]), interval.Interval(self.notes[1], self.next.notes[1])]
-
 def getScoreWrapper(fn, cantus_firmus):
     s = converter.parse(fn)
     sw = ScoreWrapper(s, cantus_firmus)
@@ -84,9 +88,7 @@ def testHarmony(sw, fn2):
         harmony.append(n)
     for i in range(0, len(sw.interval_wrappers)):
         sw.interval_wrappers[i].harmonize(harmony[i])
-        #print(sw.interval_wrappers[i])
-    for i in range(0, len(sw.interval_wrappers)):
-        sw.interval_wrappers[i].calc_melodic_intervals()
+    sw.calc_vlqs()
 
 if __name__ == '__main__':
     cantus_firmus = 1
