@@ -7,10 +7,10 @@ import music21 as m21
 import music_generation.counterpoint_parser as cpp
 import music_generation.counterpoint_rules as cpr
 
-fn1 = "./music_generation/melody2.musicxml"
+# fn1 = "./music_generation/melody2.musicxml"
 # fn2 = "./music_generation/harmony2.musicxml"
-# fn1 = "./music_generation/test_cases/rules1_2melody.musicxml"
-fn2 = "./music_generation/test_cases/rules6_7harmony.musicxml"
+fn1 = "./music_generation/test_cases/rule8melody.musicxml"
+fn2 = "./music_generation/test_cases/rule8harmony.musicxml"
 
 if __name__ == '__main__':
     sw = cpp.getScoreWrapper(fn1, 1)

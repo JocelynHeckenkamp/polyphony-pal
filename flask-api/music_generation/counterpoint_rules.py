@@ -26,7 +26,8 @@ def check_counterpoint(sw: cpp.ScoreWrapper):
         if (#rule1(iw) # range
             #or rule2(iw) # consonant intervals
             #or rule6(iw) # approaching perfect intervals
-            rule7(iw) # hidden perfect intervals
+            #or rule7(iw) # hidden perfect intervals
+            rule8(iw) # voice crossing
         ):
             return True
 
@@ -69,11 +70,16 @@ def rule6(iw: cpp.IntervalWrapper): # approaching perfect intervals
         return True
     return False
 
-def rule7(iw: cpp.IntervalWrapper):
+def rule7(iw: cpp.IntervalWrapper): # hidden perfect intervals
     if iw.next is not None:
         if iw.vlq.hiddenFifth() or iw.vlq.hiddenOctave():
             print(iw)
             return True
+    return False
+
+def rule8(iw: cpp.IntervalWrapper):
+    if iw.notes[0].higherThan(iw.notes[1]):
+        return True
     return False
 
 if __name__ == '__main__':
