@@ -1,11 +1,29 @@
 
 from flask import Flask, request, jsonify, render_template
+
+#database/API
+from flask_sqlalchemy import SQLAlchemy
+from config import Config
+
+#rules imports
 import music_analysis.rules1to13 as r113
 import music_analysis.rules14to26 as r1426
 import music_analysis.music_xml_parser as mxp
 import music_analysis.music_generation_encapsulated as gen
 from music_analysis.error import Error as e
+
+#database model
+from models import AnalysisError
+
 app = Flask(__name__)
+app.config.from_object(Config)
+db = SQLAlchemy(app)
+
+#database initialized before any requests
+@app.before_first_request
+def create_tables():
+    db.create_all()
+
 
 
 
