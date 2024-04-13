@@ -25,7 +25,8 @@ def check_counterpoint(sw: cpp.ScoreWrapper):
     for iw in sw.interval_wrappers:
         if (#rule1(iw) # range
             #or rule2(iw) # consonant intervals
-            rule6(iw) # approaching perfect intervals
+            #or rule6(iw) # approaching perfect intervals
+            rule7(iw) # hidden perfect intervals
         ):
             return True
 
@@ -68,6 +69,12 @@ def rule6(iw: cpp.IntervalWrapper): # approaching perfect intervals
         return True
     return False
 
+def rule7(iw: cpp.IntervalWrapper):
+    if iw.next is not None:
+        if iw.vlq.hiddenFifth() or iw.vlq.hiddenOctave():
+            print(iw)
+            return True
+    return False
 
 if __name__ == '__main__':
 
