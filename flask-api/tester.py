@@ -6,17 +6,23 @@ import music_analysis.rules14to26 as r1426
 import music21 as m21
 import music_generation.counterpoint_parser as cpp
 import music_generation.counterpoint_rules as cpr
+import music_generation.music21_method_extensions as m21me
+import music_generation.counterpoint_generation as cpg
 
+fn = "./music_generation/melody3.musicxml"
 fn1 = "./music_generation/melody2.musicxml"
 fn2 = "./music_generation/harmony2.musicxml"
 # fn1 = "./music_generation/test_cases/rule10melody.musicxml"
 # fn2 = "./music_generation/test_cases/rule10harmony.musicxml"
 
 if __name__ == '__main__':
-    sw = cpp.getScoreWrapper(fn1, 1)
-    cpp.testHarmony(sw, fn2)
-    errors = cpr.check_counterpoint(sw)
-    print(errors)
+    m21me.extend()
+    cpg.generate_counterpoint(fn, 1)
+
+    # sw = cpp.getScoreWrapper(fn1, 1)
+    # cpp.testHarmony(sw, fn2)
+    # errors = cpr.check_counterpoint(sw)
+    # print(errors)
 
     # sw = mxp.getScoreWrapper(fn)
     #print(sw)

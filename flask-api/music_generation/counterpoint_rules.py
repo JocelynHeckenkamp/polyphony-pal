@@ -38,6 +38,8 @@ def check_counterpoint(sw: cpp.ScoreWrapper):
     return False
 
 def rule1(iw: cpp.IntervalWrapper): # ranges
+    m21me.extend()
+
     mel = iw.notes[1]
     har = iw.notes[0]
 
