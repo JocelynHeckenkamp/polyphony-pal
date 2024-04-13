@@ -30,7 +30,8 @@ def check_counterpoint(sw: cpp.ScoreWrapper):
             #or rule8(iw) # voice crossing
             #or rule9(iw) # repeated notes melodic intervals
             #or rule10(iw) # consecutive leaps
-            rule11(iw) # augmented melodic intervals
+            #or rule11(iw) # augmented melodic intervals
+            rule12(iw) # large and diminished melodic intervals
         ):
             return True
 
@@ -109,6 +110,16 @@ def rule11(iw: cpp.IntervalWrapper): # augmented melodic intervals
         for mi in iw.melodic_intervals:
             if mi.name[0] == "A":
                 return True
+    return False
+
+def rule12(iw: cpp.IntervalWrapper): # large and diminished melodic intervals
+    if iw.next is not None and iw.next.next is not None:
+        for m in range(0, 2):
+            mi = iw.melodic_intervals[m]
+            if mi.name[0] == "d" or abs(mi.semitones) > 5:
+                mi2 = iw.next.melodic_intervals[m]
+                if not mi2.isStep or mi.direction == mi2.direction:
+                    return True
     return False
 
 if __name__ == '__main__':

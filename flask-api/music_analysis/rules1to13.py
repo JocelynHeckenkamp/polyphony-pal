@@ -151,7 +151,7 @@ def rule5(chord: mxp.ChordWrapper): # melodic leaps
     errors = []
 
     for a in range(len(chord.melodic_intervals)):
-        if chord.melodic_intervals[a].semitones > 12:
+        if abs(chord.melodic_intervals[a].semitones) > 12:
             voices = [False] * 4
             voices[a] = True
             ErrorParams = {
