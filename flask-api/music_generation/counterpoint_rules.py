@@ -16,22 +16,22 @@ consonant_intervals = ["P1", "m3", "M3", "P5", "m6", "M6",
 def check_counterpoint(sw: cpp.ScoreWrapper):
     m21me.extend()
 
-    # if (rule3(sw) # begin with unison
-    #     or rule4(sw) # end with unison
-    #     or rule5(sw) # closes with contrary motion
-    # ):
-    #     return True
+    if (rule3(sw) # begin with unison
+        or rule4(sw) # end with unison
+        or rule5(sw) # closes with contrary motion
+    ):
+        return True
 
     for iw in sw.interval_wrappers:
-        if (#rule1(iw) # range
-            #or rule2(iw) # consonant intervals
-            #or rule6(iw) # approaching perfect intervals
-            #or rule7(iw) # hidden perfect intervals
-            #or rule8(iw) # voice crossing
-            #or rule9(iw) # repeated notes melodic intervals
-            rule10(iw) # consecutive leaps
-            #or rule11(iw) # augmented melodic intervals
-            #or rule12(iw) # large and diminished melodic intervals
+        if (rule1(iw) # range
+            or rule2(iw) # consonant intervals
+            or rule6(iw) # approaching perfect intervals
+            or rule7(iw) # hidden perfect intervals
+            or rule8(iw) # voice crossing
+            or rule9(iw) # repeated notes melodic intervals
+            or rule10(iw) # consecutive leaps
+            or rule11(iw) # augmented melodic intervals
+            or rule12(iw) # large and diminished melodic intervals
         ):
             return True
 
