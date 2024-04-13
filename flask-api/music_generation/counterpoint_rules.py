@@ -27,13 +27,11 @@ def rule1(iw: cpp.IntervalWrapper): # ranges
     mel = iw.notes[1]
     har = iw.notes[0]
 
-    print(mel)
-    print(har)
-
     if (mel.higherThan(m21.note.Note(ranges[1][1])) or
         mel.lessThan(m21.note.Note(ranges[1][0])) or
         har.higherThan(m21.note.Note(ranges[0][1])) or
-        har.lowerthan(m21.note.Note(ranges[0][0]))):
+        har.lessThan(m21.note.Note(ranges[0][0]))):
+
         return True
 
     return False
