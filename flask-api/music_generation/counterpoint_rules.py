@@ -16,6 +16,9 @@ consonant_intervals = ["P1", "m3", "M3", "P5", "m6", "M6",
 def check_counterpoint(sw: cpp.ScoreWrapper):
     m21me.extend()
 
+    if (rule3(sw)):
+        return True
+
     for iw in sw.interval_wrappers:
         if (rule1(iw) # range
             or rule2(iw) # consonant intervals
@@ -39,6 +42,11 @@ def rule1(iw: cpp.IntervalWrapper): # ranges
 
 def rule2(iw: cpp.IntervalWrapper):
     if iw.interval_obj.name not in consonant_intervals:
+        return True
+    return False
+
+def rule3(sw: cpp.ScoreWrapper):
+    if sw.interval_wrappers[0].interval_obj.name not in ["P1", "P8", "P15", "P22"]:
         return True
     return False
 
