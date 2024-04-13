@@ -29,7 +29,8 @@ def check_counterpoint(sw: cpp.ScoreWrapper):
             #or rule7(iw) # hidden perfect intervals
             #or rule8(iw) # voice crossing
             #or rule9(iw) # repeated notes melodic intervals
-            rule10(iw) # consecutive leaps
+            #or rule10(iw) # consecutive leaps
+            rule11(iw) # augmented melodic intervals
         ):
             return True
 
@@ -101,6 +102,13 @@ def rule10(iw: cpp.IntervalWrapper): # consecutive leaps
                 c = m21.chord.Chord([n1, n2, n3])
                 if not c.isTriad() or iw.melodic_intervals[mi].direction != iw.next.melodic_intervals[mi].direction:
                     return True
+    return False
+
+def rule11(iw: cpp.IntervalWrapper): # augmented melodic intervals
+    if iw.next is not None:
+        for mi in iw.melodic_intervals:
+            if mi.name[0] == "A":
+                return True
     return False
 
 if __name__ == '__main__':
