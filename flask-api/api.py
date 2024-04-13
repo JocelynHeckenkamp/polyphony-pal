@@ -2,8 +2,9 @@
 from flask import Flask, request, jsonify, render_template
 
 #database/API
-from flask_sqlalchemy import SQLAlchemy
-from config import Config
+from database.ext import db  # Updated to reflect new path
+from database.config import Config  # Updated if config.py was moved; otherwise, keep as 'from config import Config'
+
 
 #rules imports
 import music_analysis.rules1to13 as r113
@@ -13,11 +14,14 @@ import music_analysis.music_generation_encapsulated as gen
 from music_analysis.error import Error as e
 
 #database model
-from models import AnalysisError
+from database.models import User 
+from database.models import Score
+from database.models import AnalysisError
 
 app = Flask(__name__)
 app.config.from_object(Config)
-db = SQLAlchemy(app)
+print("Database URI:", app.config['SQLALCHEMY_DATABASE_URI'])
+db.init_app(app)
 
 #database initialized before any requests
 @app.before_first_request

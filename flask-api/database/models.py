@@ -1,4 +1,4 @@
-from api import db
+from ext import db
 
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
