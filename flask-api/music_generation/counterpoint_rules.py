@@ -29,9 +29,9 @@ def check_counterpoint(sw: cpp.ScoreWrapper):
             #or rule7(iw) # hidden perfect intervals
             #or rule8(iw) # voice crossing
             #or rule9(iw) # repeated notes melodic intervals
-            #or rule10(iw) # consecutive leaps
+            rule10(iw) # consecutive leaps
             #or rule11(iw) # augmented melodic intervals
-            rule12(iw) # large and diminished melodic intervals
+            #or rule12(iw) # large and diminished melodic intervals
         ):
             return True
 
@@ -93,7 +93,7 @@ def rule9(iw: cpp.IntervalWrapper): # no repeated notes or unacceptable melodic 
             return True
     return False
 
-def rule10(iw: cpp.IntervalWrapper): # consecutive leaps
+def rule10(iw: cpp.IntervalWrapper): # consecutive leaps and outlining triads
     if iw.next is not None and iw.next.next is not None:
         for mi in range(len(iw.melodic_intervals)-1):
             if not iw.melodic_intervals[mi].isStep and not iw.next.melodic_intervals[mi].isStep:
@@ -102,6 +102,9 @@ def rule10(iw: cpp.IntervalWrapper): # consecutive leaps
                 n3 = iw.next.next.notes[mi]
                 c = m21.chord.Chord([n1, n2, n3])
                 if not c.isTriad() or iw.melodic_intervals[mi].direction != iw.next.melodic_intervals[mi].direction:
+                    print(iw)
+                    return True
+                if c.isDiminishedTriad() and (iw.next.next.next is None or iw.melodic_intervals[mi].direction != iw.next.next.melodic_intervals[mi].direction):
                     return True
     return False
 

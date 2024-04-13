@@ -9,8 +9,8 @@ import music_generation.counterpoint_rules as cpr
 
 # fn1 = "./music_generation/melody2.musicxml"
 # fn2 = "./music_generation/harmony2.musicxml"
-fn1 = "./music_generation/test_cases/rule12melody.musicxml"
-fn2 = "./music_generation/test_cases/rule12harmony.musicxml"
+fn1 = "./music_generation/test_cases/rule10melody.musicxml"
+fn2 = "./music_generation/test_cases/rule10harmony.musicxml"
 
 if __name__ == '__main__':
     sw = cpp.getScoreWrapper(fn1, 1)
