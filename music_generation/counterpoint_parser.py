@@ -30,6 +30,12 @@ class ScoreWrapper:
             iw = IntervalWrapper(n, self.cf)
             self.interval_wrappers.append(iw)
 
+        for i in range(len(self.interval_wrappers)):
+            if i != 0:
+                self.interval_wrappers[i].prev = self.interval_wrappers[i-1]
+            if i != len(self.interval_wrappers)-1:
+                self.interval_wrappers[i].next = self.interval_wrappers[i+1]
+
 class IntervalWrapper:
     cf = None # cantus firmus index (0 or 1)
     cp = None # counterpoint index (0 or 1)
@@ -53,7 +59,8 @@ class IntervalWrapper:
             har = (n if cantus_firmus == 1 else note.Note(n2))
             i = interval.Interval(har, mel)
             if i.name in consonant_intervals:
-                print(i)
+                self.counterpoints.append(n2)
+        print(self.counterpoints)
 
     def __str__(self):
         return f"{self.notes[0].pitch if self.notes[0] is not None else None}, {self.notes[1].pitch if self.notes[1] is not None else None}: {self.interval_obj.name if self.interval_obj is not None else None}"
@@ -71,7 +78,7 @@ if __name__ == '__main__':
     s = converter.parse(fn1)
     sw = ScoreWrapper(s, cantus_firmus)
 
-    # harmony
+    harmony
     s2 = converter.parse(fn2)
     harmony = []
     for n in s2.recurse().getElementsByClass(note.Note):
@@ -80,7 +87,6 @@ if __name__ == '__main__':
         sw.interval_wrappers[i].harmonize(harmony[i])
         print(sw.interval_wrappers[i])
 
-    print(interval.Interval(note.Note("D2"), note.Note("A5")))
 
     # for el in s.recurse():
     #     print(el)
