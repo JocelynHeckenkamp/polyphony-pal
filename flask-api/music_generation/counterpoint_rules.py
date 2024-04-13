@@ -16,15 +16,16 @@ consonant_intervals = ["P1", "m3", "M3", "P5", "m6", "M6",
 def check_counterpoint(sw: cpp.ScoreWrapper):
     m21me.extend()
 
-    if (#rule3(sw) # begin with unison
-        #or rule4(sw) # end with unison
-        rule5(sw) # closes with contrary motion
-    ):
-        return True
+    # if (rule3(sw) # begin with unison
+    #     or rule4(sw) # end with unison
+    #     or rule5(sw) # closes with contrary motion
+    # ):
+    #     return True
 
     for iw in sw.interval_wrappers:
-        if (rule1(iw) # range
-            or rule2(iw) # consonant intervals
+        if (#rule1(iw) # range
+            #or rule2(iw) # consonant intervals
+            rule6(iw) # approaching perfect intervals
         ):
             return True
 
@@ -58,9 +59,15 @@ def rule4(sw: cpp.ScoreWrapper): # end with unison
         return True
     return False
 
-def rule5(sw: cpp.ScoreWrapper):
+def rule5(sw: cpp.ScoreWrapper): # closing
     pen = sw.interval_wrappers[len(sw.interval_wrappers)-2]
     return pen.vlq.closesIncorrectly()
+
+def rule6(iw: cpp.IntervalWrapper): # approaching perfect intervals
+    if (iw.prev is not None and iw.interval_obj.name[0] == "P" and not iw.prev.vlq.contraryMotion()):
+        return True
+    return False
+
 
 if __name__ == '__main__':
 
