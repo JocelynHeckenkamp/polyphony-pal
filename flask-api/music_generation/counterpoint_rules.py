@@ -18,6 +18,7 @@ def check_counterpoint(sw: cpp.ScoreWrapper):
 
     for iw in sw.interval_wrappers:
         if (rule1(iw) # range
+            or rule2(iw) # consonant intervals
         ):
             return True
 
@@ -34,6 +35,11 @@ def rule1(iw: cpp.IntervalWrapper): # ranges
 
         return True
 
+    return False
+
+def rule2(iw: cpp.IntervalWrapper):
+    if iw.interval_obj.name not in consonant_intervals:
+        return True
     return False
 
 if __name__ == '__main__':

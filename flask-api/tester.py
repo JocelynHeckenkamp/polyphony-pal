@@ -6,10 +6,10 @@ import music_analysis.rules14to26 as r1426
 import music_generation.counterpoint_parser as cpp
 import music_generation.counterpoint_rules as cpr
 
-fn1 = "./music_generation/melody2.musicxml"
-fn2 = "./music_generation/harmony2.musicxml"
-#fn1 = "./music_generation/test_cases/rule1melody.musicxml"
-#fn2 = "./music_generation/test_cases/rule1harmony.musicxml"
+# fn1 = "./music_generation/melody2.musicxml"
+# fn2 = "./music_generation/harmony2.musicxml"
+fn1 = "./music_generation/test_cases/rules1_2melody.musicxml"
+fn2 = "./music_generation/test_cases/rules1_2harmony.musicxml"
 
 if __name__ == '__main__':
     sw = cpp.getScoreWrapper(fn1, 1)
