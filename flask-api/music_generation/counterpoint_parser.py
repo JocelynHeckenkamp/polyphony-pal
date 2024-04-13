@@ -40,8 +40,6 @@ class IntervalWrapper:
     cf = None # cantus firmus index (0 or 1)
     cp = None # counterpoint index (0 or 1)
 
-    #quality = None
-
     def __init__(self, n, cantus_firmus):
         self.cf = cantus_firmus
         self.cp = int(not cantus_firmus)
@@ -60,7 +58,6 @@ class IntervalWrapper:
             i = interval.Interval(har, mel)
             if i.name in consonant_intervals:
                 self.counterpoints.append(n2)
-        print(self.counterpoints)
 
     def __str__(self):
         return f"{self.notes[0].pitch if self.notes[0] is not None else None}, {self.notes[1].pitch if self.notes[1] is not None else None}: {self.interval_obj.name if self.interval_obj is not None else None}"
@@ -70,7 +67,19 @@ class IntervalWrapper:
         self.interval_obj = interval.Interval(self.notes[0], self.notes[1])
         self.intervalClass = self.interval_obj.intervalClass
 
-        # find all consonant notes
+def getScoreWrapper(fn, cantus_firmus):
+    s = converter.parse(fn)
+    sw = ScoreWrapper(s, cantus_firmus)
+    return sw
+
+def testHarmony(sw, fn2):
+    s2 = converter.parse(fn2)
+    harmony = []
+    for n in s2.recurse().getElementsByClass(note.Note):
+        harmony.append(n)
+    for i in range(0, len(sw.interval_wrappers)):
+        sw.interval_wrappers[i].harmonize(harmony[i])
+        #print(sw.interval_wrappers[i])
 
 if __name__ == '__main__':
     cantus_firmus = 1
@@ -78,26 +87,6 @@ if __name__ == '__main__':
     s = converter.parse(fn1)
     sw = ScoreWrapper(s, cantus_firmus)
 
-    harmony
-    s2 = converter.parse(fn2)
-    harmony = []
-    for n in s2.recurse().getElementsByClass(note.Note):
-        harmony.append(n)
-    for i in range(0, len(sw.interval_wrappers)):
-        sw.interval_wrappers[i].harmonize(harmony[i])
-        print(sw.interval_wrappers[i])
+    testHarmony(sw, fn2)
 
 
-    # for el in s.recurse():
-    #     print(el)
-    #
-    # print("=========")
-    #
-    # for a in s.getElementsByClass(stream.Part):
-    #     for b in a.recurse().getElementsByClass(note.Note):
-    #         print(b)
-    #
-    # print("----------")
-    #
-    # for el in s.recurse().getElementsByClass(note.Note):
-    #     print(el)
