@@ -27,7 +27,8 @@ def check_counterpoint(sw: cpp.ScoreWrapper):
             #or rule2(iw) # consonant intervals
             #or rule6(iw) # approaching perfect intervals
             #or rule7(iw) # hidden perfect intervals
-            rule8(iw) # voice crossing
+            #or rule8(iw) # voice crossing
+            rule9(iw) # repeated notes melodic intervals
         ):
             return True
 
@@ -80,6 +81,13 @@ def rule7(iw: cpp.IntervalWrapper): # hidden perfect intervals
 def rule8(iw: cpp.IntervalWrapper):
     if iw.notes[0].higherThan(iw.notes[1]):
         return True
+    return False
+
+def rule9(iw: cpp.IntervalWrapper): # no repeated notes or unacceptable melodic intervals
+    acceptable_leaps = ["m2", "M2", "m3", "M3", "P4", "P5", "m6", "P8"]
+    if iw.next is not None:
+        if iw.melodic_intervals[0].name not in acceptable_leaps or iw.melodic_intervals[1].name not in acceptable_leaps:
+            return True
     return False
 
 if __name__ == '__main__':
