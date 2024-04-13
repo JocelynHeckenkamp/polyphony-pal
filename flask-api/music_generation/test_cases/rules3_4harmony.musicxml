@@ -59,7 +59,7 @@
       </score-part>
     </part-list>
   <part id="P1">
-    <measure number="1" width="164.84">
+    <measure number="1" width="164.13">
       <print>
         <system-layout>
           <system-margins>
@@ -108,7 +108,7 @@
         <accidental>flat</accidental>
         </note>
       </measure>
-    <measure number="2" width="91.26">
+    <measure number="2" width="90.55">
       <note default-x="13.32" default-y="-20.00">
         <pitch>
           <step>D</step>
@@ -119,7 +119,7 @@
         <type>whole</type>
         </note>
       </measure>
-    <measure number="3" width="91.26">
+    <measure number="3" width="90.55">
       <note default-x="13.32" default-y="0.00">
         <pitch>
           <step>A</step>
@@ -130,7 +130,7 @@
         <type>whole</type>
         </note>
       </measure>
-    <measure number="4" width="91.26">
+    <measure number="4" width="90.55">
       <note default-x="13.32" default-y="-10.00">
         <pitch>
           <step>F</step>
@@ -141,7 +141,7 @@
         <type>whole</type>
         </note>
       </measure>
-    <measure number="5" width="91.26">
+    <measure number="5" width="90.55">
       <note default-x="13.32" default-y="-15.00">
         <pitch>
           <step>E</step>
@@ -152,7 +152,7 @@
         <type>whole</type>
         </note>
       </measure>
-    <measure number="6" width="91.26">
+    <measure number="6" width="90.55">
       <note default-x="13.32" default-y="-20.00">
         <pitch>
           <step>D</step>
@@ -163,7 +163,7 @@
         <type>whole</type>
         </note>
       </measure>
-    <measure number="7" width="91.26">
+    <measure number="7" width="90.55">
       <note default-x="13.32" default-y="-10.00">
         <pitch>
           <step>F</step>
@@ -174,7 +174,7 @@
         <type>whole</type>
         </note>
       </measure>
-    <measure number="8" width="90.60">
+    <measure number="8" width="89.89">
       <note default-x="13.80" default-y="10.00">
         <pitch>
           <step>C</step>
@@ -185,7 +185,7 @@
         <type>whole</type>
         </note>
       </measure>
-    <measure number="9" width="90.60">
+    <measure number="9" width="89.89">
       <note default-x="13.80" default-y="15.00">
         <pitch>
           <step>D</step>
@@ -196,7 +196,7 @@
         <type>whole</type>
         </note>
       </measure>
-    <measure number="10" width="92.42">
+    <measure number="10" width="91.71">
       <note default-x="23.74" default-y="10.00">
         <pitch>
           <step>C</step>
@@ -209,15 +209,17 @@
         <accidental>sharp</accidental>
         </note>
       </measure>
-    <measure number="11" width="91.48">
-      <note default-x="13.80" default-y="15.00">
+    <measure number="11" width="98.56">
+      <note default-x="21.59" default-y="15.00">
         <pitch>
           <step>D</step>
+          <alter>-1</alter>
           <octave>4</octave>
           </pitch>
         <duration>4</duration>
         <voice>1</voice>
         <type>whole</type>
+        <accidental>flat</accidental>
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>

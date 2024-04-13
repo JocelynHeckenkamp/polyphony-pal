@@ -50,6 +50,7 @@ class IntervalWrapper:
         self.prev = None
         self.next = None
         self.counterpoints = []
+        self.melodic_intervals = None
 
         # possible harmonies
         for n2 in notes_in_range[self.cp]:
@@ -67,6 +68,10 @@ class IntervalWrapper:
         self.interval_obj = interval.Interval(self.notes[0], self.notes[1])
         self.intervalClass = self.interval_obj.intervalClass
 
+    def calc_melodic_intervals(self):
+        if self.next is not None:
+            self.melodic_intervals = [interval.Interval(self.notes[0], self.next.notes[0]), interval.Interval(self.notes[1], self.next.notes[1])]
+
 def getScoreWrapper(fn, cantus_firmus):
     s = converter.parse(fn)
     sw = ScoreWrapper(s, cantus_firmus)
@@ -80,6 +85,8 @@ def testHarmony(sw, fn2):
     for i in range(0, len(sw.interval_wrappers)):
         sw.interval_wrappers[i].harmonize(harmony[i])
         #print(sw.interval_wrappers[i])
+    for i in range(0, len(sw.interval_wrappers)):
+        sw.interval_wrappers[i].calc_melodic_intervals()
 
 if __name__ == '__main__':
     cantus_firmus = 1
