@@ -14,13 +14,14 @@ def generate_counterpoint(fn, cantus_firmus):
     tree_indices = [0] * len(sw.interval_wrappers)
 
     mm = 0
+    count = 0
     while mm < len(sw.interval_wrappers):
         if verbose: print(mm)
         if tree_indices[mm] == len(sw.interval_wrappers[mm].counterpoints):
             if verbose: print("Exausted level", mm, "with", tree_indices)
             if mm == 0:
                 print("Parsing complete")
-                print(correct_counterpoints)
+                if verbose: print(correct_counterpoints)
                 break
             for i in range(mm, len(tree_indices)):
                 tree_indices[i] = 0
@@ -66,11 +67,12 @@ def generate_counterpoint(fn, cantus_firmus):
 
         if mm == len(sw.interval_wrappers)-1:
             counterpoint = []
+            count += 1
             for iw in sw.interval_wrappers:
                 counterpoint.append(iw.notes[iw.cp])
                 iw.reset()
             correct_counterpoints.append(counterpoint)
-            if verbose: print(counterpoint)
+            print(count, ":", counterpoint)
             tree_indices[-1] += 1
             mm = -1
 
@@ -85,8 +87,6 @@ def createXML(sw, noteList):
     partStaves[0].clef = clef.BassClef()
     partStaves[1].clef = clef.TrebleClef()
 
-    mm = 0
-    voices = None
     for mm, iw in enumerate(sw.interval_wrappers):
         measures = [stream.Measure(number=mm, offset=0), stream.Measure(number=mm, offset=0)]
         voices = [stream.Voice(id=1), stream.Voice(id=2)]
@@ -97,12 +97,6 @@ def createXML(sw, noteList):
             measures[1].insert(0, meter.TimeSignature('4/4'))  # Set time signature
             measures[1].insert(0, sw.key_signature)
 
-        #for i, n in enumerate(noteList):
-            # if i == 3:
-            #     h = harmony.ChordSymbol(key.tonic.name)
-            #     h.romanNumeral = roman.RomanNumeral(roman_numerals[count])
-            #     h.writeAsChord = False
-            #     voices[i].append(h)
         cf = iw.notes[sw.cf]
         cp = noteList[mm]
         cf.duration.type = "whole"
@@ -115,21 +109,14 @@ def createXML(sw, noteList):
         partStaves[0].append(measures[0])
         partStaves[1].append(measures[1])
 
-        #mm += 1
-
     s.append(partStaves[1])
     s.append(partStaves[0])
 
-    s.show()
+    # s.show()
 
-    print("==========")
-
-    # for el in score.recurse():
-    #     print(el)
-    #
-    # print("---------")
-    #
-    # sc = converter.parse("./music_generation/counterpoint1.musicxml")
-    # for el in sc.recurse():
-    #     print(el)
+    # return string
+    GEX = musicxml.m21ToXml.GeneralObjectExporter(s)
+    out = GEX.parse()
+    outStr = out.decode('utf-8')
+    return outStr
 
