@@ -26,6 +26,7 @@ class ScoreWrapper:
         self.score = score
         self.cf = cantus_firmus
         self.cp = int(not cantus_firmus)
+        self.key_signature = score.recurse().stream().keySignature
 
         all_notes = score.recurse().getElementsByClass(note.Note)
         for n in range(len(all_notes)):

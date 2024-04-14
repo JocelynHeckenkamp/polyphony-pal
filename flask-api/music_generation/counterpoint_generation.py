@@ -1,7 +1,9 @@
 from . import counterpoint_parser as cpp
 from . import counterpoint_rules as cpr
 from . import music21_method_extensions as m21me
-import music21 as m21
+from music21 import *
+
+verbose = False
 
 def generate_counterpoint(fn, cantus_firmus):
     m21me.extend()
@@ -11,14 +13,14 @@ def generate_counterpoint(fn, cantus_firmus):
     correct_counterpoints = []
     tree_indices = [0] * len(sw.interval_wrappers)
 
-    #for mm in range(len(sw.interval_wrappers)):
     mm = 0
     while mm < len(sw.interval_wrappers):
-        print(mm)
+        if verbose: print(mm)
         if tree_indices[mm] == len(sw.interval_wrappers[mm].counterpoints):
-            print("Exausted level", mm, "with", tree_indices)
+            if verbose: print("Exausted level", mm, "with", tree_indices)
             if mm == 0:
                 print("Parsing complete")
+                print(correct_counterpoints)
                 break
             for i in range(mm, len(tree_indices)):
                 tree_indices[i] = 0
@@ -27,15 +29,14 @@ def generate_counterpoint(fn, cantus_firmus):
             continue
 
         cp = sw.interval_wrappers[mm].counterpoints[tree_indices[mm]]
-        sw.interval_wrappers[mm].harmonize(m21.note.Note(cp))
+        sw.interval_wrappers[mm].harmonize(note.Note(cp))
 
         if mm > 0:
             sw.calc_vlqs(mm-1)
 
         # rules
-        print("Testing ", cp)
+        if verbose: print("Testing ", cp)
         passing = True
-        #for i in range(0, mm+1):
 
         iw = sw.interval_wrappers[mm]
 
@@ -54,22 +55,14 @@ def generate_counterpoint(fn, cantus_firmus):
             if (cpr.rule4(sw) or cpr.rule5(sw)):
                 passing = False
 
-
         # handle passing
-        if passing:
+        if verbose and passing:
             print("Pass", mm, ":", cp)
 
         if not passing:
-            print("Fail", mm, ":", cp)
+            if verbose: print("Fail", mm, ":", cp)
             tree_indices[mm] += 1
             mm -= 1
-
-        # completed one
-        # save value
-        # reset harmonizations
-        # increment last tree index
-        # reset mm
-        # remember to handle errors in sliding window above (or do I not have to?)
 
         if mm == len(sw.interval_wrappers)-1:
             counterpoint = []
@@ -77,13 +70,66 @@ def generate_counterpoint(fn, cantus_firmus):
                 counterpoint.append(iw.notes[iw.cp])
                 iw.reset()
             correct_counterpoints.append(counterpoint)
-            print(counterpoint)
+            if verbose: print(counterpoint)
             tree_indices[-1] += 1
             mm = -1
 
         mm += 1
 
+    for cp in correct_counterpoints:
+        createXML(sw, cp)
 
-    print(tree_indices)
+def createXML(sw, noteList):
+    s = stream.Score()
+    partStaves = [stream.PartStaff(instrument.Piano()), stream.PartStaff(instrument.Piano())]
+    partStaves[0].clef = clef.BassClef()
+    partStaves[1].clef = clef.TrebleClef()
 
-    print()
+    mm = 0
+    voices = None
+    for mm, iw in enumerate(sw.interval_wrappers):
+        measures = [stream.Measure(number=mm, offset=0), stream.Measure(number=mm, offset=0)]
+        voices = [stream.Voice(id=1), stream.Voice(id=2)]
+
+        if mm == 0:
+            measures[0].insert(0, meter.TimeSignature('4/4'))  # Set time signature
+            measures[0].insert(0, sw.key_signature)
+            measures[1].insert(0, meter.TimeSignature('4/4'))  # Set time signature
+            measures[1].insert(0, sw.key_signature)
+
+        #for i, n in enumerate(noteList):
+            # if i == 3:
+            #     h = harmony.ChordSymbol(key.tonic.name)
+            #     h.romanNumeral = roman.RomanNumeral(roman_numerals[count])
+            #     h.writeAsChord = False
+            #     voices[i].append(h)
+        cf = iw.notes[sw.cf]
+        cp = noteList[mm]
+        cf.duration.type = "whole"
+        cp.duration.type = "whole"
+        voices[sw.cf].append(cf)
+        voices[sw.cp].append(cp)
+
+        measures[0].append(voices[0])
+        measures[1].append(voices[1])
+        partStaves[0].append(measures[0])
+        partStaves[1].append(measures[1])
+
+        #mm += 1
+
+    s.append(partStaves[1])
+    s.append(partStaves[0])
+
+    s.show()
+
+    print("==========")
+
+    # for el in score.recurse():
+    #     print(el)
+    #
+    # print("---------")
+    #
+    # sc = converter.parse("./music_generation/counterpoint1.musicxml")
+    # for el in sc.recurse():
+    #     print(el)
+
