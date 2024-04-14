@@ -76,7 +76,10 @@ def generate_counterpoint(fn, cantus_firmus):
             for iw in sw.interval_wrappers:
                 counterpoint.append(iw.notes[iw.cp])
                 iw.reset()
+            correct_counterpoints.append(counterpoint)
             print(counterpoint)
+            tree_indices[-1] += 1
+            mm = -1
 
         mm += 1
 
