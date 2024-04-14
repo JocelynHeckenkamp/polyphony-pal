@@ -2,3 +2,7 @@ flask
 python-dotenv
 music21
 urllib3==1.26.6
+SQLAlchemy
+Flask-SQLAlchemy
+pymysql
+Flask-Migrate
