@@ -38,8 +38,6 @@ def check_counterpoint(sw: cpp.ScoreWrapper):
     return False
 
 def rule1(iw: cpp.IntervalWrapper): # ranges
-    m21me.extend()
-
     mel = iw.notes[1]
     har = iw.notes[0]
 
@@ -79,7 +77,6 @@ def rule6(iw: cpp.IntervalWrapper): # approaching perfect intervals
 def rule7(iw: cpp.IntervalWrapper): # hidden perfect intervals
     if iw.next is not None:
         if iw.vlq.hiddenFifth() or iw.vlq.hiddenOctave():
-            print(iw)
             return True
     return False
 
@@ -104,7 +101,6 @@ def rule10(iw: cpp.IntervalWrapper): # consecutive leaps and outlining triads
                 n3 = iw.next.next.notes[mi]
                 c = m21.chord.Chord([n1, n2, n3])
                 if not c.isTriad() or iw.melodic_intervals[mi].direction != iw.next.melodic_intervals[mi].direction:
-                    print(iw)
                     return True
                 if c.isDiminishedTriad() and (iw.next.next.next is None or iw.melodic_intervals[mi].direction != iw.next.next.melodic_intervals[mi].direction):
                     return True

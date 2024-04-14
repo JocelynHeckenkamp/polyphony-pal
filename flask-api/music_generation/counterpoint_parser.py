@@ -43,7 +43,6 @@ class ScoreWrapper:
 
     def calc_vlqs(self, start_index):
         for iw in self.interval_wrappers[start_index:]:
-            print(iw, iw.next)
             if iw.next is not None and iw.next.notes[self.cp] is not None and iw.notes[self.cp] is not None:
                 iw.melodic_intervals = [interval.Interval(iw.notes[0], iw.next.notes[0]), interval.Interval(iw.notes[1], iw.next.notes[1])]
                 iw.vlq = voiceLeading.VoiceLeadingQuartet(iw.notes[0], iw.next.notes[0], iw.notes[1], iw.next.notes[1])
