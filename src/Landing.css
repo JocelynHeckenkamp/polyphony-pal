@@ -38,16 +38,25 @@
 
 .get-started-btn {
   margin-top: 30px;
-  background-color: grey;
+  background-color:black;
   color: white;
   transition: background-color 0.3s;
+  
 }
 
 
 
 .get-started-btn:hover {
-  background-color: black; /* dark grey  #424242 */
+  background-color:  grey; /* dark grey  #424242 */
 
+}
+
+.BTN {
+  margin-top: 30px;
+  background-color:black;
+  color: white;
+  transition: background-color 0.3s;
+  
 }
 
 /* team member styles */

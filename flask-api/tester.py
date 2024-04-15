@@ -1,8 +1,3 @@
-import music_analysis.music_xml_parser as mxp
-import music_analysis.error as e
-import music_analysis.rule27 as r27
-import music_analysis.rules1to13 as r113
-import music_analysis.rules14to26 as r1426
 import music21 as m21
 import music_generation.counterpoint_parser as cpp
 import music_generation.counterpoint_rules as cpr
@@ -32,6 +27,7 @@ if __name__ == '__main__':
         #print(c.melodic_intervals)
 
     # chords iterated through by next pointer
+    
     # curr = sw.chord_wrappers[0]
     # print(r27.check_rule_27(sw))
     # while(curr is not None):
@@ -41,5 +37,5 @@ if __name__ == '__main__':
     #     for error in errors:
     #         print(error)
     #     curr = curr.next
-
+    
     # sw.score.show()

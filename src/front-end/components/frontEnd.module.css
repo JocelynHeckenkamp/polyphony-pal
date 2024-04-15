@@ -1,0 +1,70 @@
+.btn {
+    background-color:black;
+    color: white;
+    transition: background-color 0.3s;
+    
+  }
+
+  .btn:hover {
+      background-color:grey;
+      
+    }
+
+.upload_paper {
+  background: #ededed;
+  padding: 24px;
+  padding-left: 80px;
+  padding-right: 80px;
+  border: 1px solid rgb(199, 199, 199);
+  border-radius: 20px;
+  
+}
+
+.upload_title {
+  font-size: 60px; 
+  color: black; 
+  font-weight: 720;
+ 
+}
+.upload_subtitle {
+  font-size: 20px; 
+  color: grey; 
+  font-weight: 200;
+  padding-top: 8px;
+  padding-bottom: 20px;
+  
+}
+
+.upload_background{
+    position: absolute;
+    top: 86px;
+    height: 88vh;
+    width: 100%;
+    display: flex;
+    overflow: hidden;
+    background-image: url('fallingnotes200.gif');
+    background-size: cover;
+    filter: blur(6px) opacity(20%);
+    /* border-radius: 10px; */
+    /* border: 2px solid rgb(224, 224, 224); */
+    border-top: 5px ridge  black;
+    z-index: -1;
+}
+
+.error_scroller{
+  justify-content: center;
+  overflow-y: scroll;
+  max-height: 800px;
+  max-width:20%;
+  
+  
+  
+}
+
+.flex_container{
+  
+  
+  justify-content: center;
+  
+  
+}

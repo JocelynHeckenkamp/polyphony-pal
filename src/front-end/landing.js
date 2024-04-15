@@ -29,25 +29,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Typography, Button, Grid, Box, Avatar } from '@mui/material';
+import { Container, Typography, Button, Grid, Avatar } from '@mui/material';
 import logo from '../polypalLogo.svg';
-import '../Landing.css';
+import  "../Landing.css";
+
+
 
 
 function Landing() {
-  const [currentTime, setCurrentTime] = useState(0);
-
-  useEffect(() => {
-    fetch('/time')
-      .then(res => res.json())
-      .then(data => {
-        const date = new Date(data.time * 1000);
-
-        const formattedDateTime = date.toLocaleString('en-US', { hour12: true });
-        setCurrentTime(formattedDateTime);
-
-      });
-  }, []);
+ 
 
   const teamMembers = [
     { name: 'Alexander N. Chin', role: 'Software Engineer', email: 'anc202000@utdallas.edu', initials: 'AC' },
@@ -57,6 +47,8 @@ function Landing() {
   ];
 
   return (
+    
+    
     <Container maxWidth="lg" className="landing-container">
 
       <Grid container spacing={4} alignItems="center" className="intro-box">
@@ -74,7 +66,7 @@ function Landing() {
             With PolyphonyPal, compose confidently, correct errors swiftly, and
             elevate your musical creations to new heights of excellence.
           </Typography>
-          <Button variant="contained" component={Link} to="/results" className="get-started-btn" sx={{backgroundColor: "black"}}>
+          <Button variant="contained" component={Link} to="/results" className="get-started-btn"  >
             Get Started
           </Button>
         </Grid>
@@ -107,6 +99,7 @@ function Landing() {
       </Grid>
 
     </Container>
+    
   );
 }
 

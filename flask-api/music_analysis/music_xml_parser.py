@@ -87,13 +87,22 @@ class ScoreWrapper:
     chord_wrappers = []
     score = None
 
-    def __init__(self, score):
+    def __init__(self):
+        self.key = None
+
+    def initScore(self, score):
         self.score = score
         self.key = score.analyze("key")
         self.key_signature = score.recurse().stream().keySignature
         self.key_interpretations = score.analyze("key").alternateInterpretations[0:3]
         self.parseScore()
         self.format_chord_wrappers()
+        return self
+
+    def initKey(self, keyStr: str):
+        self.key_signature = key.Key(keyStr)
+        self.key = key.Key(keyStr)
+        return self
 
     def __str__(self):
         return f"score({self.key})"
@@ -102,7 +111,9 @@ class ScoreWrapper:
         voice_map = {}
         note_matrix = {}
         locations = set()
+        self.score.show("text")
         for voice in self.score.recurse().voices: # 2 staffs per score; n measures per staff, 2 voices per measure
+            print(voice)
             # map voice to number
             vox = str(voice)[-2]
             if vox not in voice_map:
@@ -113,7 +124,7 @@ class ScoreWrapper:
                 offset = no.offset
                 locations.add((measure_num, offset))
                 note_matrix[(measure_num, offset, voice_map[vox])] = no
-
+        # print(note_matrix)
         chords = []
         for location in locations:
             chords.append(ChordWrapper(note_matrix[(location[0], location[1], 0)],
@@ -123,14 +134,16 @@ class ScoreWrapper:
             chords[-1].set_location()
         self.chord_wrappers = chords
 
-    def format_chord_wrappers(self):
+    def format_chord_wrappers(self, sorted = True):
         # sort chordwrappers by measure number first then offset number second
         def compare_chordWrapper(chord1, chord2):
             if chord1.location[0] == chord2.location[0]:
                 return chord1.location[1] - chord2.location[1]
             else:
                 return chord1.location[0] - chord2.location[0]
-        self.chord_wrappers.sort(key=cmp_to_key(compare_chordWrapper))
+            
+        if sorted:
+            self.chord_wrappers.sort(key=cmp_to_key(compare_chordWrapper))
 
         # link prev and next chord attributes
         for i in range(len(self.chord_wrappers)):
@@ -147,8 +160,7 @@ class ScoreWrapper:
 
 def getScoreWrapper(filename):
     s = converter.parse(filename)
-    sw = ScoreWrapper(s)
-    return sw
+    return ScoreWrapper().initScore(s)
 
 # if __name__ == '__main__':
 #     sw = getScoreWrapper(fn)
