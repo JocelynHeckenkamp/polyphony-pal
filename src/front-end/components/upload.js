@@ -59,7 +59,7 @@ function Upload({setVis, setXML, setLoading, setMusicErrors} ) {
               Upload Music XML File
             </Typography>
             <Typography className={css.upload_subtitle} >
-              Export Music XML file from Musescore or any other editor
+              Export Music XML file from Musescore or any other editor to be analyzed
             </Typography>
 
             <input onChange={(e) => { setFile(e.target.files[0]) }} type='file' accept='.musicxml,.mxml, .mxl' ></input>
@@ -69,11 +69,11 @@ function Upload({setVis, setXML, setLoading, setMusicErrors} ) {
         </Grid>
       </Grid>
 
-      
+      <div className={css.upload_background}></div>
     </div>
     
     
-
+    
   );
 
 

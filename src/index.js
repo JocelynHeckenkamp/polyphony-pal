@@ -6,6 +6,7 @@ import {StyledEngineProvider} from "@mui/styled-engine"
 import Landing from "./front-end/landing";
 import Results from "./front-end/results";
 import Generation from "./front-end/generation";
+import Counterpoint from "./front-end/counterpoint";
 
 
 //Always have landing LAST in routes :)
@@ -20,6 +21,7 @@ export default function Index() {
     
           <Route path="results" element={<Results />} />
           <Route path="generation" element={<Generation />} />
+          <Route path="counterpoint" element={<Counterpoint />} />
 
           <Route path="/" element={<Landing/>} />
 
