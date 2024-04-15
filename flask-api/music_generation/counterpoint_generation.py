@@ -78,8 +78,10 @@ def generate_counterpoint(fn, cantus_firmus):
 
         mm += 1
 
-    for cp in correct_counterpoints:
-        createXML(sw, cp)
+    return correct_counterpoints
+
+    # for cp in correct_counterpoints:
+    #     createXML(sw, cp)
 
 def createXML(sw, noteList):
     s = stream.Score()
