@@ -49,10 +49,10 @@ function Upload({setVis, setXML, setLoading, setMusicErrors} ) {
   return (
 
     
-    <div  align="left"  >
+    <div  >
     
-      <Grid container mt={{xs:20, sm:20, md:20, lg:20 , xl:20}} justifyContent="center"  >
-        <Grid item align="center" >
+      <Grid container mt={{xs:20, sm:20, md:20, lg:20 , xl:20}}  className={css.flex_container}>
+        <Grid item  align="center">
           <Paper className={css.upload_paper} elevation={3}>
 
             <Typography className={css.upload_title} >
@@ -69,9 +69,7 @@ function Upload({setVis, setXML, setLoading, setMusicErrors} ) {
         </Grid>
       </Grid>
 
-      <div className={css.upload_background}>
       
-      </div>
     </div>
     
     
