@@ -92,7 +92,7 @@ function Results() {
             
             {renderContent()}
         </Grid>
-        <div className={css.upload_background}></div>
+        
         
         </div>
        

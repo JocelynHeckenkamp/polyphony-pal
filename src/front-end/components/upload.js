@@ -65,11 +65,11 @@ function Upload({titleTXT, subTXT, setVis, setXML, setLoading, setMusicErrors} )
         </Grid>
       </Grid>
 
-      
+      <div className={css.upload_background}></div>
     </div>
     
     
-
+    
   );
 
 
