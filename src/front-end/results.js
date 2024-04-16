@@ -22,7 +22,7 @@ import css from "./components/frontEnd.module.css"
 function Results() {
     const [musicXml, setMusicXml] = useState('');
     const [isLoading, setIsLoading] = useState(true); //loading spinner state
-    const [error, setError] = useState(null); //error message state
+    
     const [uploadVis, setUploadVis] = useState(true);
     const [musicErrors, setMusicErrors] = useState([]);//contains array of music errors
     
@@ -31,7 +31,8 @@ function Results() {
         if(uploadVis){
             const title= String.raw`Upload Music XML File`; 
             const subtitle = String.raw`Export Music XML file from Musescore or any other editor`;
-            return <Upload titleTXT={title} subTXT={subtitle} setVis={setUploadVis} setXML={setMusicXml} setLoading={setIsLoading} setMusicErrors={setMusicErrors} />;
+            return <Upload titleTXT={title} subTXT={subtitle} setVis={setUploadVis} setXML={setMusicXml}
+                     setLoading={setIsLoading} setMusicErrors={setMusicErrors} />;
         }
         else{    
             if (error) {

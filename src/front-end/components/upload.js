@@ -5,7 +5,7 @@ import css from "./frontEnd.module.css"
 
 
 
-function Upload({titleTXT, subTXT, setVis, setXML, setLoading, setMusicErrors} ) {
+function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusicErrors} ) {
   
   const [file, setFile] = useState(null);
 
@@ -57,6 +57,7 @@ function Upload({titleTXT, subTXT, setVis, setXML, setLoading, setMusicErrors} )
 
             <Typography className={css.upload_title} >{titleTXT}</Typography>
             <Typography className={css.upload_subtitle} >{subTXT}</Typography>
+            <Typography className={css.upload_thirdtitle} >{thirdTXT}</Typography>
 
             <input onChange={(e) => { setFile(e.target.files[0]) }} type='file' accept='.musicxml,.mxml, .mxl' ></input>
             <Button variant="contained" onClick={handleUpload} className={css["btn"]}>Upload</Button>

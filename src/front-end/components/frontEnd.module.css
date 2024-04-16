@@ -4,11 +4,29 @@
     transition: background-color 0.3s;
     
   }
+  .btnLG {
+    background-color:black;
+    color: white;
+    transition: background-color 0.3s;
+    padding: 15px 32px;
+    margin-bottom: 4px;
+  }
 
   .btn:hover {
       background-color:grey;
       
     }
+    .btnLG:hover {
+      background-color:grey;
+      
+    }
+/* .music_paper{
+   pt:5
+   backgroundColor: "#e0e0e0"
+   borderRadius: 5
+   mt={-2}
+   
+} */
 
 .upload_paper {
   background: #ededed;
@@ -30,8 +48,16 @@
   font-size: 20px; 
   color: grey; 
   font-weight: 200;
-  padding-top: 8px;
-  padding-bottom: 20px;
+  padding-top: 6px;
+  padding-bottom: 10px;
+  
+}
+.upload_thirdtitle {
+  font-size: 20px; 
+  color: grey; 
+  font-weight: 200;
+  padding-bottom: 10px;
+  
   
 }
 

@@ -20,7 +20,9 @@ def music_upload():
 
 @app.route('/musicGeneration', methods=['POST'])
 def music_generation():
+    
     req = request.get_data(False, True, False)
+    
     #run script then return
     req = req.split(",")
     romanNumerals = req[1:]

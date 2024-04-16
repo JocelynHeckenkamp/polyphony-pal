@@ -6,8 +6,14 @@ import Header from './components/polypalHeader';
 import css from "./components/frontEnd.module.css"
 
 function Counterpoint() {
+  const title= String.raw`Upload Music XML File`; 
+  const subtitle = String.raw`Export Music XML file from Musescore or any other editor`;
+  const thirdtitle = String.raw`One line cantus firmus to be harmonized`
 
-
+ const [isLoading, setIsLoading] = useState(true); //loading spinner state
+ const [uploadVis, setUploadVis] = useState(true);
+ const [musicErrors, setMusicErrors] = useState([]);//contains array of music errors
+ const [musicXml, setMusicXml] = useState('');
  const handleUpload = () =>{
 
  }     
@@ -17,23 +23,10 @@ function Counterpoint() {
 
 const renderContent= () =>{
     return(
-        <Grid container mt={{xs:20, sm:20, md:20, lg:20 , xl:20}}  className={css.flex_container}>
-        <Grid item  align="center">
-          <Paper className={css.upload_paper} elevation={3}>
+    
 
-            <Typography className={css.upload_title} >
-              Upload Music XML File
-            </Typography>
-            <Typography className={css.upload_subtitle} >
-              This file will generate counterpoint music?
-            </Typography>
-
-            <input onChange={(e) => { setFile(e.target.files[0]) }} type='file' accept='.musicxml,.mxml, .mxl' ></input>
-            <Button variant="contained" onClick={handleUpload} className={css["btn"]}>Upload</Button>
-
-          </Paper>
-        </Grid>
-      </Grid>
+    <Upload titleTXT={title} subTXT={subtitle} thirdTXT={thirdtitle} setVis={setUploadVis}
+     setXML={setMusicXml} setLoading={setIsLoading} setMusicErrors={setMusicErrors} />
 
     );
 }
@@ -45,7 +38,7 @@ const renderContent= () =>{
         {renderContent()}
 
 
-        <div className={css.upload_background}></div>
+        
     </div>
     );
 }
