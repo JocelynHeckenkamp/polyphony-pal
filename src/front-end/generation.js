@@ -50,12 +50,13 @@ const render_content = () =>
     else{
         if(musicXML){//if data is recieved, render it
             return(
-             <Paper className={css.upload_paper}>   
+             <Paper className={css.music_paper}>   
             <SheetMusicComponent musicXml={musicXML} /></Paper> );
         }
         else{//wait for user input
             const titleTXT ="Generate Music"
             const subTXT ="Input chords/roman numerals and key signature"
+            const thirdTXT ="Please enter a comma separated list ex) I,ii,V7,I"
             return(
                 <Grid>
 
@@ -65,6 +66,7 @@ const render_content = () =>
 
                                 <Typography className={css.upload_title} >{titleTXT}</Typography>
                                 <Typography className={css.upload_subtitle} >{subTXT}</Typography>
+                                <Typography className={css.upload_thirdtitle} >{thirdTXT}</Typography>
                                 
                                 <TextField id="outlined-basic" label="Roman Numerals" variant="outlined" value={textVal} onChange={handleTextChange}/>
                                 <Keydropdown setdrop={setDD} ddValue={ddValue}/>

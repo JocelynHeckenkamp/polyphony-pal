@@ -20,13 +20,15 @@
       background-color:grey;
       
     }
-/* .music_paper{
-   pt:5
-   backgroundColor: "#e0e0e0"
-   borderRadius: 5
-   mt={-2}
+.music_paper{
+   padding-top:10px;
+   background: #e0e0e0;
+   border: 1px solid rgb(199, 199, 199);
+   border-radius: 20px;
+   margin-top:-2;
+   max-width: 100vh;
    
-} */
+}
 
 .upload_paper {
   background: #ededed;

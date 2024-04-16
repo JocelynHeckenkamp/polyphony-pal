@@ -22,7 +22,7 @@ import css from "./components/frontEnd.module.css"
 function Results() {
     const [musicXml, setMusicXml] = useState('');
     const [isLoading, setIsLoading] = useState(true); //loading spinner state
-    
+    const [pageError, setError] = useState(null); //error message state
     const [uploadVis, setUploadVis] = useState(true);
     const [musicErrors, setMusicErrors] = useState([]);//contains array of music errors
     
@@ -35,7 +35,7 @@ function Results() {
                      setLoading={setIsLoading} setMusicErrors={setMusicErrors} />;
         }
         else{    
-            if (error) {
+            if (pageError) {
                 return <p>Error: {error}</p>;
             } else if (isLoading) {
                 return(<CircularProgress />);
