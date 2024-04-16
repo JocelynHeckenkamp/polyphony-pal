@@ -5,7 +5,7 @@ import css from "./frontEnd.module.css"
 
 
 
-function Upload({setVis, setXML, setLoading, setMusicErrors} ) {
+function Upload({titleTXT, subTXT, setVis, setXML, setLoading, setMusicErrors} ) {
   
   const [file, setFile] = useState(null);
 
@@ -55,12 +55,8 @@ function Upload({setVis, setXML, setLoading, setMusicErrors} ) {
         <Grid item  align="center">
           <Paper className={css.upload_paper} elevation={3}>
 
-            <Typography className={css.upload_title} >
-              Upload Music XML File
-            </Typography>
-            <Typography className={css.upload_subtitle} >
-              Export Music XML file from Musescore or any other editor
-            </Typography>
+            <Typography className={css.upload_title} >{titleTXT}</Typography>
+            <Typography className={css.upload_subtitle} >{subTXT}</Typography>
 
             <input onChange={(e) => { setFile(e.target.files[0]) }} type='file' accept='.musicxml,.mxml, .mxl' ></input>
             <Button variant="contained" onClick={handleUpload} className={css["btn"]}>Upload</Button>
