@@ -50,7 +50,8 @@ const render_content = () =>
     else{
         if(musicXML){//if data is recieved, render it
             return(
-             <Paper className={css.music_paper}>   
+             <Paper className={css.music_paper}> 
+               
             <SheetMusicComponent musicXml={musicXML} /></Paper> );
         }
         else{//wait for user input

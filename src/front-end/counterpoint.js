@@ -26,7 +26,8 @@ const renderContent= () =>{
         return(<CircularProgress/>);
     }
     if(musicXml){
-        return(<p>{musicXml}</p>)
+        {console.log(musicXml[1])}
+        return(<p>{musicXml[1]}</p>)
     }
 
     else{
