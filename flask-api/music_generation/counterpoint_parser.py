@@ -91,6 +91,7 @@ class IntervalWrapper:
 
 def getScoreWrapper(fn, cantus_firmus):
     s = converter.parse(fn)
+
     sw = ScoreWrapper(s, cantus_firmus)
     return sw
 
