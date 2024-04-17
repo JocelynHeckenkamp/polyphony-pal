@@ -18,6 +18,14 @@ def music_upload():
     content = "{} {}".format(musicXML, errors(musicXML))
     return content
 
+@app.route('/counterpoint', methods=['PUT'])
+def counterpoint():
+    musicXML = request.get_data(False, True, False)
+    #run script then return
+    #content = "{} {}".format(musicXML, errors(musicXML))
+    return musicXML
+
+
 @app.route('/musicGeneration', methods=['POST'])
 def music_generation():
     

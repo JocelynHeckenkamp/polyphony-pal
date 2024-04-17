@@ -6,7 +6,9 @@ import css from "./frontEnd.module.css"
 
 
 function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusicErrors} ) {
-  
+  const resultsRoute = "/results"
+  const counterpointRoute = "/counterpoint"
+
   const [file, setFile] = useState(null);
 
   function handleUpload() {
@@ -14,37 +16,59 @@ function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusi
       console.log("No file selected");
       return;
     }
-   
+   if(window.location.href.includes(resultsRoute)){
+      
+      //upload file to backend
+      //update visible components as well
+      fetch("/upload",
+        {
+          method: "PUT",
+          body: file,
+        })
+        .then(response => response.text())
+        .then(data => {
+          //hide upload component, then set data
+          //ndata[0] holds the musicXML, the rest of the array holds the errors
+          var errors_str = data.split("[{")[1]
+          var ndata = errors_str.substring(0, errors_str.length - 2).split("}, {")
+          var errorJSON = ndata.map((str) => "{" + str + "}")
 
-    //upload file to backend
-    //update visible components as well
-    fetch("/upload",
-      {
-        method: "PUT",
-        body: file,
-      })
-      .then(response => response.text())
-      .then(data => {
-        //hide upload component, then set data
-        //ndata[0] holds the musicXML, the rest of the array holds the errors
-        var errors_str = data.split("[{")[1]
-        var ndata = errors_str.substring(0, errors_str.length - 2).split("}, {")
-        var errorJSON = ndata.map((str) => "{" + str + "}")
+          //converts the strings to JSON format
+          .map((str) => str.replaceAll("'", "\"").replaceAll("(", "[").replaceAll(")", "]").toLowerCase())
+          .map(JSON.parse)
+          
+          setVis(false);
+          setXML(data);
 
-        //converts the strings to JSON format
-        .map((str) => str.replaceAll("'", "\"").replaceAll("(", "[").replaceAll(")", "]").toLowerCase())
-        .map(JSON.parse)
-        setMusicErrors(errorJSON);
-        setVis(false);
-        setXML(data);
+          console.log(errorJSON)
+          //set loading bar false AFTER data has been set
+        })
+        .then(setLoading(false))
+        .catch(error => console.error("Error during the upload process:", error));
+    }
+    else{
+      fetch("/counterpoint",
+        {
+          method: "PUT",
+          body: file,
+        })
+        .then(response => response.text())
+        .then(data => {
+          //hide upload component, then set data
+          //ndata[0] holds the musicXML, the rest of the array holds the errors
+         
+          setVis(false);
+          setXML(data);
 
-        console.log(errorJSON)
-        //set loading bar false AFTER data has been set
-      })
-      .then(setLoading(false))
-      .catch(error => console.error("Error during the upload process:", error));
+          
+          //set loading bar false AFTER data has been set
+        })
+        .then(setLoading(false))
+        .catch(error => console.error("Error during the upload process:", error));
+    }
   }
-
+  
+  
 
   return (
 
