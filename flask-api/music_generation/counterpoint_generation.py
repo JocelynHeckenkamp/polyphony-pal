@@ -11,6 +11,7 @@ def generate_counterpoint(fn, cantus_firmus):
     sw = cpp.getScoreWrapper(fn, cantus_firmus)
 
     correct_counterpoints = []
+
     tree_indices = [0] * len(sw.interval_wrappers)
 
     mm = 0
@@ -85,7 +86,6 @@ def generate_counterpoint(fn, cantus_firmus):
     for cp in correct_counterpoints:
         musicXMLs.append(createXML(sw, cp))
 
-    print(musicXMLs)
     return musicXMLs
 
 def createXML(sw, noteList):
