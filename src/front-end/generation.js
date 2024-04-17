@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import SheetMusicComponent from './SheetMusicComponent';
-import { TextField, Select,MenuItem, Button, Grid, CircularProgress } from '@mui/material';
+import { TextField,  Paper, Grid, CircularProgress, Typography, Button } from '@mui/material';
 import Header from './components/polypalHeader';
+import Keydropdown from './components/keysigdropdown';
+import css from "./components/frontEnd.module.css"
 
 
 function Generation(){
     //ddvalue = key
     //text value = roman numerals
-    const [ddValue, setDD] = useState([]);
+    const [ddValue, setDD] = useState('');
     const [textVal, setTextVal] = useState("");
-    const [data, setData] = useState();
     //false = spinner not showing
     const [spinner, setSpinner] = useState(false);
     const [musicXML, setMusicXML] = useState('');
@@ -19,11 +20,6 @@ const handleTextChange = (e) => {
     console.log(textVal)
 }
 
- const handleDDchange = (e) => {
-    setDD(e.target.value);
-    console.log(textVal)
-    
-}
 //upload to api music_generation function
 const upload = () => {
     
@@ -53,40 +49,36 @@ const render_content = () =>
     }
     else{
         if(musicXML){//if data is recieved, render it
-            return(<SheetMusicComponent musicXml={musicXML} />);
+            return(
+             <Paper className={css.music_paper}>   
+            <SheetMusicComponent musicXml={musicXML} /></Paper> );
         }
         else{//wait for user input
+            const titleTXT ="Generate Music"
+            const subTXT ="Input chords/roman numerals and key signature"
+            const thirdTXT ="Please enter a comma separated list ex) I,ii,V7,I"
             return(
                 <Grid>
+
+                    <Grid container mt={{xs:20, sm:20, md:20, lg:20 , xl:20}}  className={css.flex_container}>
+                            <Grid item  align="center">
+                            <Paper className={css.upload_paper} elevation={3}>
+
+                                <Typography className={css.upload_title} >{titleTXT}</Typography>
+                                <Typography className={css.upload_subtitle} >{subTXT}</Typography>
+                                <Typography className={css.upload_thirdtitle} >{thirdTXT}</Typography>
+                                
+                                <TextField id="outlined-basic" label="Roman Numerals" variant="outlined" value={textVal} onChange={handleTextChange}/>
+                                <Keydropdown setdrop={setDD} ddValue={ddValue}/>
+                                <Button onClick={upload} className={css.btnLG}>Upload</Button>
+ 
+                            </Paper>
+                            </Grid>
+                        </Grid>
                 
-                <TextField id="outlined-basic" label="Roman Numerals" variant="outlined" value={textVal} onChange={handleTextChange}/>
-                <Select value={ddValue} onChange={handleDDchange} multiple>
-                    <MenuItem value={"A"}>A</MenuItem>
-                    <MenuItem value={"B"}>B</MenuItem>
-                    <MenuItem value={"C"}>C</MenuItem>
-                    <MenuItem value={"D"}>D</MenuItem>
-                    <MenuItem value={"E"}>E</MenuItem>
-                    <MenuItem value={"F"}>F</MenuItem>
-                    <MenuItem value={"G"}>G</MenuItem>
-    
-                    <MenuItem value={"A#"}>A#</MenuItem>
-                    <MenuItem value={"B#"}>B#</MenuItem>
-                    <MenuItem value={"C#"}>C#</MenuItem>
-                    <MenuItem value={"D#"}>D#</MenuItem>
-                    <MenuItem value={"E#"}>E#</MenuItem>
-                    <MenuItem value={"F#"}>F#</MenuItem>
-                    <MenuItem value={"G#"}>G#</MenuItem>
-    
-                    <MenuItem value={"A-"}>A-</MenuItem>
-                    <MenuItem value={"B-"}>B-</MenuItem>
-                    <MenuItem value={"C-"}>C-</MenuItem>
-                    <MenuItem value={"D-"}>D-</MenuItem>
-                    <MenuItem value={"E-"}>E-</MenuItem>
-                    <MenuItem value={"F-"}>F-</MenuItem>
-                    <MenuItem value={"G-"}>G-</MenuItem>
-                </Select> 
+               
+               
                 
-                <Button onClick={upload}>Upload</Button>
             </Grid>
             );
         }
@@ -97,6 +89,7 @@ const render_content = () =>
         <div>
             <Header/>
             {render_content()}
+            <div className={css.upload_background}></div>
         </div>
     );
 }

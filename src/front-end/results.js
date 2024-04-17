@@ -22,37 +22,20 @@ import css from "./components/frontEnd.module.css"
 function Results() {
     const [musicXml, setMusicXml] = useState('');
     const [isLoading, setIsLoading] = useState(true); //loading spinner state
-    const [error, setError] = useState(null); //error message state
+    const [pageError, setError] = useState(null); //error message state
     const [uploadVis, setUploadVis] = useState(true);
     const [musicErrors, setMusicErrors] = useState([]);//contains array of music errors
-    //fetch MusicXML data - if an error occurs check to make sure this fetches on mount
-    //change fetch to delayedfetch to test loading bars
-    // useEffect(() => {
-    //     setIsLoading(true);//start loading spinner
-    //     fetch("/results")
-    //         .then(res => {
-    //             if (!res.ok) {
-    //                 throw new Error('Network response: (HTTP response had an error)');
-    //             }
-    //             return res.text()
-    //         })
-    //         .then(data => {
-    //             setMusicXml(data)
-    //             setIsLoading(false);//success stop loading spinner state
-    //         })
-    //         .catch(error => {
-    //             console.error("Error fetching MusicXML:", error);
-    //             setError('Failed to load sheet music. Please try again.');//set error message
-    //             setIsLoading(false);//error stop loading spinner state
-    //         });
-    // }, []);
+    
 
     const renderContent = () => {
         if(uploadVis){
-            return <Upload setVis={setUploadVis} setXML={setMusicXml} setLoading={setIsLoading} setMusicErrors={setMusicErrors} />;
+            const title= String.raw`Upload Music XML File`; 
+            const subtitle = String.raw`Export Music XML file from Musescore or any other editor`;
+            return <Upload titleTXT={title} subTXT={subtitle} setVis={setUploadVis} setXML={setMusicXml}
+                     setLoading={setIsLoading} setMusicErrors={setMusicErrors} />;
         }
         else{    
-            if (error) {
+            if (pageError) {
                 return <p>Error: {error}</p>;
             } else if (isLoading) {
                 return(<CircularProgress />);
@@ -110,7 +93,7 @@ function Results() {
             
             {renderContent()}
         </Grid>
-        <div className={css.upload_background}></div>
+        
         
         </div>
        
