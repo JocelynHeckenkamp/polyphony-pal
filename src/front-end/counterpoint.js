@@ -26,7 +26,7 @@ const renderContent= () =>{
         return(<CircularProgress/>);
     }
     if(musicXml){
-        return(<SheetMusicComponent musicXml={musicXml}/>)
+        return(<p>{musicXml}</p>)
     }
 
     else{

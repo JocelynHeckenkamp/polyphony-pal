@@ -26,6 +26,7 @@ def counterpoint():
 
     #run script then return
     #content = "{} {}".format(musicXML, errors(musicXML))
+    print(counterpoints)
     return counterpoints
 
 
