@@ -3,11 +3,10 @@ import SheetMusicComponent from './SheetMusicComponent';
 import { TextField, Select,MenuItem, Button, Grid, CircularProgress } from '@mui/material';
 import Header from './components/polypalHeader';
 
-
 function Generation(){
     //ddvalue = key
     //text value = roman numerals
-    const [ddValue, setDD] = useState([]);
+    const [ddValue, setDD] = useState("");
     const [textVal, setTextVal] = useState("");
     const [data, setData] = useState();
     //false = spinner not showing
@@ -31,7 +30,10 @@ const upload = () => {
     fetch("/musicGeneration",
       {
         method: "POST",
-        body: values ,
+        body: JSON.stringify({values}) ,
+        headers: {
+            "Content-Type": "application/json"
+          }
       })
       .then(setSpinner(true))
       .then(response => response.text())
@@ -45,6 +47,7 @@ const upload = () => {
 //once music is set, render
 //drop down to be removed!
 
+const circleOfFifths = "C,G,D,A,E,B,C-,F#,G-,C#,D-,A-,E-,B-,F,a,e,b,f#,c#,g#,e-,d#,b-,f,c,g,d".split(',');
 
 const render_content = () =>
 {   
@@ -58,32 +61,9 @@ const render_content = () =>
         else{//wait for user input
             return(
                 <Grid>
-                
                 <TextField id="outlined-basic" label="Roman Numerals" variant="outlined" value={textVal} onChange={handleTextChange}/>
-                <Select value={ddValue} onChange={handleDDchange} multiple>
-                    <MenuItem value={"A"}>A</MenuItem>
-                    <MenuItem value={"B"}>B</MenuItem>
-                    <MenuItem value={"C"}>C</MenuItem>
-                    <MenuItem value={"D"}>D</MenuItem>
-                    <MenuItem value={"E"}>E</MenuItem>
-                    <MenuItem value={"F"}>F</MenuItem>
-                    <MenuItem value={"G"}>G</MenuItem>
-    
-                    <MenuItem value={"A#"}>A#</MenuItem>
-                    <MenuItem value={"B#"}>B#</MenuItem>
-                    <MenuItem value={"C#"}>C#</MenuItem>
-                    <MenuItem value={"D#"}>D#</MenuItem>
-                    <MenuItem value={"E#"}>E#</MenuItem>
-                    <MenuItem value={"F#"}>F#</MenuItem>
-                    <MenuItem value={"G#"}>G#</MenuItem>
-    
-                    <MenuItem value={"A-"}>A-</MenuItem>
-                    <MenuItem value={"B-"}>B-</MenuItem>
-                    <MenuItem value={"C-"}>C-</MenuItem>
-                    <MenuItem value={"D-"}>D-</MenuItem>
-                    <MenuItem value={"E-"}>E-</MenuItem>
-                    <MenuItem value={"F-"}>F-</MenuItem>
-                    <MenuItem value={"G-"}>G-</MenuItem>
+                <Select value={ddValue} onChange={handleDDchange}>
+                    {circleOfFifths.map(key => <MenuItem key={key} value={key}>{key}</MenuItem>)}
                 </Select> 
                 
                 <Button onClick={upload}>Upload</Button>

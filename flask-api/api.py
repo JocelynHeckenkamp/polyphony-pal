@@ -14,23 +14,17 @@ import music_analysis.music_generation_encapsulated as gen
 from music_analysis.error import Error as e
 
 #database model
-from database.models import User 
-from database.models import Score
-from database.models import AnalysisError
+from database.models import *
 
 app = Flask(__name__)
 app.config.from_object(Config)
 print("Database URI:", app.config['SQLALCHEMY_DATABASE_URI'])
 db.init_app(app)
 
-#database initialized before any requests
-@app.before_first_request
-def create_tables():
+# #database initialized before any requests
+# app.register_blueprint(api_bp)
+with app.app_context():
     db.create_all()
-
-
-
-
 
 #Currently Prints the File sent to this route
 @app.route('/upload', methods=['PUT'])
@@ -39,17 +33,6 @@ def music_upload():
     #run script then return
     content = "{} {}".format(musicXML, errors(musicXML))
     return content
-
-@app.route('/musicGeneration', methods=['POST'])
-def music_generation():
-    req = request.get_data(False, True, False)
-    #run script then return
-    req = req.split(",")
-    romanNumerals = req[1:]
-    key = req[0]
-    xml = gen.musicGenerationFromRomanToStr(romanNumerals, key, verbose=True)
-    return xml
-
 
 def errors(musicXML):
     errors = []
@@ -61,6 +44,25 @@ def errors(musicXML):
         curr = curr.next
     return [error.__dict__ for error in errors]
 
+@app.route('/musicGeneration', methods=['POST'])
+def music_generation():
+    req = request.get_json()
+    req = req['values']
+    romanNumerals = req[1].split(",")
+    key = req[0]
+    xml = gen.musicGenerationFromRomanToStr(romanNumerals, key, verbose=True)
+    return xml
+    # new_romanScore = RomanScore(
+    #         roman=req[1],
+    #         key=key,
+    #         finished=False,
+    #         most_recent_XML=None,
+    #     )
+
+    # db.session.add(new_romanScore)
+    # db.session.commit()
+
+    # return jsonify(new_romanScore.serialize()), 201
 
 if __name__ == '__main__':
     app.run(debug=True)

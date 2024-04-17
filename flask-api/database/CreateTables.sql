@@ -10,4 +10,4 @@ CREATE TABLE scores (
     owningUser VARCHAR(80) NULL,
     FOREIGN KEY (owningUser) REFERENCES users(username)
 );
-
+docker
