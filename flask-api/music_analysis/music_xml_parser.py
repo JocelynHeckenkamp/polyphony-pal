@@ -163,16 +163,16 @@ def getScoreWrapper(filename):
     return ScoreWrapper().initScore(s)
 
 # if __name__ == '__main__':
-    # sw = getScoreWrapper(fn)
-    # print(sw)
-
-    #for c in sw.chord_wrappers:
-        #print(c.location, c.chord_obj.fullName)
-        #print(c.melodic_intervals)
-
-    # chords iterated through by next pointer
-    # curr = sw.chord_wrappers[0]
-    # while(curr is not None):
-    #     print(curr)
-    #     curr = curr.next
-    # s.show()
+#     sw = getScoreWrapper(fn)
+#     print(sw)
+#
+#     for c in sw.chord_wrappers:
+#         print(c.location, c.chord_obj.fullName)
+#         print(c.melodic_intervals)
+#
+#     chords iterated through by next pointer
+#     curr = sw.chord_wrappers[0]
+#     while(curr is not None):
+#         print(curr)
+#         curr = curr.next
+#     s.show()
