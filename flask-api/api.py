@@ -4,6 +4,7 @@ import music_analysis.rules1to13 as r113
 import music_analysis.rules14to26 as r1426
 import music_analysis.music_xml_parser as mxp
 import music_analysis.music_generation_encapsulated as gen
+import music_generation.counterpoint_generation as cpg
 from music_analysis.error import Error as e
 app = Flask(__name__)
 
@@ -21,6 +22,8 @@ def music_upload():
 @app.route('/counterpoint', methods=['PUT'])
 def counterpoint():
     musicXML = request.get_data(False, True, False)
+    counterpoints = cpg.generate_counterpoints(musicXML, 0)
+
     #run script then return
     #content = "{} {}".format(musicXML, errors(musicXML))
     return musicXML
