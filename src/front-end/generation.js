@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import SheetMusicComponent from './SheetMusicComponent';
-import { TextField,  Paper, Grid, CircularProgress, Typography, Button } from '@mui/material';
+import { TextField,  Paper, Grid, CircularProgress, Typography, Button, Select, MenuItem } from '@mui/material';
 import Header from './components/polypalHeader';
 import Keydropdown from './components/keysigdropdown';
 import css from "./components/frontEnd.module.css"
@@ -12,11 +12,17 @@ function Generation(){
     const [textVal, setTextVal] = useState("");
     //false = spinner not showing
     const [spinner, setSpinner] = useState(false);
+    const [generating, setGen] = useState(false);
     const [musicXML, setMusicXML] = useState('');
 
 const handleTextChange = (e) => {
     setTextVal(e.target.value);
     console.log(textVal)
+}
+const handleDDchange = (e) => {
+    setDD(e.target.value);
+    console.log(textVal)
+    
 }
 
 //upload to api music_generation function
@@ -44,6 +50,7 @@ const upload = async () => {
         const xmls = data.xmls;
         if (xmls.length > 0 || data.finished) {
             setSpinner(false)
+            setGen(true)
         }
         setMusicXML(xmls);
 
@@ -53,13 +60,15 @@ const upload = async () => {
             });
             const data = await res.json();
             const xmls = data.xmls;
-            if (xmls.length > 0 || data.finished) {
+            if ( xmls.length > 0 || data.finished) {
                 setSpinner(false)
+                setGen(true)
             }
             setMusicXML(xmls);
 
             if (data.finished) {
             clearInterval(interval); // Stop polling if finished
+            setGen(false)
             }
         }, 10000); // Poll every 10 seconds (10000 milliseconds)
 
@@ -78,11 +87,13 @@ const circleOfFifths = "C,G,D,A,E,B,C-,F#,G-,C#,D-,A-,E-,B-,F,a,e,b,f#,c#,g#,e-,
 const render_content = () =>
 {   
     if(spinner){ //if waiting on data, show spinner
-        return(<CircularProgress/>);
+        return(<div><CircularProgress/> <p>Waiting to generate data</p></div>);
     }
     else{
         if(musicXML){//if data is recieved, render it
-            return <>{musicXML.map(xml => <SheetMusicComponent musicXml={xml.xml} key={xml.id} />)}</>;
+            return <>
+                {generating ? (<div><CircularProgress/> <p>Generating Data</p></div>) : (null)}
+                {musicXML.map(xml => <SheetMusicComponent musicXml={xml.xml} key={xml.id} />)}</>;
         }
         else{//wait for user input
             const titleTXT ="Generate Music"
@@ -94,6 +105,7 @@ const render_content = () =>
                 <Select value={ddValue} onChange={handleDDchange}>
                     {circleOfFifths.map(key => <MenuItem key={key} value={key}>{key}</MenuItem>)}
                 </Select> 
+                <Button onClick={upload}>Upload</Button>
                 
             </Grid>
             );

@@ -35,7 +35,7 @@ const renderContent= () =>{
             <Grid>
             <Upload titleTXT={title} subTXT={subtitle} thirdTXT={thirdtitle} setVis={setUploadVis}
             setXML={setMusicXml} setLoading={setIsLoading} setMusicErrors={setMusicErrors} />
-            <Checkbox checked={checked} onChange={handleChange} inputProps={{ 'aria-label': 'controlled' }} label="Joe"> </Checkbox>
+            
             </Grid>
 
     );
