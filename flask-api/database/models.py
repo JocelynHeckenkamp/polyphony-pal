@@ -1,4 +1,5 @@
 from .ext import db
+from sqlalchemy.orm import relationship
 
 class User(db.Model):
     __tablename__ = 'User'
@@ -38,7 +39,7 @@ class RomanScore(db.Model):
     roman = db.Column(db.Text, nullable=False)
     key = db.Column(db.Text, nullable=False)
     finished = db.Column(db.Boolean, nullable=False)
-    most_recent_XML = db.Column(db.Integer, db.ForeignKey('XML.id'))
+    xmls = relationship('XML', backref='RomanScore', info={'fulltext_indexed': True})
 
     def __repr__(self):
         return f'<RomanScore {self.id}>'
@@ -49,7 +50,6 @@ class RomanScore(db.Model):
             'roman': self.roman,
             'key': self.key,
             'finished': self.finished,
-            'most_recent_XML': self.most_recent_XML,
         }
 
 class XML(db.Model):

@@ -1,6 +1,11 @@
 from . import music_xml_parser as mxp
 from . import music_generation_from_rn as gen
+import requests
 from music21 import *
+
+import sys
+
+URL = "http://localhost:5000"
 
 def musicGenerationFromRomanToFiles(roman_numerals: list[str], keyStr:str, limit = 10, verbose = False, verboseLong = False):
     # write bassline
@@ -39,7 +44,7 @@ def musicGenerationFromRomanToFiles(roman_numerals: list[str], keyStr:str, limit
     if len(goodChordLists) == 0: print("Could not find any valid harmonizations of the current chord progression.") 
 
 
-def musicGenerationFromRomanToStr(roman_numerals: list[str], keyStr:str, limit = 1, verbose = False, verboseLong = False):
+def musicGenerationFromRomanToStr(roman_numerals: list[str], keyStr:str, id: int, limit = 10, verbose = False, verboseLong = False):
     # write bassline
     bassline, chordPitches = gen.analyzeRN(roman_numerals, keyStr)
     if verbose:
@@ -71,23 +76,28 @@ def musicGenerationFromRomanToStr(roman_numerals: list[str], keyStr:str, limit =
 
     # get all good chordlists
     sw = mxp.ScoreWrapper().initKey(keyStr)
-    xml = gen.score_dfs_iterative(roman_numerals, sw, chordCombos, limit=limit, verbose=verbose, verboseLong=verboseLong, strOut=True)
+    combos = gen.score_dfs_iterative(roman_numerals, sw, chordCombos, id, limit=limit, verbose=verbose, verboseLong=verboseLong)
 
-    if len(xml) == 0: 
+    # add xml to XML table
+    data = {
+        'finished': True,
+    }
+    requests.put(f"{URL}/RomanScore/{id}", json=data)
+
+    if len(combos) == 0: 
         print("Could not find any valid harmonizations of the current chord progression.") 
         return None
     else: 
-        return xml 
+        return combos
 
 
 if __name__ == '__main__':
-   # user input
-    keyStr = "G"
-    # roman_numerals = ["vi", "ii", "V6", "iii6", "IV6", "I", "V", "V", "I", "IV6", "I6", "ii743", "ii65", "V", "I"]
-    # roman_numerals = ["vi", "ii", "V6", "iii6", "IV6", "I", "V"]
-    # roman_numerals = ["I", "iio", "I", "vi", "I64", "V7", "I"]
-    # roman_numerals = ["I6", "iii6", "vi6", "ii", "V7/V", "V6", "V"]
-    roman_numerals = ["I", "V6", "vi", "V43/IV", "IV", "ii7", "V"]
-    print(musicGenerationFromRomanToStr(roman_numerals, keyStr, verbose=True))
+    script_name = sys.argv[0]  
+    romanNumerals = sys.argv[1]       
+    key_ = sys.argv[2]       
+    id = sys.argv[3]
+    musicGenerationFromRomanToStr(romanNumerals.split(","), key_, id, limit = 10)
+
+
 
 

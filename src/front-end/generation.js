@@ -24,25 +24,55 @@ const handleTextChange = (e) => {
     
 }
 //upload to api music_generation function
-const upload = () => {
+const upload = async () => {
     
     const values = [ ddValue, textVal ]
-    fetch("/musicGeneration",
-      {
-        method: "POST",
-        body: JSON.stringify({values}) ,
-        headers: {
-            "Content-Type": "application/json"
-          }
-      })
-      .then(setSpinner(true))
-      .then(response => response.text())
-      .then(data => {
-        setMusicXML(data);
-        setSpinner(false);
-        //set loading bar false AFTER data has been set
-      })
-      .catch(error => console.error("Error during the upload process:", error));
+    try {
+        setSpinner(true)
+        let res = await fetch("/musicGeneration",
+            {
+                method: "POST",
+                body: JSON.stringify({values}) ,
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+        let data = await res.json()
+        let id = data.id 
+        console.log(data)
+
+        res = await fetch(`/RomanScore/${id}/XML`, {
+            method: 'GET'
+        });
+        data = await res.json();
+        const xmls = data.xmls;
+        if (xmls.length > 0 || data.finished) {
+            setSpinner(false)
+        }
+        setMusicXML(xmls);
+
+        const interval = setInterval(async () => {
+            const res = await fetch(`/RomanScore/${id}/XML`, {
+            method: 'GET'
+            });
+            const data = await res.json();
+            const xmls = data.xmls;
+            if (xmls.length > 0 || data.finished) {
+                setSpinner(false)
+            }
+            setMusicXML(xmls);
+
+            if (data.finished) {
+            clearInterval(interval); // Stop polling if finished
+            }
+        }, 10000); // Poll every 10 seconds (10000 milliseconds)
+
+        // setMusicXML(data);
+        // setSpinner(false);
+    }
+    catch(error) {
+        console.error("Error during the upload process:", error) 
+    }
   }
 //once music is set, render
 //drop down to be removed!
@@ -56,7 +86,7 @@ const render_content = () =>
     }
     else{
         if(musicXML){//if data is recieved, render it
-            return(<SheetMusicComponent musicXml={musicXML} />);
+            return <>{musicXML.map(xml => <SheetMusicComponent musicXml={xml.xml} key={xml.id} />)}</>;
         }
         else{//wait for user input
             return(
