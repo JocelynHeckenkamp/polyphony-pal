@@ -26,8 +26,8 @@ const renderContent= () =>{
         return(<CircularProgress/>);
     }
     if(musicXml){
-        {console.log(musicXml[1])}
-        return(<p>{musicXml[1]}</p>)
+        {console.log(JSON.parse(musicXml)[0])}
+        return(<SheetMusicComponent musicXml={JSON.parse(musicXml)[0]}/>);
     }
 
     else{

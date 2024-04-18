@@ -1,5 +1,5 @@
 
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, json
 import music_analysis.rules1to13 as r113
 import music_analysis.rules14to26 as r1426
 import music_analysis.music_xml_parser as mxp
@@ -23,7 +23,7 @@ def music_upload():
 def counterpoint():
     musicXML = request.get_data(False, True, False)
     counterpoints = cpg.generate_counterpoint(musicXML, 1)
-    print(counterpoints)
+    counterpoints = json.dumps(counterpoints)
     return counterpoints
 
 
