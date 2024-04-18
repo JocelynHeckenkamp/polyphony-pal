@@ -4,7 +4,10 @@ from . import music21_method_extensions
 from . import rules14to26 as r1426
 from . import rules1to13 as r113
 from . import rules25_28_31 as r252831
+import requests
 import re
+
+URL = "http://localhost:5000"
 
 music21_method_extensions.extend()
 global globalCount
@@ -47,7 +50,7 @@ def score_dfs_recursive(rn, sw: mxp.ScoreWrapper, lists: list[list[list[note.Not
 
 
 # iterative 
-def score_dfs_iterative(rn, sw: mxp.ScoreWrapper, lists: list[list[list[note.Note]]], limit=10, verbose=False, verboseLong=False, strOut=False):
+def score_dfs_iterative(rn, sw: mxp.ScoreWrapper, lists: list[list[list[note.Note]]], id: int, limit=10, verbose=False, verboseLong=False):
     stack = [(0, [])]  # Initialize stack with initial index and empty prefix
     combinations = []
     maxLength = len(lists)
@@ -63,14 +66,21 @@ def score_dfs_iterative(rn, sw: mxp.ScoreWrapper, lists: list[list[list[note.Not
                 if runningValidation(sw, new_prefix, verboseLong=verboseLong):
                     if len(new_prefix) == maxLength:
                         if not lastValidation(sw, new_prefix, verbose=verbose):
-                            return ""
+                            # return []
+                            pass
                         
                         if verbose:
                             print(new_prefix)
 
+                        # add xml to database
                         xml = createMXL(new_prefix, rn, sw.key)
-                        if strOut:
-                            return xml
+                        data = {
+                            'roman_id': id,
+                            'xml': xml,
+                        }
+                        XML = requests.post(f"{URL}/XML", json=data).json()
+
+                        combinations.append(new_prefix)
 
                         limit -= 1
                         if limit == 0:
