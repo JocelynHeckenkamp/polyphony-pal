@@ -1,29 +1,96 @@
-Important info to starting this app WITHOUT DOCKER
-ensure you have the following installed:
-- Python >= 3.11
+# Starting the Application without Docker
 
-- cd into flask-api directory
-if running without docker:
-  create a venv in the root directory of the backend of the project (flask-api)
-- Activate the virtual environment: `python3 -m venv venv`
-- For Mac: `source venv/bin/activate`
-- For Windows: `venv\Scripts\activate`
-- Install the required packages: `pip install -r requirements.txt --no-cache-dir`
+## Prerequisites
+Ensure you have Python version 3.11 or higher installed.
 
-- To run the app, run the app api first: `flask run`
-- Run the frontend app: `npm start`
---------------------------------
-## DEVELOPMENT If running WITH Docker  on backend
-  Build the docker image: WITHOUT SCRIPT (FOR DEVELOPMENT)
+## Backend Setup
+1. **Set Up the Virtual Environment:**
+   - Navigate to the `flask-api` directory.
+   - Create a virtual environment in the root directory:
+     ```bash
+     python3 -m venv venv
+     ```
+   - Activate the virtual environment:
+     - On macOS:
+       ```bash
+       source venv/bin/activate
+       ```
+     - On Windows:
+       ```powershell
+       .\venv\Scripts\activate
+       ```
+   - Install the required packages:
+     ```bash
+     pip install -r requirements.txt --no-cache-dir
+     ```
+
+2. **Run the Application:**
+   - Start the API:
+     ```bash
+     flask run
+     ```
+
+## Frontend Setup
+- Navigate to the `polyphonypal` root directory.
+- Install dependencies and start the frontend application:
   ```bash
-    docker pull python:3.10-slim
-    docker build -f Dev.Dockerfile . -t dockertesting
-  ```
+  npm install
+  npm start
+
+
+
+
+
+
+
+# Starting the Application with Docker
+--------------------------------
+## Prerequisites
+Ensure you have Docker installed on your machine. and includes docker compose V2
+
+--------------------------------
+### Build the docker image: WITH COMPOSE (FOR DEVELOPMENT)
+   - ensure you have docker daemon running, then cd into flask api directory to run the following commands:
+  ```bash
+  docker compose up --build
+```
+   - To stop the container:
+   `docker compose down`
+
+   - To run the frontend app: cd into polyphonypal root directory run
+    `npm install`
+    then
+    `npm start`
+
+
+## Build the Docker image: WITHOUT COMPOSE (FOR DEVELOPMENT)
+-----------------------------------
+# DEVELOPMENT If running WITH Docker on backend
+
+
+```bash
+docker pull python:3.10-slim
+docker build -f Dev.Dockerfile . -t dockertesting
   Run the container:
  ```bash (maybe unix systems only)
  docker run -it -v "$(pwd)":/app -p 127.0.0.1:5001:5000 dockertesting
+```
+## Build the docker image: WITH COMPOSE (FOR DEVELOPMENT)
+
+  - Ensure you have docker daemon running, then cd into flask api directory to run the following commands:
+
+  ```bash
+  docker compose up --build
+```
+
+  - To stop the container: `docker compose down`
+
+  - To run the frontend app: cd into polyphonypal root directory run:
+   `npm install`
+   and then:
+  `npm start`
 -----------------------------------
-## If running with Docker DEPLOYMENT ONLY on backend
+#### If running with Docker DEPLOYMENT ONLY on backend
   build the docker image: WITHOUT SCRIPT
   ```bash
     docker pull python:3.8-slim
