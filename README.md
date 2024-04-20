@@ -93,7 +93,7 @@ docker build -f Dev.Dockerfile . -t dockertesting
 #### If running with Docker DEPLOYMENT ONLY on backend
   build the docker image: WITHOUT SCRIPT
   ```bash
-    docker pull python:3.8-slim
+    docker pull python:3.10-slim
     docker build -t flask_server .
   ```
   Run the container:
