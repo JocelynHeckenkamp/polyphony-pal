@@ -76,9 +76,11 @@
   
 }
 .upload_numerals {
-  font-size: 40px; 
+  font-size: 20px; 
   color: black; 
-  font-weight: 720;
+  font-weight: 400;
+  padding-bottom: 40px;
+  /* text-align: center; */
  
 }
 
@@ -118,9 +120,10 @@
   
 }
 
-.copy_alert{
+.alert_copy{
   position: fixed;
   width: 198vh;
+  top: 0;
   /* width: 300vh;
   top: 0px;
   color: black;

@@ -130,8 +130,9 @@ def add_XML():
 
 @app.route('/RomanScore/<int:id>/XML', methods=['GET'])
 def get_XML(id: int):
+    max_xmls = int(request.args.get('max_xmls', 50))
     score = RomanScore.query.get(id)
-    xmls = [{'xml':x.xml, 'id':x.id} for x in score.xmls]
+    xmls = [{'xml':x.xml, 'id':x.id} for x in score.xmls[:min(len(score.xmls), max_xmls)]]
     return jsonify({'xmls': xmls, 'finished': score.finished}), 201 
 
 

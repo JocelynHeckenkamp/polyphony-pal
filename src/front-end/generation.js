@@ -111,7 +111,8 @@ const text = {upload_title: title, upload_subtitle: subtitle, upload_thirdtitle:
 const render_content = () =>
 {   
     if(spinner){ //if waiting on data, show spinner
-        return(<div><Typography className={css.upload_numerals}>Roman Numerals: {textVal}<br></br> Key Signature: {ddValue}</Typography>
+        return(<div><Typography className={css.upload_title}>Generated Scores</Typography>
+        <Typography className={css.upload_numerals}>Roman Numerals: {textVal}<br></br> Key Signature: {ddValue}</Typography>
             <CircularProgress/> <p>You have found a new roman numeral sequence! Generating music... This may take a few minutes </p></div>);
     }
     else{
@@ -120,8 +121,9 @@ const render_content = () =>
             return(
             <Grid container direction="column">
                 <Collapse  className={css.alert_copy} in={alertCopy}><Alert  severity='info' >Music XML has been copied to clipboard</Alert></Collapse>
-                <Typography className={css.upload_numerals}>Roman Numerals: {textVal}<br></br> Key Signature: {ddValue}</Typography>
-                {generating ? (<div><CircularProgress/> <p>Generating music... This may take a few minutes: </p></div>) : null}
+                <Typography className={css.upload_title}>Generated Scores</Typography>
+                <Typography className={css.upload_numerals}>Roman Numerals: {textVal} <br></br> Key Signature: {ddValue}</Typography>
+                {generating ? (<div><CircularProgress/> <p className={css.upload_numerals}>Generating music... This may take a few minutes: </p></div>) : null}
                 
                 
                 <Grid container direction="row" className={css.flex_container} spacing={2}>
