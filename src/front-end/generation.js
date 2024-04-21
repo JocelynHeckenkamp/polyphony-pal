@@ -13,7 +13,7 @@ function Generation(){
     const [spinner, setSpinner] = useState(false);
     const [generating, setGen] = useState(false);
     const [musicXML, setMusicXML] = useState('');
-    const [alertCopy, setAlertCopy] = useState(true);
+    const [alertCopy, setAlertCopy] = useState(false);
 
 const handleTextChange = (e) => {
     setTextVal(e.target.value);
@@ -117,24 +117,28 @@ const render_content = () =>
     else{
         
         if(musicXML){//if data is recieved, render it and say we're waiting for more
-            return <>
-                <Collapse  className={css.copy_alert} in={alertCopy}><Alert  severity='info' >Music XML has been copied to clipboard</Alert></Collapse>
+            return(
+            <Grid container direction="column">
+                <Collapse  className={css.alert_copy} in={alertCopy}><Alert  severity='info' >Music XML has been copied to clipboard</Alert></Collapse>
                 <Typography className={css.upload_numerals}>Roman Numerals: {textVal}<br></br> Key Signature: {ddValue}</Typography>
                 {generating ? (<div><CircularProgress/> <p>Generating music... This may take a few minutes: </p></div>) : null}
                 
                 
+                <Grid container direction="row" className={css.flex_container} spacing={2}>
                 {musicXML.map(xml => 
-                    <Grid pb={2} maxWidth={"50vh"}>
-                  
+                    
+                        <Grid item  pb={2} sx={{width:"60vh"}}>
                         <Paper className={css.music_paper} onClick={() => {copyContent(xml.xml)}} >
                         <SheetMusicComponent musicXml={xml.xml} key={xml.id} />
                         </Paper>
+                        </Grid>
                     
                     
-                    </Grid>
+                    
                 )}
-                
-                </>;
+                </Grid>
+            </Grid>
+                );
         }
         else{//wait for user input
             
@@ -144,7 +148,7 @@ const render_content = () =>
                 <Grid container  mt={{xs:20, sm:20, md:20, lg:20 , xl:20}} className={css.flex_container} >
                     <Grid item align="center"  >
                     <Paper className={css.upload_paper} elevation={3}>
-                        {Object.keys(text).map(key => <Typography className={css[key]}>{text[key]}</Typography>)}
+                        {Object.keys(text).map(key => <Typography key={key} className={css[key]}>{text[key]}</Typography>)}
 
                         
                         <Grid item >
