@@ -61,18 +61,21 @@
 
 /* team member styles */
 .team-grid-container {
+  flex: auto;
   justify-content: center;
+  align-items: center;
   margin-top: 50px;
 }
 
 .team-member {
   text-align: center;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 40px;
 }
 
 .team-avatar {
   background-color: #ccc;
-  margin-bottom: 45px;
 }
 
 .team-name {

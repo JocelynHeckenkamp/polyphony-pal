@@ -101,10 +101,10 @@
 }
 
 .error_scroller{
-  justify-content: center;
+  justify-content: right;
   overflow-y: scroll;
-  max-height: 800px;
-  max-width:20%;
+  max-height: 80vh;
+  max-width:30%;
   
   
   
