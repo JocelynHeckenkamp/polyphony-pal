@@ -54,9 +54,9 @@ function Results() {
                     <Grid item xs={1} sm={1} md={1} lg={1} xl={1}></Grid>
 
 
-                    <Grid container item     className={css.error_scroller} >
+                    <Grid container item   className={css.error_scroller} >
                         {musicErrors.map((error) => ( 
-                        <Grid item pb={2} pr={2} >
+                        <Grid item pb={2} pr={2} key={musicErrors.indexOf(error)}>
                         <Paper sx={{ padding: 3,  backgroundColor: "#e0e0e0", borderRadius: 5 }} elevation={2} >
                            Title: {error.title} <br/><br/> 
                            Measure Number: {error.location[0]} <br/>

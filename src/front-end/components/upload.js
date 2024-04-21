@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Typography, Button, Grid, Paper } from '@mui/material';
+import { Typography, Button, Grid, Paper, FormGroup, Checkbox, FormControlLabel } from '@mui/material';
 import css from "./frontEnd.module.css"
 
 
@@ -36,7 +36,7 @@ function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusi
           //converts the strings to JSON format
           .map((str) => str.replaceAll("'", "\"").replaceAll("(", "[").replaceAll(")", "]").toLowerCase())
           .map(JSON.parse)
-          
+          setMusicErrors(errorJSON);
           setVis(false);
           setXML(data);
 
@@ -75,19 +75,31 @@ function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusi
     
     <div  >
     
-      <Grid container mt={{xs:20, sm:20, md:20, lg:20 , xl:20}}  className={css.flex_container}>
-        <Grid item  align="center">
+      <Grid container mt={{xs:20, sm:20, md:20, lg:20 , xl:20}} align="center" className={css.flex_container}>
+        
           <Paper className={css.upload_paper} elevation={3}>
 
             <Typography className={css.upload_title} >{titleTXT}</Typography>
             <Typography className={css.upload_subtitle} >{subTXT}</Typography>
             <Typography className={css.upload_thirdtitle} >{thirdTXT}</Typography>
-
-            <input onChange={(e) => { setFile(e.target.files[0]) }} type='file' accept='.musicxml,.mxml, .mxl' ></input>
-            <Button variant="contained" onClick={handleUpload} className={css["btn"]}>Upload</Button>
-
+          <Grid container item direction="row" className={css.flex_container}>
+              
+            
+              <input onChange={(e) => { setFile(e.target.files[0]) }} type='file' accept='.musicxml,.mxml, .mxl' ></input>
+            
+              {window.location.pathname == counterpointRoute ?
+                
+                <FormGroup sx={{width:"fit-content"}} >
+                <FormControlLabel   control={<Checkbox  defaultChecked  size="small"/>} label="Melody" />
+                <FormControlLabel  control={<Checkbox size="small" />} label="Harmony" />
+                </FormGroup>
+                :null}
+            <Grid item>
+              <Button variant="contained"  onClick={handleUpload} className={css.btn}>Upload</Button>
+              </Grid>
+          </Grid>
           </Paper>
-        </Grid>
+        
       </Grid>
 
       <div className={css.upload_background}></div>
