@@ -67,16 +67,19 @@
     position: absolute;
     top: 86px;
     height: 88vh;
+   
     width: 100%;
     display: flex;
     overflow: hidden;
     background-image: url('fallingnotes200.gif');
+    background-repeat: repeat-x;
     background-size: cover;
     filter: blur(6px) opacity(20%);
     /* border-radius: 10px; */
     /* border: 2px solid rgb(224, 224, 224); */
     border-top: 5px ridge  black;
     z-index: -1;
+    
 }
 
 .error_scroller{
