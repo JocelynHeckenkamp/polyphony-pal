@@ -17,16 +17,12 @@ fn1 = "./melody2.musicxml"
 fn2 = "./harmony2.musicxml"
 
 class ScoreWrapper:
-    score = None
-    cf = None  # cantus firmus index (0 or 1)
-    cp = None  # counterpoint index (0 or 1)
-    interval_wrappers = []
-
     def __init__(self, score, cantus_firmus):
         self.score = score
         self.cf = cantus_firmus
         self.cp = int(not cantus_firmus)
         self.key_signature = score.recurse().stream().keySignature
+        self.interval_wrappers = []
 
         all_notes = score.recurse().getElementsByClass(note.Note)
         for n in range(len(all_notes)):
@@ -91,6 +87,7 @@ class IntervalWrapper:
 
 def getScoreWrapper(fn, cantus_firmus):
     s = converter.parse(fn)
+
     sw = ScoreWrapper(s, cantus_firmus)
     return sw
 

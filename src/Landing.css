@@ -4,9 +4,9 @@
   box-sizing: border-box;
 }
 .intro-box {
-
+  margin-top: -40px;
   background: #f0f0f0;
-  padding: 20px;
+  padding: 0px;
   margin-bottom: 40px; /* Spacing between sections */
 }
 .landing-header {
@@ -61,18 +61,21 @@
 
 /* team member styles */
 .team-grid-container {
+  flex: auto;
   justify-content: center;
-  margin-top: 50px;
+  align-items: center;
+  margin-top: 20px;
 }
 
 .team-member {
   text-align: center;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 40px;
 }
 
 .team-avatar {
   background-color: #ccc;
-  margin-bottom: 45px;
 }
 
 .team-name {

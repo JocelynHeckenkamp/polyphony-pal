@@ -16,7 +16,7 @@ function Header()
         <Grid item >
         <Link href="/"><Button size="large" sx={{ color: "black" }}>About</Button></Link>
         <Link href="/generation"><Button size="large" sx={{ color: "black" }}>Generate</Button></Link>  
-                        <Button size="large" sx={{ color: "black" }}>Account</Button>
+        <Link href="/counterpoint"><Button size="large" sx={{ color: "black" }}>Counterpoint</Button></Link>                
         <Link href="/results"><Button size="large" sx={{ color: "black" }}>Upload</Button> </Link>
         </Grid>
       </Grid>
