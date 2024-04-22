@@ -73,8 +73,8 @@ Ensure you have Docker installed on your machine. and includes docker compose V2
  docker build -f Dev.Dockerfile . -t dockertesting
 ```
 - Run the container:
- 
-  bash 
+
+  bash
 ```bash
 docker run -it -v "$(pwd)":/app -p 127.0.0.1:5001:5000 dockertesting
 ```
@@ -85,7 +85,11 @@ docker run -it -v "$(pwd)":/app -p 127.0.0.1:5001:5000 dockertesting
   ```bash
   docker compose up --build
 ```
-
+ - NOTE: if you get an error about the port being in use, you can change the port in the docker-compose.yml file to a different port, e.g. 5001:
+ ```bash
+ ports:
+      - "5001:5000"`
+  ```
   - To stop the container: `docker compose down`
 
   - To run the frontend app: cd into polyphonypal root directory run:
