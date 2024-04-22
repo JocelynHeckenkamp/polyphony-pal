@@ -20,6 +20,26 @@ function Counterpoint() {
     setChecked(event.target.checked);
   };
 
+  function copyContent(xml) {
+     
+    try {
+     navigator.clipboard.writeText(xml);
+     console.log('Content copied to clipboard');
+      /* Resolved - text copied to clipboard successfully */
+    
+        console.log(alertCopy)
+        setAlertCopy(true)
+        setTimeout(() => {
+            setAlertCopy(false);
+          }, 3000);
+        
+
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+      /* Rejected - text failed to copy to the clipboard */
+    }
+  }
+
 
 const renderContent= () =>{
     if(isLoading){
@@ -27,7 +47,16 @@ const renderContent= () =>{
     }
     if(musicXml){
         {console.log(JSON.parse(musicXml)[0])}
-        return(<SheetMusicComponent musicXml={JSON.parse(musicXml)[0]}/>);
+        return(<Grid container direction="column" spacing={2}>
+            
+            {JSON.parse(musicXml).map(xml => (
+            <Grid item>
+                <Paper className={css.music_paper} onClick={() => {copyContent(xml.xml)}} >
+                <SheetMusicComponent key={xml} musicXml={xml}/>
+                </Paper>
+            </Grid> 
+            ))}
+            </Grid>);
     }
 
     else{
