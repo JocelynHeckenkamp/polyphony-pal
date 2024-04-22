@@ -145,7 +145,7 @@ const render_content = () =>
         else{//wait for user input
             
             return(
-                <div>
+                <div >
                    
                 <Grid container  mt={{xs:20, sm:20, md:20, lg:20 , xl:20}} className={css.flex_container} >
                     <Grid item align="center"  >
@@ -167,7 +167,7 @@ const render_content = () =>
                     </Paper>  
                 </Grid>
             </Grid>
-            <div className={css.upload_background}></div>
+            
             </div>
             );
         }

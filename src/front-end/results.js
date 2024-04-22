@@ -42,10 +42,10 @@ function Results() {
             } else if (musicXml) { //musicXML done loading
                 return(
                 <div > 
-                <Grid container spacing={2} sx={{display: 'flex', justifyContent: 'space-between', padding: "10px"}}>  
+                <Grid container spacing={2} sx={{display: 'flex', justifyContent: 'space-between', padding: "10px"}} className={css.flex_container}>  
                     <Grid container item xs={7} sm={7} md={7} lg={7} xl={7} direction="column"   sx={{ overflow: 'visible'}} >
                         <Grid item mt={-2}>
-                            <Paper  sx={{  pt:5, backgroundColor: "#e0e0e0", borderRadius: 5,  }} elevation={4} >
+                            <Paper  sx={{  pt:5, backgroundColor: "#ffffff", borderRadius: 5,  }} elevation={4} >
                                 <Grid sx={{justifyContent: 'center'}}>
                                     <SheetMusicComponent musicXml={musicXml} />
                                 </Grid>
@@ -58,7 +58,7 @@ function Results() {
                     <Grid container item   className={css.error_scroller} >
                         {musicErrors.map((error) => ( 
                             <Grid item pb={2} pr={2} key={musicErrors.indexOf(error)}>
-                                <Paper sx={{ padding: 3,  backgroundColor: "#e0e0e0", borderRadius: 5, width: "20vw"}} elevation={2} >
+                                <Paper sx={{ padding: 3,  backgroundColor: "#ffffff", borderRadius: 5, width: "20vw"}} elevation={2} >
                                     Title: {error.title} <br/><br/> 
                                     Measure Number: {error.location[0]} <br/>
                                     Offset:{error.location[1]} <br/><br/> 
@@ -70,7 +70,7 @@ function Results() {
                     </Grid>
 
 
-                    <Paper sx={{ padding: 3,  backgroundColor: "#e0e0e0", borderRadius: 5, width: "10vw"}} elevation={2} >
+                    <Paper sx={{ padding: 3,  backgroundColor: "#ffffff", borderRadius: 5, width: "10vw", ml:2}} elevation={2} >
                         <Typography>Number of Errors: {musicErrors.length}</Typography>
                     </Paper>
 

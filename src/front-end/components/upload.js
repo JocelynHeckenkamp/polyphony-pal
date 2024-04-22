@@ -74,11 +74,11 @@ function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusi
   return (
 
     
-    <div  >
+    <div   >
     
       <Grid container mt={{xs:20, sm:20, md:20, lg:20 , xl:20}} align="center" className={css.flex_container}>
         
-          <Paper className={css.upload_paper} elevation={3}>
+          <Paper className={css.upload_paper} elevation={3} >
 
             <Typography className={css.upload_title} >{titleTXT}</Typography>
             <Typography className={css.upload_subtitle} >{subTXT}</Typography>
@@ -100,7 +100,7 @@ function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusi
         
       </Grid>
 
-      <div className={css.upload_background}></div>
+      
     </div>
     
     
