@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Typography, Button, Grid, Paper, FormGroup, Checkbox, FormControlLabel } from '@mui/material';
 import css from "./frontEnd.module.css"
+import CustomSwitch from './customswitch';
 
 
 
@@ -82,20 +83,17 @@ function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusi
             <Typography className={css.upload_title} >{titleTXT}</Typography>
             <Typography className={css.upload_subtitle} >{subTXT}</Typography>
             <Typography className={css.upload_thirdtitle} >{thirdTXT}</Typography>
-          <Grid container item direction="row" className={css.flex_container}>
+          <Grid container item direction="row" spacing={3} className={css.flex_container}>
               
-            
-              <input onChange={(e) => { setFile(e.target.files[0]) }} type='file' accept='.musicxml,.mxml, .mxl' ></input>
-            
-              {window.location.pathname == counterpointRoute ?
-                
-                <FormGroup sx={{width:"fit-content"}} >
-                <FormControlLabel   control={<Checkbox  defaultChecked  size="small"/>} label="Melody" />
-                <FormControlLabel  control={<Checkbox size="small" />} label="Harmony" />
-                </FormGroup>
-                :null}
+              <Grid item>
+              <input className={css.file_select} onChange={(e) => { setFile(e.target.files[0]) }} type='file' accept='.musicxml,.mxml, .mxl' ></input>
+              </Grid>
+              <Grid item>
+              {window.location.pathname == counterpointRoute && (
+                <CustomSwitch />)}
+              </Grid>
             <Grid item>
-              <Button variant="contained"  onClick={handleUpload} className={css.btn}>Upload</Button>
+              <Button variant="contained" sx={{mt:-1}} onClick={handleUpload} className={css.btn}>Upload</Button>
               </Grid>
           </Grid>
           </Paper>

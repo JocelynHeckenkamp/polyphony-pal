@@ -4,9 +4,9 @@
   box-sizing: border-box;
 }
 .intro-box {
-
+  margin-top: -40px;
   background: #f0f0f0;
-  padding: 20px;
+  padding: 0px;
   margin-bottom: 40px; /* Spacing between sections */
 }
 .landing-header {
@@ -64,7 +64,7 @@
   flex: auto;
   justify-content: center;
   align-items: center;
-  margin-top: 50px;
+  margin-top: 20px;
 }
 
 .team-member {
