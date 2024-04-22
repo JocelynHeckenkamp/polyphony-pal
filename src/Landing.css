@@ -1,82 +1,118 @@
-
 /* Ensure all elements use border-box */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Primary font */
+  color: #333;
+  background-color: #fdf8e1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Vertically center children */
+
+}
+
 .intro-box {
-  margin-top: -40px;
-  background: #f0f0f0;
-  padding: 0px;
-  margin-bottom: 40px; /* Spacing between sections */
+  width: 100%;
+
+  background-color: #f6f5ed;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin-bottom: 40px;
+  border: 1px solid #e8e0cb;
+  border-radius: 40px;
+  box-sizing: border-box;
+}
+.landing-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .landing-header {
+
   text-align: center;
   margin-bottom: 50px;
 }
+
 .landing-logo {
   max-width: 100%;
   height: auto;
+  transition: transform 0.3s ease-in-out;
 }
 
 .landing-title {
   font-size: 3rem;
   font-weight: bold;
   margin-bottom: 1rem;
+  line-height: 1.2;
 }
 
 .landing-subtitle {
+  font-family: 'Arial', sans-serif; /* Secondary font */
   font-size: 1rem;
   margin-bottom: 1rem;
+  line-height: 1.5;
 }
 
 .logo-container {
   display: flex;
-  justify-content: flex-end; /* Align logo to the right of container*/
+  justify-content: flex-end;
 }
-
-
 
 .get-started-btn {
   margin-top: 30px;
-  background-color:black;
+  background-color: #333; /* Darker color */
   color: white;
-  transition: background-color 0.3s;
-  
+  transition: background-color 0.3s ease;
 }
-
-
 
 .get-started-btn:hover {
-  background-color:  grey; /* dark grey  #424242 */
-
+  background-color: #555; /* Smoother transition to grey */
 }
 
-.BTN {
-  margin-top: 30px;
-  background-color:black;
-  color: white;
-  transition: background-color 0.3s;
-  
-}
-
-/* team member styles */
 .team-grid-container {
-  flex: auto;
+  display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 20px;
+  flex-wrap: nowrap;
 }
 
 .team-member {
   text-align: center;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 40px;
+  margin: 0 10px; /* Add margin to space us out */
+  border: 1px solid #ddd;
+  background: #f6f5ed;
+  padding: 20px;
+  transition: transform 0.3s ease-in-out;
+  border-radius: 40px;
 }
 
 .team-avatar {
-  background-color: #ccc;
+  transition: box-shadow 0.3s ease;
+  border: 2px solid #e8e0cb;
 }
+
+.team-avatar:hover {
+  box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+}
+.landing-container .get-started-btn {
+  padding: 10px 25px;
+  border-radius: 25px; /* Pill shape button idea? */
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.landing-container .get-started-btn:hover {
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+}
+
 
 .team-name {
   font-size: 24px;
@@ -90,12 +126,25 @@
 
 @media (max-width: 960px) {
   .logo-container {
-    justify-content: center; /* Center the logo on smaller screens */
+    justify-content: center; /* Center the logo on smaller screen i hope */
     margin-top: 20px;
   }
 }
-/* Footer styles  */
-.footer {
-  /* Your styles here */
 
+
+@media (max-width: 600px) {
+  .landing-title {
+    font-size: 2.5rem;
+  }
+
+  .landing-subtitle {
+    font-size: 0.9rem;
+  }
+}
+
+/* Footer styles */
+.footer {
+  padding: 20px;
+  background: #d7cec4;
+  text-align: center;
 }
