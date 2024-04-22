@@ -23,7 +23,7 @@ def music_upload():
 def counterpoint():
     musicXML = request.get_data(False, True, False)
     counterpoints = cpg.generate_counterpoint(musicXML, 1)
-    return counterpoints
+    return jsonify(counterpoints)
 
 
 @app.route('/musicGeneration', methods=['POST'])
