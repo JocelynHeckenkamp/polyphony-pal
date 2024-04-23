@@ -1,5 +1,6 @@
 
 from flask import Flask, request, jsonify, json
+from flask_cors import CORS
 import logging
 import os
 
@@ -12,6 +13,8 @@ from database.query import roman_score_query, romanid_XML_query, add_romanScore
 #rules imports
 import music_analysis.rules1to13 as r113
 import music_analysis.rules14to26 as r1426
+import music_analysis.rule27 as r27
+import music_analysis.rules25_28_31 as rules252831
 import music_analysis.music_xml_parser as mxp
 import music_generation.counterpoint_generation as cpg
 from music_analysis.error import Error as e
@@ -20,6 +23,7 @@ from music_analysis.error import Error as e
 from database.models import *
 
 app = Flask(__name__)
+cors = CORS(app)
 app.config.from_object(Config)
 print("Database URI:", app.config['SQLALCHEMY_DATABASE_URI'])
 db.init_app(app)
@@ -31,13 +35,28 @@ logging.basicConfig(level=logging.DEBUG)
 with app.app_context():
     db.create_all()
 
+def calcErrors(musicXML):
+    errorList = []
+    doubling_errors = []
+    sw = mxp.getScoreWrapper(musicXML)
+    errorList.extend(r27.check_rule_27(sw))
+
+    curr = sw.chord_wrappers[0]
+    while(curr is not None):
+        errorList.extend(r113.check_rules_1_to_13(curr, sw))
+        errorList.extend(rules252831.check_rules_25_28to31(curr, sw))
+        doubling_errors.extend(r1426.check_rules_14_to_26(curr, sw))
+        curr = curr.next
+    return [error.__dict__ for error in errorList], [error.__dict__ for error in doubling_errors]
+
 #Currently Prints the File sent to this route
 @app.route('/upload', methods=['PUT'])
 def music_upload():
     musicXML = request.get_data(False, True, False)
     #run script then return
-    content = "{} {}".format(musicXML, errors(musicXML))
-    return content
+    errors, doubling_errors = calcErrors(musicXML)
+    return jsonify({'errors': errors, 'suggestions': doubling_errors}), 200
+
 
 @app.route('/counterpoint', methods=['PUT'])
 def counterpoint():
@@ -46,15 +65,6 @@ def counterpoint():
     counterpoints = json.dumps(counterpoints)
     return counterpoints
 
-def errors(musicXML):
-    errors = []
-    sw = mxp.getScoreWrapper(musicXML)
-    curr = sw.chord_wrappers[0]
-    while(curr is not None):
-        errors.extend(r113.check_rules_1_to_13(curr, sw))
-        errors.extend(r1426.check_rules_14_to_26(curr, sw))
-        curr = curr.next
-    return [error.__dict__ for error in errors]
 
 
 @app.route('/musicGeneration', methods=['POST'])

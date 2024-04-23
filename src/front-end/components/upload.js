@@ -3,69 +3,64 @@ import React, { useState } from 'react';
 import { Typography, Button, Grid, Paper, FormGroup, Checkbox, FormControlLabel } from '@mui/material';
 import css from "./frontEnd.module.css"
 import CustomSwitch from './customswitch';
+import { HOST } from '../utils';
 
 
 
-function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusicErrors} ) {
+function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusicErrors, setMusicSuggestions} ) {
   const resultsRoute = "/results"
   const counterpointRoute = "/counterpoint"
 
   const [file, setFile] = useState(null);
 
-  function handleUpload() {
-    if (!file) {
-      console.log("No file selected");
-      return;
+  const handleUpload = async () => {
+    try {
+      if (!file) {
+        console.log("No file selected");
+        return;
+      }
+      if(window.location.href.includes(resultsRoute)){
+        
+        //upload file to backend
+        //update visible components as well
+        const res = await fetch(`${HOST}/upload`,
+          {
+            method: "PUT",
+            body: file,
+          })
+        
+        let data = await res.json()
+        console.log("data:", data)
+
+        setMusicErrors(data.errors);
+        setMusicSuggestions(data.suggestions);
+        setVis(false);
+        setXML(await file.text());
+        setLoading(false)
+      }
+      else{
+        fetch(`${HOST}/counterpoint`,
+          {
+            method: "PUT",
+            body: file,
+          })
+          .then(response => response.text())
+          .then(data => {
+            //hide upload component, then set data
+            //ndata[0] holds the musicXML, the rest of the array holds the errors
+           
+            setVis(false);
+            setXML(data);
+  
+            
+            //set loading bar false AFTER data has been set
+          })
+          .then(setLoading(false))
+      }
+
     }
-   if(window.location.href.includes(resultsRoute)){
-      
-      //upload file to backend
-      //update visible components as well
-      fetch("/upload",
-        {
-          method: "PUT",
-          body: file,
-        })
-        .then(response => response.text())
-        .then(data => {
-          //hide upload component, then set data
-          //ndata[0] holds the musicXML, the rest of the array holds the errors
-          var errors_str = data.split("[{")[1]
-          var ndata = errors_str.substring(0, errors_str.length - 2).split("}, {")
-          var errorJSON = ndata.map((str) => "{" + str + "}")
-
-          //converts the strings to JSON format
-          .map((str) => str.replaceAll("'", "\"").replaceAll("(", "[").replaceAll(")", "]").toLowerCase())
-          .map(JSON.parse)
-          setMusicErrors(errorJSON);
-          setVis(false);
-          setXML(data);
-
-          console.log(errorJSON)
-          //set loading bar false AFTER data has been set
-        })
-        .then(setLoading(false))
-        .catch(error => console.error("Error during the upload process:", error));
-    }
-    else{
-      fetch("/counterpoint",
-        {
-          method: "PUT",
-          body: file,
-        })
-        .then(response => response.text())
-        .then(data => {
-          //hide upload component, then set data
-          //ndata[0] holds the musicXML, the rest of the array holds the errors
-         
-          setVis(false);
-          setXML(data);
-
-          
-          //set loading bar false AFTER data has been set
-        })
-        .then(setLoading(false))
-        .catch(error => console.error("Error during the upload process:", error));
+    catch(error) {
+      console.error("Error during the upload process:", error) 
     }
   }
   

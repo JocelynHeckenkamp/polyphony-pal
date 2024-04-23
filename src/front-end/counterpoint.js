@@ -15,7 +15,8 @@ function Counterpoint() {
  const [musicErrors, setMusicErrors] = useState([]);//contains array of music errors
  const [musicXml, setMusicXml] = useState('');
  const [checked, setChecked] = useState(true);  
-      
+ const [musicSuggestions, setMusicSuggestions] = useState([]);//contains array of music errors     
+
  const handleChange = (event) => {
     setChecked(event.target.checked);
   };
@@ -63,7 +64,7 @@ const renderContent= () =>{
             return(
             <Grid>
             <Upload titleTXT={title} subTXT={subtitle} thirdTXT={thirdtitle} setVis={setUploadVis}
-            setXML={setMusicXml} setLoading={setIsLoading} setMusicErrors={setMusicErrors} />
+            setXML={setMusicXml} setLoading={setIsLoading} setMusicErrors={setMusicErrors} setMusicSuggestions={setMusicSuggestions} />
             
             </Grid>
 
