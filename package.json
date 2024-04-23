@@ -23,7 +23,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://127.0.0.1:5000",
+  "proxy": "https://polyphony-pal-production.up.railway.app/",
   "browserslist": {
     "production": [
       ">0.2%",
