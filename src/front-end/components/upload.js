@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Typography, Button, Grid, Paper, FormGroup, Checkbox, FormControlLabel } from '@mui/material';
 import css from "./frontEnd.module.css"
 import CustomSwitch from './customswitch';
+import { HOST } from '../utils';
 
 
 
@@ -22,7 +23,7 @@ function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusi
         
         //upload file to backend
         //update visible components as well
-        const res = await fetch("/upload",
+        const res = await fetch(`${HOST}/upload`,
           {
             method: "PUT",
             body: file,
@@ -38,7 +39,7 @@ function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusi
         setLoading(false)
       }
       else{
-        fetch("/counterpoint",
+        fetch(`${HOST}/counterpoint`,
           {
             method: "PUT",
             body: file,

@@ -1,0 +1,1 @@
+export const HOST = "https://polyphony-pal-production.up.railway.app"
