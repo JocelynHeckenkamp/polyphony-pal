@@ -1,5 +1,6 @@
 
 from flask import Flask, request, jsonify, json
+from flask_cors import CORS
 import logging
 import os
 
@@ -22,6 +23,7 @@ from music_analysis.error import Error as e
 from database.models import *
 
 app = Flask(__name__)
+cors = CORS(app)
 app.config.from_object(Config)
 print("Database URI:", app.config['SQLALCHEMY_DATABASE_URI'])
 db.init_app(app)
@@ -38,7 +40,7 @@ def calcErrors(musicXML):
     doubling_errors = []
     sw = mxp.getScoreWrapper(musicXML)
     errorList.extend(r27.check_rule_27(sw))
-    
+
     curr = sw.chord_wrappers[0]
     while(curr is not None):
         errorList.extend(r113.check_rules_1_to_13(curr, sw))
