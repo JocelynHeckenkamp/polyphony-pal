@@ -106,12 +106,7 @@
 .error_scroller{
   overflow-y: scroll;
   max-height: 80vh;
-<<<<<<< HEAD
-  max-width:30%;
- 
-=======
   max-width: 15vw;
->>>>>>> 00b65b29b0f64b3801825a1c4d6d90e9ab79ec9a
 }
   .error_scroller_paper{
     

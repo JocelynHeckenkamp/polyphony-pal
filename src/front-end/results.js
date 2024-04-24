@@ -53,7 +53,6 @@ function Results() {
                     </Grid>
                     
 
-<<<<<<< HEAD
 
                     <Grid container item   className={css.error_scroller} >
                         {musicErrors.map((error) => ( 
@@ -67,23 +66,6 @@ function Results() {
                                 </Paper>
                             </Grid>
                         ))}
-=======
-                    <Grid container item  sx={{maxHeight: '80vh', maxWidth: '15vw'}}>
-                        <Typography>Errors</Typography>
-                        <Grid container item className={css.error_scroller}>
-                            {musicErrors.map((error) => ( 
-                                <Grid item pb={2} pr={2} key={musicErrors.indexOf(error)}>
-                                    <Paper sx={{ padding: 3,  backgroundColor: "#ffffff", borderRadius: 5}} elevation={2} >
-                                        Title: {error.title} <br/><br/> 
-                                        Measure Number: {error.location[0]} <br/>
-                                        Offset:{error.location[1]} <br/><br/> 
-                                        Description: {error.description} <br/><br/> 
-                                        Suggestion: {error.suggestion} 
-                                    </Paper>
-                                </Grid>
-                            ))}
-                        </Grid>
->>>>>>> 00b65b29b0f64b3801825a1c4d6d90e9ab79ec9a
                     </Grid>
 
                     <Grid container item  sx={{maxHeight: '80vh', maxWidth: '15vw'}}>
@@ -103,19 +85,10 @@ function Results() {
                         </Grid>
                     </Grid>
 
-<<<<<<< HEAD
                     <Paper className={css.error_counter_paper} elevation={2} >
                         <Typography>Number of Errors: {musicErrors.length}</Typography>
                     </Paper>
 
-=======
-                    <Grid container item  sx={{maxHeight: '80vh', maxWidth: '15vw'}}>
-                        <Typography>Suggestions</Typography> 
-                            <Paper sx={{ padding: 3,  backgroundColor: "#ffffff", borderRadius: 5, width: "10vw", ml:2}} elevation={2} >
-                                <Typography>Number of Errors: {musicErrors.length}</Typography>
-                            </Paper>
-                    </Grid>
->>>>>>> 00b65b29b0f64b3801825a1c4d6d90e9ab79ec9a
                 </Grid>  
                 </div>  
                 );
