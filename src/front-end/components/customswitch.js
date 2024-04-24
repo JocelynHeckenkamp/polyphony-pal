@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, Switch, Grid, styled, alpha, FormGroup, FormControlLabel, FormControl } from '@mui/material';
+import { Typography, Switch, Grid, styled, alpha } from '@mui/material';
 import css from "./frontEnd.module.css"
 
 function CustomSwitch({switchVal}){
@@ -9,12 +9,17 @@ const [switchState, setSwitch] = useState(false);
     const Custom = styled(Switch)(({ theme }) => ({
         '& .MuiSwitch-switchBase.Mui-checked': {
           color: "#1c1b1c",
+          
+          
+          
           '&:hover': {
             backgroundColor: alpha("#1c1b1c", theme.palette.action.hoverOpacity),
+            
           },
         },
         '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
           backgroundColor: "#1c1b1c",
+          
         },
       }));
 
@@ -40,12 +45,14 @@ return(
    <Grid container className={css.switch_container}>
     <Typography className={css.switch_text}>Melody</Typography>
 
-    
-    <Custom className={css.switch} checked={switchState} onClick={handleChange} ></Custom>
+   
+    <Custom className={css.switch} checked={switchState} onChange={handleChange} /> 
       
-
+    
     <Typography className={css.switch_text} sx={{mr:5}}>Harmony</Typography>
     </Grid>
 </div>);    
 }
+
+
 export default CustomSwitch;
