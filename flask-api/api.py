@@ -19,8 +19,19 @@ from music_analysis.error import Error as e
 #database model
 from database.models import *
 
-app = Flask(__name__)
 
+app = Flask(__name__)
+app.config.from_object(Config)
+print("Database URI:", app.config['SQLALCHEMY_DATABASE_URI'])
+db.init_app(app)
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
+
+# #database initialized before any requests
+with app.app_context():
+    db.create_all()
+    
 #Currently Prints the File sent to this route
 @app.route('/upload', methods=['PUT'])
 def music_upload():
