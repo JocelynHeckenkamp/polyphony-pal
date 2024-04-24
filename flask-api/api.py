@@ -20,16 +20,6 @@ from music_analysis.error import Error as e
 from database.models import *
 
 app = Flask(__name__)
-app.config.from_object(Config)
-print("Database URI:", app.config['SQLALCHEMY_DATABASE_URI'])
-db.init_app(app)
-
-# Configure logging
-logging.basicConfig(level=logging.DEBUG)
-
-# #database initialized before any requests
-with app.app_context():
-    db.create_all()
 
 #Currently Prints the File sent to this route
 @app.route('/upload', methods=['PUT'])
@@ -41,8 +31,19 @@ def music_upload():
 
 @app.route('/counterpoint', methods=['PUT'])
 def counterpoint():
-    musicXML = request.get_data(False, True, False)
-    counterpoints = cpg.generate_counterpoint(musicXML, 1)
+    # musicXML = request.get_data(False, True, False)
+    file = request.files['xml']
+    musicType = request.form.get('type')
+    musicXML = file.read().decode('utf-8')
+    
+    ##sets music type for script
+    if musicType == "Melody":
+         musicType = 1
+    else:
+        musicType = 0
+
+    
+    counterpoints = cpg.generate_counterpoint(musicXML, musicType)
     counterpoints = json.dumps(counterpoints)
     return counterpoints
 

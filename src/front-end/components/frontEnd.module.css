@@ -109,9 +109,23 @@
   max-height: 80vh;
   max-width:30%;
  
-  
-  
 }
+  .error_scroller_paper{
+    
+    padding: 15px;
+    background-color: "#ffffff";
+    border-radius: 20px; 
+    width: 20vw;
+   
+  }
+  .error_counter_paper{
+    
+    padding: 15px;
+    background-color: "#ffffff";
+    border-radius: 20px; 
+    width: 10vw;
+    margin-left:20px;
+  }
 
 .flex_container{
   
@@ -140,6 +154,7 @@
 .switch{
   top:-6px;
   
+  
 }
   .switch_container{
     padding-left: 0px;
@@ -149,6 +164,6 @@
   }
 
 .file_select{
-  margin-right: -50px;
-  margin-left: -10px;
+  /* margin-right: -50px;
+  margin-left: -10px; */
 }

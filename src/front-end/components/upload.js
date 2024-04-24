@@ -11,12 +11,18 @@ function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusi
   const counterpointRoute = "/counterpoint"
 
   const [file, setFile] = useState(null);
+  const[ counterpointType, setCounterpointType] = useState("Melody");
 
   function handleUpload() {
     if (!file) {
       console.log("No file selected");
       return;
     }
+    //to send file and Melody/Harmony to counterpoint
+    const formData = new FormData();
+    formData.append("xml", file);
+    formData.append("type", counterpointType);
+   
    if(window.location.href.includes(resultsRoute)){
       
       //upload file to backend
@@ -51,7 +57,7 @@ function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusi
       fetch("/counterpoint",
         {
           method: "PUT",
-          body: file,
+          body: formData,
         })
         .then(response => response.text())
         .then(data => {
@@ -84,14 +90,14 @@ function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusi
             <Typography className={css.upload_subtitle} >{subTXT}</Typography>
             <Typography className={css.upload_thirdtitle} >{thirdTXT}</Typography>
           <Grid container item direction="row" spacing={3} className={css.flex_container}>
-              
+          <Grid item>
+              {window.location.pathname == counterpointRoute && (
+                <CustomSwitch switchVal={setCounterpointType} />)}
+              </Grid>
               <Grid item>
               <input className={css.file_select} onChange={(e) => { setFile(e.target.files[0]) }} type='file' accept='.musicxml,.mxml, .mxl' ></input>
               </Grid>
-              <Grid item>
-              {window.location.pathname == counterpointRoute && (
-                <CustomSwitch />)}
-              </Grid>
+              
             <Grid item>
               <Button variant="contained" sx={{mt:-1}} onClick={handleUpload} className={css.btn}>Upload</Button>
               </Grid>
