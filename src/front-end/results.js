@@ -4,6 +4,8 @@ import { Paper, CircularProgress, Grid, Typography } from '@mui/material';
 import Upload from "./components/upload";
 import Header from './components/polypalHeader';
 import css from "./components/frontEnd.module.css"
+import XMLtoMIDI from './XMLtoMIDI';  // Adjust the path as necessary
+
 
 
 
@@ -26,24 +28,24 @@ function Results() {
     const [uploadVis, setUploadVis] = useState(true);
     const [musicErrors, setMusicErrors] = useState([]);//contains array of music errors
     const [musicSuggestions, setMusicSuggestions] = useState([]);//contains array of music errors
-    
+
 
     const renderContent = () => {
         if(uploadVis){
-            const title= String.raw`Upload Music XML File`; 
+            const title= String.raw`Upload Music XML File`;
             const subtitle = String.raw`Export Music XML file from Musescore or any other editor`;
             return <Upload titleTXT={title} subTXT={subtitle} setVis={setUploadVis} setXML={setMusicXml}
                      setLoading={setIsLoading} setMusicErrors={setMusicErrors} setMusicSuggestions={setMusicSuggestions} />;
         }
-        else{   
+        else{
             if (pageError) {
                 return <p>Error: {error}</p>;
             } else if (isLoading) {
                 return(<CircularProgress />);
             } else if (musicXml) { //musicXML done loading
                 return(
-                <div> 
-                <Grid container spacing={2} sx={{display: 'flex', justifyContent: 'center', padding: "10px"}} className={css.flex_container}>  
+                <div>
+                <Grid container spacing={2} sx={{display: 'flex', justifyContent: 'center', padding: "10px"}} className={css.flex_container}>
                     <Grid container item  direction="column" sx={{ overflow: 'visible', width: '40vw'}} >
                             <Paper  sx={{  pt:5, backgroundColor: "#ffffff", borderRadius: 5,  width: "100%"}} elevation={4} >
                                 <Grid sx={{justifyContent: 'center'}}>
@@ -51,19 +53,19 @@ function Results() {
                                 </Grid>
                             </Paper>
                     </Grid>
-                    
+
 
                     <Grid container item  sx={{maxHeight: '80vh', maxWidth: '15vw'}}>
                         <Typography>Errors</Typography>
                         <Grid container item className={css.error_scroller}>
-                            {musicErrors.map((error) => ( 
+                            {musicErrors.map((error) => (
                                 <Grid item pb={2} pr={2} key={musicErrors.indexOf(error)}>
                                     <Paper sx={{ padding: 3,  backgroundColor: "#ffffff", borderRadius: 5}} elevation={2} >
-                                        Title: {error.title} <br/><br/> 
+                                        Title: {error.title} <br/><br/>
                                         Measure Number: {error.location[0]} <br/>
-                                        Offset:{error.location[1]} <br/><br/> 
-                                        Description: {error.description} <br/><br/> 
-                                        Suggestion: {error.suggestion} 
+                                        Offset:{error.location[1]} <br/><br/>
+                                        Description: {error.description} <br/><br/>
+                                        Suggestion: {error.suggestion}
                                     </Paper>
                                 </Grid>
                             ))}
@@ -71,16 +73,16 @@ function Results() {
                     </Grid>
 
                     <Grid container item  sx={{maxHeight: '80vh', maxWidth: '15vw'}}>
-                        <Typography>Suggestions</Typography> 
+                        <Typography>Suggestions</Typography>
                         <Grid container item   className={css.error_scroller} >
-                            {musicSuggestions.map((error) => ( 
+                            {musicSuggestions.map((error) => (
                                 <Grid item pb={2} pr={2} key={musicSuggestions.indexOf(error)}>
                                     <Paper sx={{ padding: 3,  backgroundColor: "#ffffff", borderRadius: 5}} elevation={2} >
-                                        Title: {error.title} <br/><br/> 
+                                        Title: {error.title} <br/><br/>
                                         Measure Number: {error.location[0]} <br/>
-                                        Offset:{error.location[1]} <br/><br/> 
-                                        Description: {error.description} <br/><br/> 
-                                        Suggestion: {error.suggestion} 
+                                        Offset:{error.location[1]} <br/><br/>
+                                        Description: {error.description} <br/><br/>
+                                        Suggestion: {error.suggestion}
                                     </Paper>
                                 </Grid>
                             ))}
@@ -88,37 +90,37 @@ function Results() {
                     </Grid>
 
                     <Grid container item  sx={{maxHeight: '80vh', maxWidth: '15vw'}}>
-                        <Typography>Suggestions</Typography> 
+                        <Typography>Suggestions</Typography>
                             <Paper sx={{ padding: 3,  backgroundColor: "#ffffff", borderRadius: 5, width: "10vw", ml:2}} elevation={2} >
                                 <Typography>Number of Errors: {musicErrors.length}</Typography>
                             </Paper>
                     </Grid>
-                </Grid>  
-                </div>  
+                </Grid>
+                </div>
                 );
             } else {
                 /// TODO: case of no loading but also no error and no musicXML
                 return <p>No sheet music data available.</p>;
             }
-        }    
-        
+        }
+
     };
 
 
     return (
         <div  className={css.flex_container}>
-         
-          
+
+
         <Grid >
-         
+
              <Header />
-            
+
             {renderContent()}
         </Grid>
-        
-        
+
+
         </div>
-       
+
     );
 }
 export default Results;
