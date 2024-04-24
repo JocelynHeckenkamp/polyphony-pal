@@ -35,9 +35,6 @@ logging.basicConfig(level=logging.DEBUG)
 # #database initialized before any requests
 with app.app_context():
     db.create_all()
-<<<<<<< HEAD
-    
-=======
 
 def calcErrors(musicXML):
     errorList = []
@@ -53,7 +50,6 @@ def calcErrors(musicXML):
         curr = curr.next
     return [error.__dict__ for error in errorList], [error.__dict__ for error in doubling_errors]
 
->>>>>>> 00b65b29b0f64b3801825a1c4d6d90e9ab79ec9a
 #Currently Prints the File sent to this route
 @app.route('/upload', methods=['PUT'])
 def music_upload():

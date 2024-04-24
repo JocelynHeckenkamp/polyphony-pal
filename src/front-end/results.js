@@ -43,37 +43,22 @@ function Results() {
             } else if (musicXml) { //musicXML done loading
                 return(
                 <div> 
-                <Grid container spacing={2} sx={{display: 'flex', justifyContent: 'center', padding: "10px"}} className={css.flex_container}>  
-                    <Grid container item  direction="column" sx={{ overflow: 'visible', width: '40vw'}} >
-                            <Paper  sx={{  pt:5, backgroundColor: "#ffffff", borderRadius: 5,  width: "100%"}} elevation={4} >
-                                <Grid sx={{justifyContent: 'center'}}>
-                                    <SheetMusicComponent musicXml={musicXml} />
-                                </Grid>
-                            </Paper>
-                    </Grid>
-                    
-
-
-                    <Grid container item   className={css.error_scroller} >
-                        {musicErrors.map((error) => ( 
-                            <Grid item pb={2} pr={2} key={musicErrors.indexOf(error)}>
-                                <Paper className={css.error_scroller_paper} elevation={2} >
-                                    Title: {error.title} <br/><br/> 
-                                    Measure Number: {error.location[0]} <br/>
-                                    Offset:{error.location[1]} <br/><br/> 
-                                    Description: {error.description} <br/><br/> 
-                                    Suggestion: {error.suggestion} 
+                <Grid container spacing={2} spacing={2} sx={{display: 'flex', justifyContent: 'center', padding: "10px"}}>  
+                        <Grid container item  direction="column" sx={{ overflow: 'visible', width: '50vw'}} >
+                                <Paper  className={css.music_paper} elevation={4} >
+                                    <Grid sx={{justifyContent: 'center'}}>
+                                        <SheetMusicComponent musicXml={musicXml} />
+                                    </Grid>
                                 </Paper>
-                            </Grid>
-                        ))}
-                    </Grid>
+                        </Grid>
+                        
 
-                    <Grid container item  sx={{maxHeight: '80vh', maxWidth: '15vw'}}>
-                        <Typography>Suggestions</Typography> 
+                         
                         <Grid container item   className={css.error_scroller} >
-                            {musicSuggestions.map((error) => ( 
-                                <Grid item pb={2} pr={2} key={musicSuggestions.indexOf(error)}>
-                                    <Paper sx={{ padding: 3,  backgroundColor: "#ffffff", borderRadius: 5}} elevation={2} >
+                            <Typography>Errors</Typography>
+                            {musicErrors.map((error) => ( 
+                                <Grid item pb={2} pr={2} key={musicErrors.indexOf(error)}>
+                                    <Paper className={css.error_scroller_paper} elevation={2} >
                                         Title: {error.title} <br/><br/> 
                                         Measure Number: {error.location[0]} <br/>
                                         Offset:{error.location[1]} <br/><br/> 
@@ -83,6 +68,22 @@ function Results() {
                                 </Grid>
                             ))}
                         </Grid>
+
+                        <Grid container item  className={css.error_scroller}>
+                            <Typography>Suggestions</Typography> 
+                            <Grid  item    >
+                                {musicSuggestions.map((error) => ( 
+                                    <Grid item pb={2} pr={2} key={musicSuggestions.indexOf(error)}>
+                                        <Paper className={css.error_scroller_paper} elevation={2} >
+                                            Title: {error.title} <br/><br/> 
+                                            Measure Number: {error.location[0]} <br/>
+                                            Offset:{error.location[1]} <br/><br/> 
+                                            Description: {error.description} <br/><br/> 
+                                            Suggestion: {error.suggestion} 
+                                        </Paper>
+                                    </Grid>
+                                ))}
+                            </Grid>
                     </Grid>
 
                     <Paper className={css.error_counter_paper} elevation={2} >

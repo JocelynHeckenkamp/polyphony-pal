@@ -47,7 +47,7 @@ function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusi
         fetch(`${HOST}/counterpoint`,
           {
             method: "PUT",
-            body: file,
+            body: formData,
           })
           .then(response => response.text())
           .then(data => {
@@ -64,7 +64,7 @@ function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusi
       }
 
     }
-    //to send file and Melody/Harmony to counterpoint
+  
   
 
 
