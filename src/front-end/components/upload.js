@@ -15,11 +15,15 @@ function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusi
   const[ counterpointType, setCounterpointType] = useState("Melody");
 
   const handleUpload = async () => {
-    try {
+    
       if (!file) {
         console.log("No file selected");
         return;
       }
+      const formData = new FormData();
+      formData.append("xml", file);
+      formData.append("type", counterpointType);
+
       if(window.location.href.includes(resultsRoute)){
         
         //upload file to backend
@@ -60,67 +64,12 @@ function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusi
       }
 
     }
-<<<<<<< HEAD
     //to send file and Melody/Harmony to counterpoint
-    const formData = new FormData();
-    formData.append("xml", file);
-    formData.append("type", counterpointType);
+  
+
+
    
-   if(window.location.href.includes(resultsRoute)){
-      
-      //upload file to backend
-      //update visible components as well
-      fetch("/upload",
-        {
-          method: "PUT",
-          body: file,
-        })
-        .then(response => response.text())
-        .then(data => {
-          //hide upload component, then set data
-          //ndata[0] holds the musicXML, the rest of the array holds the errors
-          var errors_str = data.split("[{")[1]
-          var ndata = errors_str.substring(0, errors_str.length - 2).split("}, {")
-          var errorJSON = ndata.map((str) => "{" + str + "}")
-
-          //converts the strings to JSON format
-          .map((str) => str.replaceAll("'", "\"").replaceAll("(", "[").replaceAll(")", "]").toLowerCase())
-          .map(JSON.parse)
-          setMusicErrors(errorJSON);
-          setVis(false);
-          setXML(data);
-
-          console.log(errorJSON)
-          //set loading bar false AFTER data has been set
-        })
-        .then(setLoading(false))
-        .catch(error => console.error("Error during the upload process:", error));
-    }
-    else{
-      fetch("/counterpoint",
-        {
-          method: "PUT",
-          body: formData,
-        })
-        .then(response => response.text())
-        .then(data => {
-          //hide upload component, then set data
-          //ndata[0] holds the musicXML, the rest of the array holds the errors
-         
-          setVis(false);
-          setXML(data);
-
-          
-          //set loading bar false AFTER data has been set
-        })
-        .then(setLoading(false))
-        .catch(error => console.error("Error during the upload process:", error));
-=======
-    catch(error) {
-      console.error("Error during the upload process:", error) 
->>>>>>> 00b65b29b0f64b3801825a1c4d6d90e9ab79ec9a
-    }
-  }
+  
   
   
 
