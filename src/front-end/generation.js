@@ -3,6 +3,7 @@ import SheetMusicComponent from './SheetMusicComponent';
 import { TextField, Paper, Grid, CircularProgress, Typography, Button, Select, MenuItem, FormControl, InputLabel, OutlinedInput, Alert, Collapse } from '@mui/material';
 import Header from './components/polypalHeader';
 import css from "./components/frontEnd.module.css"
+import XMLtoMIDI from './XMLtoMIDI';  // Adjust the path as necessary
 import { HOST } from './utils';
 
 function Generation() {
@@ -15,6 +16,11 @@ function Generation() {
     const [generating, setGen] = useState(false);
     const [musicXML, setMusicXML] = useState('');
     const [alertCopy, setAlertCopy] = useState(false);
+    const [selectedXmlId, setSelectedXmlId] = useState(null);
+
+    const handleClick = (id) => {
+        setSelectedXmlId(prevId => prevId === id ? null : id);
+    };
 
     const handleTextChange = (e) => {
         setTextVal(e.target.value);
@@ -128,15 +134,12 @@ function Generation() {
 
                         <Grid container direction="row" className={css.flex_container} spacing={2}>
                             {musicXML.map(xml =>
-
                                 <Grid item pb={2} sx={{ width: "60vh" }}>
-                                    <Paper className={css.music_paper} onClick={() => { copyContent(xml.xml) }} >
-                                        <SheetMusicComponent musicXml={xml.xml} key={xml.id} />
+                                    <Paper className={css.music_paper} onClick={() => { copyContent(xml.xml); handleClick(xml.id)  }} >
+                                        <SheetMusicComponent musicXml={xml.xml} key={xml.id}/>
                                     </Paper>
+                                    {selectedXmlId === xml.id && <XMLtoMIDI musicXML={xml.xml}/>} {/* Render XMLtoMIDI component conditionally */}
                                 </Grid>
-
-
-
                             )}
                         </Grid>
                     </Grid>

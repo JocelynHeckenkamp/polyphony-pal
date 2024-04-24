@@ -32,7 +32,7 @@ function Results() {
 
     const handleClick = () => {
         if (musicXml) {
-            setShowXMLtoMIDI(true); // Set state to true to render XMLtoMIDI component
+            setShowXMLtoMIDI((prevShowXMLtoMIDI) => !prevShowXMLtoMIDI);
         }
     };
 
