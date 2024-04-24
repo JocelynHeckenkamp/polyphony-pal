@@ -3,21 +3,64 @@ import React, { useState } from 'react';
 import { Typography, Button, Grid, Paper, FormGroup, Checkbox, FormControlLabel } from '@mui/material';
 import css from "./frontEnd.module.css"
 import CustomSwitch from './customswitch';
+import { HOST } from '../utils';
 
 
 
-function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusicErrors} ) {
+function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusicErrors, setMusicSuggestions} ) {
   const resultsRoute = "/results"
   const counterpointRoute = "/counterpoint"
 
   const [file, setFile] = useState(null);
   const[ counterpointType, setCounterpointType] = useState("Melody");
 
-  function handleUpload() {
-    if (!file) {
-      console.log("No file selected");
-      return;
+  const handleUpload = async () => {
+    try {
+      if (!file) {
+        console.log("No file selected");
+        return;
+      }
+      if(window.location.href.includes(resultsRoute)){
+        
+        //upload file to backend
+        //update visible components as well
+        const res = await fetch(`${HOST}/upload`,
+          {
+            method: "PUT",
+            body: file,
+          })
+        
+        let data = await res.json()
+        console.log("data:", data)
+
+        setMusicErrors(data.errors);
+        setMusicSuggestions(data.suggestions);
+        setVis(false);
+        setXML(await file.text());
+        setLoading(false)
+      }
+      else{
+        fetch(`${HOST}/counterpoint`,
+          {
+            method: "PUT",
+            body: file,
+          })
+          .then(response => response.text())
+          .then(data => {
+            //hide upload component, then set data
+            //ndata[0] holds the musicXML, the rest of the array holds the errors
+           
+            setVis(false);
+            setXML(data);
+  
+            
+            //set loading bar false AFTER data has been set
+          })
+          .then(setLoading(false))
+      }
+
     }
+<<<<<<< HEAD
     //to send file and Melody/Harmony to counterpoint
     const formData = new FormData();
     formData.append("xml", file);
@@ -72,6 +115,10 @@ function Upload({titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMusi
         })
         .then(setLoading(false))
         .catch(error => console.error("Error during the upload process:", error));
+=======
+    catch(error) {
+      console.error("Error during the upload process:", error) 
+>>>>>>> 00b65b29b0f64b3801825a1c4d6d90e9ab79ec9a
     }
   }
   

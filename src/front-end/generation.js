@@ -3,6 +3,7 @@ import SheetMusicComponent from './SheetMusicComponent';
 import { TextField,  Paper, Grid, CircularProgress, Typography, Button, Select, MenuItem, FormControl, InputLabel, OutlinedInput, Alert, Collapse } from '@mui/material';
 import Header from './components/polypalHeader';
 import css from "./components/frontEnd.module.css"
+import { HOST } from './utils';
 
 function Generation(){
     //ddvalue = key
@@ -52,7 +53,7 @@ const upload = async () => {
     const values = [ ddValue, textVal ]
     try {
         setSpinner(true)
-        let res = await fetch("/musicGeneration",
+        let res = await fetch(`${HOST}/musicGeneration`,
             {
                 method: "POST",
                 body: JSON.stringify({values}) ,
@@ -64,7 +65,7 @@ const upload = async () => {
         let id = data.id 
         console.log(data)
 
-        res = await fetch(`/RomanScore/${id}/XML`, {
+        res = await fetch(`${HOST}/RomanScore/${id}/XML`, {
             method: 'GET'
         });
         data = await res.json();
@@ -76,7 +77,7 @@ const upload = async () => {
         setMusicXML(xmls);
 
         const interval = setInterval(async () => {
-            const res = await fetch(`/RomanScore/${id}/XML`, {
+            const res = await fetch(`${HOST}/RomanScore/${id}/XML`, {
             method: 'GET'
             });
             const data = await res.json();
