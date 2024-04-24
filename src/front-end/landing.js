@@ -7,7 +7,7 @@ import alexPP from './components/alexPP.png';
 import asealPP from './components/asealPP.png';
 import jocelynPP from './components/jocelynPP.png';
 import coryPP from './components/coryPP.png';
-import  "../Landing.css";
+import "../Landing.css";
 import Header from './components/polypalHeader';
 
 
@@ -17,7 +17,7 @@ function Landing() {
 
 
   const teamMembers = [
-    { name: 'Alexander N. Chin', role: 'Software Engineer', email: 'anc202000@utdallas.edu', initials: 'AC', src: alexPP},
+    { name: 'Alexander N. Chin', role: 'Software Engineer', email: 'anc202000@utdallas.edu', initials: 'AC', src: alexPP },
     { name: 'Aseal Mohmand', role: 'Software Engineer', email: 'asm200011@utdallas.edu', initials: 'AM', src: asealPP },
     { name: 'Jocelyn Heckenkamp', role: 'Software Engineer', email: 'jah190020@utdallas.edu', initials: 'JH', src: jocelynPP },
     { name: 'Cory Harris', role: 'Software Engineer', email: 'cnh200002@utdallas.edu', initials: 'CH', src: coryPP }
@@ -25,8 +25,9 @@ function Landing() {
 
   return (
 
-    <>
-      <Header/>
+
+<><div className='front-container'></div>
+      <Header />
       <Container maxWidth="lg" className="landing-container">
 
         <Grid container spacing={4} alignItems="center" className="intro-box">
@@ -62,7 +63,7 @@ function Landing() {
         <Grid container spacing={0} className="team-grid-container">
           {teamMembers.map((member, index) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={index} className="team-member">
-              <Grid sx={{display: 'flex', justifyContent: 'center'}}>
+              <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Avatar className="team-avatar" src={member.src} sx={{ width: 250, height: 250 }}>{member.initials}</Avatar>
               </Grid>
               <Typography variant="subtitle1" component="div" className="team-name">
@@ -79,6 +80,8 @@ function Landing() {
         </Grid>
 
       </Container>
+
+
     </>
   );
 }
