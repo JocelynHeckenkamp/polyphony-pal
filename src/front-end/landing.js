@@ -5,8 +5,8 @@ import { Container, Typography, Button, Grid, Avatar } from '@mui/material';
 import logo from '../polypalLogo.svg';
 import alexPP from './components/alexPP.jpeg';
 import asealPP from './components/asealPP.png';
-import jocelynPP from './components/jocelynPP.png';
-import coryPP from './components/coryPP.png';
+import jocelynPP from './components/Jocelyn.JPG';
+import coryPP from './components/Cory.jpeg';
 import "../Landing.css";
 import Header from './components/polypalHeader';
 
