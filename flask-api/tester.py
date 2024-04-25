@@ -25,7 +25,6 @@ if __name__ == '__main__':
     sw = mxp.getScoreWrapper(fn)
     errors = []
     for cw in sw.chord_wrappers:
-        print(1)
         errors.extend(r113.check_rules_1_to_13(cw, sw))
 
     for e in errors:

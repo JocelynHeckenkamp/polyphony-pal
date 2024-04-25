@@ -283,7 +283,6 @@ def rule11(chord: mxp.ChordWrapper): # parallel octaves
                     continue
                 vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[a], chord.next.notes[a], chord.notes[b], chord.next.notes[b])
                 if vlq.parallelUnisonOrOctave():
-                    print(chord.melodic_intervals[a].name, chord.melodic_intervals[b].name)
                     voices = [False] * 4
                     voices[a] = True
                     voices[b] = True
@@ -332,16 +331,17 @@ def rule13(chord: mxp.ChordWrapper): # hidden fifths and octaves
         vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[0], chord.next.notes[0], chord.notes[3], chord.next.notes[3])
         if (vlq.hiddenInterval(music21.interval.Interval('P5'))
             or vlq.hiddenInterval(music21.interval.Interval('P8'))):
-            voices = [True, False, False, True]
-            ErrorParams = {
-                'title': "Hidden Octave or Fifth",
-                'location': chord.location,
-                'description': f"Soprano and bass form a parallel octave or fifth.",
-                'suggestion': "",
-                'voices': voices,
-                'duration': 2.0,
-            }
-            errors.append(e.Error(**ErrorParams))
+            if not vlq.contraryMotion() or not (chord.melodic_intervals[0].isStep or chord.melodic_intervals[0].name == "P1"):
+                voices = [True, False, False, True]
+                ErrorParams = {
+                    'title': "Hidden Octave or Fifth",
+                    'location': chord.location,
+                    'description': f"Soprano and bass form a hidden octave or fifth.",
+                    'suggestion': "",
+                    'voices': voices,
+                    'duration': 2.0,
+                }
+                errors.append(e.Error(**ErrorParams))
 
     return errors
 
