@@ -23,6 +23,7 @@ def check_rule_27(score: mxp.ScoreWrapper):
                 'suggestion': suggestion,
                 'voices': [False] * 4,
                 'duration': -1,
+                'link': "https://musictheory.pugetsound.edu/mt21c/MajorKeySignatures.html"
             }
 
             errors.append(e.Error(**ErrorParams))

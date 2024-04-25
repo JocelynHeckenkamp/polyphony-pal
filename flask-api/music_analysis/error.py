@@ -33,13 +33,14 @@ class Error:
     voices = [False] * 4 # array of 4 booleans; soprano, alto, tenor, bass; true means there's an error
     suggestion = None # does not always have a value
     duration = None # float; number of beats, usually 1.0, 2.0, or 3.0; -1 only for key signature error
-    def __init__(self, title: str, location: tuple, description: str, suggestion: str, voices: list, duration: float):
+    def __init__(self, title: str, location: tuple, description: str, suggestion: str, voices: list, duration: float, link: str):
         self.title = title
         self.location = location
         self.description = description
         self.suggestion = suggestion
         self.voices = voices
         self.duration = duration
+        self.link = link
 
     def __str__(self):
         #return f"{self.title} ({self.location})"
