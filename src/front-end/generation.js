@@ -7,11 +7,8 @@ import XMLtoMIDI from './XMLtoMIDI';  // Adjust the path as necessary
 import { HOST } from './utils';
 
 function Generation() {
-    //ddvalue = key
-    //text value = roman numerals
     const [ddValue, setDD] = useState("");
     const [textVal, setTextVal] = useState("");
-    //false = spinner not showing
     const [spinner, setSpinner] = useState(false);
     const [generating, setGen] = useState(false);
     const [musicXML, setMusicXML] = useState('');
