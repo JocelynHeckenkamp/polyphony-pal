@@ -3,24 +3,33 @@ import music_generation.counterpoint_parser as cpp
 import music_generation.counterpoint_rules as cpr
 import music_generation.music21_method_extensions as m21me
 import music_generation.counterpoint_generation as cpg
+import music_analysis.music_xml_parser as mxp
+import music_analysis.rules1to13 as r113
 
-fn = "./music_generation/melody4.musicxml"
-fn1 = "./music_generation/melody2.musicxml"
-fn2 = "./music_generation/harmony2.musicxml"
+# fn = "./music_generation/melody4.musicxml"
+# fn1 = "./music_generation/melody2.musicxml"
+# fn2 = "./music_generation/harmony2.musicxml"
 # fn1 = "./music_generation/test_cases/rule10melody.musicxml"
 # fn2 = "./music_generation/test_cases/rule10harmony.musicxml"
+fn = "./music_analysis/voice-leading-1.musicxml"
 
 if __name__ == '__main__':
-    m21me.extend()
-    cpg.generate_counterpoint(fn, 1)
+    # m21me.extend()
+    # cpg.generate_counterpoint(fn, 1)
 
     # sw = cpp.getScoreWrapper(fn1, 1)
     # cpp.testHarmony(sw, fn2)
     # errors = cpr.check_counterpoint(sw)
     # print(errors)
 
-    # sw = mxp.getScoreWrapper(fn)
-    #print(sw)
+    sw = mxp.getScoreWrapper(fn)
+    errors = []
+    for cw in sw.chord_wrappers:
+        print(1)
+        errors.extend(r113.check_rules_1_to_13(cw, sw))
+
+    for e in errors:
+        print(e.title, e.location)
     
     #for c in sw.chord_wrappers:
         #print(c.location, c.chord_obj.fullName)

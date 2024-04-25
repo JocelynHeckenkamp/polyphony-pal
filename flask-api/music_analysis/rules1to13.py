@@ -279,8 +279,11 @@ def rule11(chord: mxp.ChordWrapper): # parallel octaves
     if (chord.next is not None):
         for a in range(len(chord.notes) - 1):
             for b in range(a+1, len(chord.notes)):
+                if chord.melodic_intervals[a].name == "P1" and chord.melodic_intervals[b].name == "P1":
+                    continue
                 vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[a], chord.next.notes[a], chord.notes[b], chord.next.notes[b])
                 if vlq.parallelUnisonOrOctave():
+                    print(chord.melodic_intervals[a].name, chord.melodic_intervals[b].name)
                     voices = [False] * 4
                     voices[a] = True
                     voices[b] = True
@@ -303,13 +306,15 @@ def rule12(chord: mxp.ChordWrapper): # parallel fifths
     if (chord.next is not None):
         for a in range(len(chord.notes) - 1):
             for b in range(a+1, len(chord.notes)):
+                if chord.melodic_intervals[a].name == "P1" and chord.melodic_intervals[b].name == "P1":
+                    continue
                 vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[a], chord.next.notes[a], chord.notes[b], chord.next.notes[b])
                 if vlq.parallelFifth():
                     voices = [False] * 4
                     voices[a] = True
                     voices[b] = True
                     ErrorParams = {
-                        'title': "Parallel Octaves",
+                        'title': "Parallel Fifth",
                         'location': chord.location,
                         'description': f"{voice_names[a]} and {voice_names_lower[b]} form a parallel fifth.",
                         'suggestion': "",
@@ -329,7 +334,7 @@ def rule13(chord: mxp.ChordWrapper): # hidden fifths and octaves
             or vlq.hiddenInterval(music21.interval.Interval('P8'))):
             voices = [True, False, False, True]
             ErrorParams = {
-                'title': "Parallel Octave or Fifth",
+                'title': "Hidden Octave or Fifth",
                 'location': chord.location,
                 'description': f"Soprano and bass form a parallel octave or fifth.",
                 'suggestion': "",
