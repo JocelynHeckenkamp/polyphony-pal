@@ -1,35 +1,56 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import MidiPlayer from 'midi-player-js';
 
 const MidiPlayerComponent = ({ midiBlob }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const player = useRef(new MidiPlayer.Player());
 
+  useEffect(() => {
+    // Set up event listener for the MIDI player
+    player.current.on('endOfFile', () => {
+      setIsPlaying(false);
+    });
+
+    // Cleanup function for useEffect
+    return () => {
+      player.current.stop();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (midiBlob && !isPlaying) {
+      loadAndPlayMidi();
+    }
+  }, [midiBlob, isPlaying]); // React to changes in midiBlob and isPlaying
+
   const loadAndPlayMidi = () => {
-    const { current: midiPlayer } = player;
-    midiPlayer.loadDataUri(midiBlob)
-      .then(() => {
-        midiPlayer.play();
+    if (!player.current.isPlaying) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        console.log('MIDI file loaded successfully:', e.target.result);
+        player.current.loadDataUri(e.target.result);
+        player.current.play();
         setIsPlaying(true);
-      })
-      .catch(error => {
-        console.error('Error loading or playing MIDI file:', error);
-      });
+      };
+      reader.onerror = function(error) {
+        console.error('Error loading MIDI file:', error);
+      };
+      reader.readAsDataURL(midiBlob); // Converts blob to data URL
+    }
   };
 
   const stopMidi = () => {
-    const { current: midiPlayer } = player;
-    midiPlayer.stop();
+    player.current.stop();
     setIsPlaying(false);
   };
 
   const togglePlay = () => {
-    if (isPlaying) {
-      stopMidi();
-    } else {
-      loadAndPlayMidi();
-    }
+    console.log('Before toggle:', isPlaying);
+    setIsPlaying(prevIsPlaying => !prevIsPlaying); // Update state based on previous state
+    console.log('After toggle:', isPlaying); // This will still log the previous state value due to asynchronous state updates
   };
+
+  console.log('Component rendered. isPlaying:', isPlaying);
 
   return (
     <div>

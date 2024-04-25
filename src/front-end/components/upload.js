@@ -37,7 +37,7 @@ function Upload({ titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMus
         setVis(false);
 
 
-        // // Now handle MIDI conversion
+        // // handle MIDI conversion
         // const formData = new FormData();
         // formData.append("file", file);
         // const midiRes = await fetch("https://meigarage.edirom.de/ege-webservice/Conversions/musicxml-partwise%3Atext%3Axml/musicxml-timewise%3Atext%3Axml/mei30%3Atext%3Axml/mei40%3Atext%3Axml/midi%3Aaudio%3Ax-midi/", {
@@ -70,11 +70,11 @@ function Upload({ titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMus
         .then(data => {
           //hide upload component, then set data
           //ndata[0] holds the musicXML, the rest of the array holds the errors
-          
+
           setVis(false);
           setXML(data);
 
-          
+
           //set loading bar false AFTER data has been set
         })
         .then(setLoading(false))
@@ -95,16 +95,16 @@ function Upload({ titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMus
 
   return (
     <div   >
-    
+
       <Grid container mt={{xs:20, sm:20, md:20, lg:20 , xl:20}} align="center" className={css.flex_container}>
-        
+
           <Paper className={css.upload_paper} elevation={3} >
 
             <Typography className={css.upload_title} >{titleTXT}</Typography>
             <Typography className={css.upload_subtitle} >{subTXT}</Typography>
             <Typography className={css.upload_thirdtitle} >{thirdTXT}</Typography>
           <Grid container item direction="row" spacing={3} className={css.flex_container}>
-              
+
               <Grid item>
               <input className={css.file_select} onChange={(e) => { setFile(e.target.files[0]) }} type='file' accept='.musicxml,.mxml, .mxl' ></input>
               </Grid>
@@ -122,10 +122,10 @@ function Upload({ titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMus
             </Alert>
           </Snackbar>
           </Paper>
-        
+
       </Grid>
 
-      
+
     </div>
   );
 }
@@ -155,7 +155,7 @@ export default Upload;
 //         return;
 //       }
 //       if(window.location.href.includes(resultsRoute)){
-        
+
 //         //upload file to backend
 //         //update visible components as well
 //         const res = await fetch(`${HOST}/upload`,
@@ -163,7 +163,7 @@ export default Upload;
 //             method: "PUT",
 //             body: file,
 //           })
-        
+
 //         let data = await res.json()
 //         console.log("data:", data)
 
@@ -183,11 +183,11 @@ export default Upload;
 //           .then(data => {
 //             //hide upload component, then set data
 //             //ndata[0] holds the musicXML, the rest of the array holds the errors
-           
+
 //             setVis(false);
 //             setXML(data);
-  
-            
+
+
 //             //set loading bar false AFTER data has been set
 //           })
 //           .then(setLoading(false))
@@ -195,26 +195,26 @@ export default Upload;
 
 //     }
 //     catch(error) {
-//       console.error("Error during the upload process:", error) 
+//       console.error("Error during the upload process:", error)
 //     }
 //   }
-  
-  
+
+
 
 //   return (
 
-    
+
 //     <div   >
-    
+
 //       <Grid container mt={{xs:20, sm:20, md:20, lg:20 , xl:20}} align="center" className={css.flex_container}>
-        
+
 //           <Paper className={css.upload_paper} elevation={3} >
 
 //             <Typography className={css.upload_title} >{titleTXT}</Typography>
 //             <Typography className={css.upload_subtitle} >{subTXT}</Typography>
 //             <Typography className={css.upload_thirdtitle} >{thirdTXT}</Typography>
 //           <Grid container item direction="row" spacing={3} className={css.flex_container}>
-              
+
 //               <Grid item>
 //               <input className={css.file_select} onChange={(e) => { setFile(e.target.files[0]) }} type='file' accept='.musicxml,.mxml, .mxl' ></input>
 //               </Grid>
@@ -227,14 +227,14 @@ export default Upload;
 //               </Grid>
 //           </Grid>
 //           </Paper>
-        
+
 //       </Grid>
 
-      
+
 //     </div>
-    
-    
-    
+
+
+
 //   );
 
 

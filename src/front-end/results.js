@@ -5,7 +5,7 @@ import Upload from "./components/upload";
 import Header from './components/polypalHeader';
 import css from "./components/frontEnd.module.css"
 import XMLtoMIDI from './XMLtoMIDI';  // Adjust the path as necessary
-
+import MidiPlayerComponent from './components/midiplayback'; //added for musicplayback -cory
 
 
 
@@ -23,12 +23,26 @@ import XMLtoMIDI from './XMLtoMIDI';  // Adjust the path as necessary
 //fetch musicXML data to give to SheetMusicComponent
 function Results() {
     const [musicXml, setMusicXml] = useState('');
+    const [midiBlob, setMidiBlob] = useState(null); //adding this so we store the MIDIblob too (for playback component) -cory
     const [isLoading, setIsLoading] = useState(true);
     const [pageError, setError] = useState(null);
     const [uploadVis, setUploadVis] = useState(true);
     const [musicErrors, setMusicErrors] = useState([]);
     const [musicSuggestions, setMusicSuggestions] = useState([]);
     const [showXMLtoMIDI, setShowXMLtoMIDI] = useState(false);
+
+    /* adding for music playback data -cory */
+    const handleConversionComplete = (midiBlob, errorMessage) => {
+        if (midiBlob) {
+            // Set state to be used by the MidiPlayerComponent
+            setMidiBlob(midiBlob);
+        } else {
+
+            console.error(errorMessage);
+            setError(errorMessage);
+        }
+    };
+
 
     const handleClick = () => {
         if (musicXml) {
@@ -55,7 +69,7 @@ function Results() {
                                     <SheetMusicComponent musicXml={musicXml} />
                                 </Grid>
                             </Paper>
-                            {showXMLtoMIDI && <XMLtoMIDI musicXML={musicXml} />} {/* Render XMLtoMIDI component conditionally */}
+                            {showXMLtoMIDI && <XMLtoMIDI musicXML={musicXml} onConversionComplete={handleConversionComplete}/>} {/* Render XMLtoMIDI component conditionally */}
                         </Grid>
 
                         <Grid container item sx={{ maxHeight: '80vh', maxWidth: '15vw' }}>
@@ -99,7 +113,7 @@ function Results() {
                             </Paper>
                         </Grid>
 
-                        {/* {musicXml && <XMLtoMIDI musicXML={musicXml} />} */}
+                        {midiBlob && <MidiPlayerComponent midiBlob={midiBlob} />}
                     </Grid>
                 </div>
             );
