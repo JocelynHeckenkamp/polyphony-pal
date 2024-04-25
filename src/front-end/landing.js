@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Typography, Button, Grid, Avatar } from '@mui/material';
 import logo from '../polypalLogo.svg';
-import alexPP from './components/alexPP.png';
+import alexPP from './components/alexPP.jpeg';
 import asealPP from './components/asealPP.png';
 import jocelynPP from './components/jocelynPP.png';
 import coryPP from './components/coryPP.png';
@@ -37,13 +37,11 @@ function Landing() {
               PolyphonyPal
             </Typography>
             <Typography variant="h6" color="inherit" className="landing-subtitle" sx={{ mb: 2 }}>
-              Welcome to PolyphonyPal, your go-to music mistake checker!
-              Perfect your compositions with ease using our intuitive platform
-              based on classical counterpoint rules. Receive real-time feedback,
-              visual error indicators, and customizable settings to accelerate
-              your learning in music theory classes or personal practice sessions.
-              With PolyphonyPal, compose confidently, correct errors swiftly, and
-              elevate your musical creations to new heights of excellence.
+              Welcome to Polyphony Pal, the ultimate tool for mastering voice leading in music composition. 
+              Whether you're a student refining your harmonies or an instructor guiding others, Polyphony Pal empowers you with tools to help you follow voice leading rules. 
+              Detect errors effortlessly with our 4-part voice leading analysis, generate rich harmonies with our Roman numeral-based music generation, 
+              and complete 2-part musical phrases with our counterpoint feature. Explore music theory creatively and confidently with Polyphony Pal, 
+              transforming theoretical concepts into beautifully orchestrated compositions. Start composing with precision and inspiration today.
             </Typography>
             <Button variant="contained" component={Link} to="/results" className="get-started-btn"  >
               Get Started
