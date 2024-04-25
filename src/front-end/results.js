@@ -58,6 +58,7 @@ function Results() {
                             {showXMLtoMIDI && <XMLtoMIDI musicXML={musicXml} />} {/* Render XMLtoMIDI component conditionally */}
                         </Grid>
 
+
                         <Grid item >
                             <Typography>Errors</Typography>
                             <Grid container item className={css.error_scroller} sx={{  width: '18vw' }}>
@@ -91,7 +92,6 @@ function Results() {
                                 ))}
                             </Grid>
                         </Grid>
-
                         <Grid item  >
                             <Grid  container item  direction="column" >
                                 <Grid item pb={2} sx={{ maxHeight: '30vh', maxWidth: '15vw' }}>

@@ -113,7 +113,7 @@ class ScoreWrapper:
         locations = set()
         self.score.show("text")
         for voice in self.score.recurse().voices: # 2 staffs per score; n measures per staff, 2 voices per measure
-            print(voice)
+            # print(voice)
             # map voice to number
             vox = str(voice)[-2]
             if vox not in voice_map:

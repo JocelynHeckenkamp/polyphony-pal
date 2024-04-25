@@ -23,6 +23,7 @@ def rule25(chord: mxp.ChordWrapper, sw):
     errors = []
     if chord.chord_obj.isAugmentedSixth():
         #print(chord)
+        link = "https://musictheory.pugetsound.edu/mt21c/VoiceLeadingAugmentedSixthChords.html"
         if chord.next is None:
             ErrorParams = {
                 'title': "Unresolved Augmented 6th Chord",
@@ -31,6 +32,7 @@ def rule25(chord: mxp.ChordWrapper, sw):
                 'suggestion': "Do not end on an augmented sixth chord.",
                 'voices': [True] * 4,
                 'duration': 1.0,
+                'link': link
             }
             errors.append(e.Error(**ErrorParams))
         elif not (chord.next.rn.romanNumeralAlone == "V" or (chord.next.rn.romanNumeralAlone.lower() == "i" and chord.next.inversion == 2)):
@@ -41,6 +43,7 @@ def rule25(chord: mxp.ChordWrapper, sw):
                 'suggestion': f"Change {chord.next.rn.romanNumeralAlone} chord to i64, I64, V, or V7.",
                 'voices': [True] * 4,
                 'duration': 2.0,
+                'link': link
             }
             errors.append(e.Error(**ErrorParams))
         else:
@@ -56,6 +59,7 @@ def rule25(chord: mxp.ChordWrapper, sw):
                             'suggestion': f"Resolve {s4.name} in {voice_names_lower[i]} to {sw.key.pitchFromDegree(4).name}.",
                             'voices': [True] * 4,
                             'duration': 2.0,
+                            'link': link
                         }
                         errors.append(e.Error(**ErrorParams))
                 elif (chord.next.rn.romanNumeralAlone == "i" or chord.next.rn.romanNumeralAlone == "I"):
@@ -67,6 +71,7 @@ def rule25(chord: mxp.ChordWrapper, sw):
                             'suggestion': f"Resolve {s4.name} in {voice_names_lower[i]} to {sw.key.pitchFromDegree(5).name}.",
                             'voices': [True] * 4,
                             'duration': 2.0,
+                            'link': link
                         }
                         errors.append(e.Error(**ErrorParams))
 
@@ -90,6 +95,7 @@ def rule28(chord: mxp.ChordWrapper): # cadences
                 'suggestion': "Rewrite last two chords with authentic cadence, plagal cadence, or deceptive cadence.",
                 'voices': voices,
                 'duration': 2.0,
+                'link': "https://musictheory.pugetsound.edu/mt21c/cadences.html"
             }
             errors.append(e.Error(**ErrorParams))
 
@@ -98,6 +104,7 @@ def rule28(chord: mxp.ChordWrapper): # cadences
 def rule29(chord: mxp.ChordWrapper, sw): # resolving V7
     errors = []
 
+    link = "https://musictheory.pugetsound.edu/mt21c/V7toIVoiceLeading.html"
     if (chord.rn.romanNumeralAlone == "V" and chord.chord_obj.isDominantSeventh()): #V7
         if chord.next is None: # ending on V7
             ErrorParams = {
@@ -107,6 +114,7 @@ def rule29(chord: mxp.ChordWrapper, sw): # resolving V7
                 'suggestion': "Resolve V7 or change it to another chord.",
                 'voices': [True] * 4,
                 'duration': 1.0,
+                'link': link
             }
             errors.append(e.Error(**ErrorParams))
         elif chord.next.rn.scaleDegree != 1:
@@ -117,6 +125,7 @@ def rule29(chord: mxp.ChordWrapper, sw): # resolving V7
                 'suggestion': "Resolve to I or i, or the change V7 to another chord.",
                 'voices': [True] * 4,
                 'duration': 2.0,
+                'link': link
             }
             errors.append(e.Error(**ErrorParams))
         else:
@@ -153,6 +162,7 @@ def rule29(chord: mxp.ChordWrapper, sw): # resolving V7
                     'suggestion': suggestion,
                     'voices': voices,
                     'duration': 2.0,
+                    'link': link
                 }
                 errors.append(e.Error(**ErrorParams))
 
@@ -162,6 +172,8 @@ def rule30(chord: mxp.ChordWrapper, sw):
     errors = []
 
     if (chord.chord_obj.isDiminishedSeventh() or chord.chord_obj.isHalfDiminishedSeventh()):
+
+        link = "https://musictheory.pugetsound.edu/mt21c/VoiceLeadingSecondaryChords.html"
 
         seventhAboveThird = False
         for n in chord.notes:
@@ -179,6 +191,7 @@ def rule30(chord: mxp.ChordWrapper, sw):
                 'suggestion': "Do not end on a chord of diminished quality.",
                 'voices': [True] * 4,
                 'duration': 1.0,
+                'link': link
             }
             errors.append(e.Error(**ErrorParams))
         elif not (chord.degreeResolvesToByStep(4, 3, sw.key)
@@ -192,6 +205,7 @@ def rule30(chord: mxp.ChordWrapper, sw):
                 'suggestion': f"Resolve scale degrees 4 to 3, 6, to 5, 7 to 8, and 2 to 1 (or to 3 if the 7th is above the 3rd).",
                 'voices': [True] * 4,
                 'duration': 2.0,
+                'link': link
             }
             errors.append(e.Error(**ErrorParams))
 
@@ -211,6 +225,7 @@ def rule31(chord: mxp.ChordWrapper):
                 'suggestion': "",
                 'voices': voices,
                 'duration': 2.0,
+                'link': "https://musictheory.pugetsound.edu/mt21c/RulesOfMelody.html"
             }
             errors.append(e.Error(**ErrorParams))
 

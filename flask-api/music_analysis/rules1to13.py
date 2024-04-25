@@ -50,6 +50,7 @@ def rule1(chord: mxp.ChordWrapper): # range
                 'suggestion': f"Write voice in range [{low}, {high}].",
                 'voices': voices,
                 'duration': 1.0,
+                'link': "https://musictheory.pugetsound.edu/mt21c/VoiceRanges.html"
             }
             errors.append(e.Error(**ErrorParams))
 
@@ -62,6 +63,7 @@ def rule2(chord: mxp.ChordWrapper): # spacing
     a_t = chord.harmonic_intervals[(1, 2)]
 
     title = "Spacing Error"
+    link = "https://musictheory.pugetsound.edu/mt21c/RulesOfSpacing.html"
 
     if abs(s_a.semitones) > 12:
         ErrorParams = {
@@ -71,6 +73,7 @@ def rule2(chord: mxp.ChordWrapper): # spacing
             'suggestion': "Lower the soprano voice or raise the alto voice.",
             'voices': [True, True, False, False],
             'duration': 1.0,
+            'link': link
         }
         errors.append(e.Error(**ErrorParams))
 
@@ -82,6 +85,7 @@ def rule2(chord: mxp.ChordWrapper): # spacing
             'suggestion': "Lower the alto voice or raise the tenor voice.",
             'voices': [False, True, True, False],
             'duration': 1.0,
+            'link': link
         }
         errors.append(e.Error(**ErrorParams))
 
@@ -103,6 +107,7 @@ def rule3(chord: mxp.ChordWrapper): # voice crossing
                     'suggestion': "Move or switch voices.",
                     'voices': voices,
                     'duration': 1.0,
+                    'link': "https://kaitlinbove.com/voice-leading"
                 }
                 errors.append(e.Error(**ErrorParams))
 
@@ -112,6 +117,7 @@ def rule4(chord: mxp.ChordWrapper): # overlapping
     errors = []
 
     title = "Voice Overlapping"
+    link = "https://kaitlinbove.com/voice-leading"
 
     for a in range(len(chord.notes)-1):
         if (chord.next is not None and chord.notes[a].lessThan(chord.next.notes[a + 1])):
@@ -125,6 +131,7 @@ def rule4(chord: mxp.ChordWrapper): # overlapping
                 'suggestion': "",
                 'voices': voices,
                 'duration': 2.0,
+                'link': link
             }
             errors.append(e.Error(**ErrorParams))
 
@@ -140,6 +147,7 @@ def rule4(chord: mxp.ChordWrapper): # overlapping
                 'suggestion': "",
                 'voices': voices,
                 'duration': 2.0,
+                'link': link
             }
             errors.append(e.Error(**ErrorParams))
 
@@ -159,6 +167,7 @@ def rule5(chord: mxp.ChordWrapper): # melodic leaps
                 'suggestion': "Change octaves or decrease the leap.",
                 'voices': voices,
                 'duration': 2.0,
+                'link': "https://kaitlinbove.com/voice-leading"
             }
             errors.append(e.Error(**ErrorParams))
 
@@ -183,6 +192,7 @@ def rule6(chord: mxp.ChordWrapper): # double leaps
                         'suggestion': "Change a leap to a step.",
                         'voices': voices,
                         'duration': 3.0,
+                        'link': "https://musictheory.pugetsound.edu/mt21c/RulesOfMelody.html"
                     }
                     errors.append(e.Error(**ErrorParams))
 
@@ -205,6 +215,7 @@ def rule7(chord: mxp.ChordWrapper): # resolving leaps
                     'suggestion': "Resolve stepwise in the opposite direction.",
                     'voices': voices,
                     'duration': 3.0,
+                    'link': "https://musictheory.pugetsound.edu/mt21c/RulesOfMelody.html"
                 }
                 errors.append(e.Error(**ErrorParams))
 
@@ -227,6 +238,7 @@ def rule8(chord: mxp.ChordWrapper): # resolving diminished movement
                     'suggestion': "Resolve stepwise in the opposite direction.",
                     'voices': voices,
                     'duration': 3.0,
+                    'link': "https://musictheory.pugetsound.edu/mt21c/RulesOfMelody.html"
                 }
                 errors.append(e.Error(**ErrorParams))
 
@@ -248,6 +260,7 @@ def rule9(chord: mxp.ChordWrapper): # resolving the 7th
                     'suggestion': "Resolve the seventh of a chord stepwise down.",
                     'voices': voices,
                     'duration': 2.0,
+                    'link': "https://musictheory.pugetsound.edu/mt21c/VoiceLeadingSeventhChordsIntro.html"
                 }
                 errors.append(e.Error(**ErrorParams))
 
@@ -267,6 +280,7 @@ def rule10(chord: mxp.ChordWrapper): # valid chords
             'suggestion': "Rewrite as a seventh chord or triad.",
             'voices': voices,
             'duration': 1.0,
+            'link': "https://musictheory.pugetsound.edu/mt21c/RomanNumeralChordSymbols.html"
         }
         errors.append(e.Error(**ErrorParams))
 
@@ -279,6 +293,8 @@ def rule11(chord: mxp.ChordWrapper): # parallel octaves
     if (chord.next is not None):
         for a in range(len(chord.notes) - 1):
             for b in range(a+1, len(chord.notes)):
+                if chord.melodic_intervals[a].name == "P1" and chord.melodic_intervals[b].name == "P1":
+                    continue
                 vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[a], chord.next.notes[a], chord.notes[b], chord.next.notes[b])
                 if vlq.parallelUnisonOrOctave():
                     voices = [False] * 4
@@ -291,6 +307,7 @@ def rule11(chord: mxp.ChordWrapper): # parallel octaves
                         'suggestion': "",
                         'voices': voices,
                         'duration': 2.0,
+                        'link': "https://musictheory.pugetsound.edu/mt21c/ObjectionableParallels.html"
                     }
                     errors.append(e.Error(**ErrorParams))
 
@@ -303,18 +320,21 @@ def rule12(chord: mxp.ChordWrapper): # parallel fifths
     if (chord.next is not None):
         for a in range(len(chord.notes) - 1):
             for b in range(a+1, len(chord.notes)):
+                if chord.melodic_intervals[a].name == "P1" and chord.melodic_intervals[b].name == "P1":
+                    continue
                 vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[a], chord.next.notes[a], chord.notes[b], chord.next.notes[b])
                 if vlq.parallelFifth():
                     voices = [False] * 4
                     voices[a] = True
                     voices[b] = True
                     ErrorParams = {
-                        'title': "Parallel Octaves",
+                        'title': "Parallel Fifth",
                         'location': chord.location,
                         'description': f"{voice_names[a]} and {voice_names_lower[b]} form a parallel fifth.",
                         'suggestion': "",
                         'voices': voices,
                         'duration': 2.0,
+                        'link': "https://musictheory.pugetsound.edu/mt21c/ObjectionableParallels.html"
                     }
                     errors.append(e.Error(**ErrorParams))
 
@@ -327,16 +347,18 @@ def rule13(chord: mxp.ChordWrapper): # hidden fifths and octaves
         vlq = music21.voiceLeading.VoiceLeadingQuartet(chord.notes[0], chord.next.notes[0], chord.notes[3], chord.next.notes[3])
         if (vlq.hiddenInterval(music21.interval.Interval('P5'))
             or vlq.hiddenInterval(music21.interval.Interval('P8'))):
-            voices = [True, False, False, True]
-            ErrorParams = {
-                'title': "Parallel Octave or Fifth",
-                'location': chord.location,
-                'description': f"Soprano and bass form a parallel octave or fifth.",
-                'suggestion': "",
-                'voices': voices,
-                'duration': 2.0,
-            }
-            errors.append(e.Error(**ErrorParams))
+            if not vlq.contraryMotion() or not (chord.melodic_intervals[0].isStep or chord.melodic_intervals[0].name == "P1"):
+                voices = [True, False, False, True]
+                ErrorParams = {
+                    'title': "Hidden Octave or Fifth",
+                    'location': chord.location,
+                    'description': f"Soprano and bass form a hidden octave or fifth.",
+                    'suggestion': "",
+                    'voices': voices,
+                    'duration': 2.0,
+                    'link': "https://stingmusik.se/files/sting_frtcktoktavkvint.pdf"
+                }
+                errors.append(e.Error(**ErrorParams))
 
     return errors
 

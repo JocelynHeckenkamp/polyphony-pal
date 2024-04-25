@@ -40,6 +40,7 @@ def rule14(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'suggestion': f'leading tone: {score.key_signature.getScale().pitches[6].name}',
                 'voices': vox,
                 'duration': 1.0,
+                'link': "https://musictheory.pugetsound.edu/mt21c/VoiceLeadingFirstInversionTriads.html"
             }
         errors.append(e.Error(**ErrorParams))
     return errors
@@ -64,6 +65,7 @@ def rule15(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'suggestion': f'double the root: {chord.chord_obj.root().name}',
                 'voices': WHOLE_CHORD,
                 'duration': 1.0,
+                'link': "https://musictheory.pugetsound.edu/mt21c/VoiceLeadingFourPartsRootPosition.html"
             }
             errors.append(e.Error(**ErrorParams))
     return errors
@@ -86,6 +88,7 @@ def rule16(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'suggestion': f'double the third: {chord.chord_obj.third.name}',
                 'voices': WHOLE_CHORD,
                 'duration': 1.0,
+                'link': "https://musictheory.pugetsound.edu/mt21c/SummaryOfDoublingRules.html"
             }
             errors.append(e.Error(**ErrorParams))
     return errors
@@ -112,6 +115,7 @@ def rule17(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'suggestion': f'double the third: {chord.next.chord_obj.third.name}',
                 'voices': WHOLE_CHORD,
                 'duration': 2.0,
+                'link': "https://musictheory.pugetsound.edu/mt21c/VoiceLeadingFourPartsRootPosition.html"
             }
             errors.append(e.Error(**ErrorParams))
     return errors
@@ -140,6 +144,7 @@ def rule18(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'suggestion': f'do not double the bass note: {bass_note}',
                 'voices': voices,
                 'duration': 1.0,
+                'link': "https://musictheory.pugetsound.edu/mt21c/VoiceLeadingFirstInversionTriads.html"
             }
             errors.append(e.Error(**ErrorParams))
     return errors
@@ -165,6 +170,7 @@ def rule19(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'suggestion': f'double the bass note: {bass_note}',
                 'voices': WHOLE_CHORD,
                 'duration': 1.0,
+                'link': "https://musictheory.pugetsound.edu/mt21c/VoiceLeadingSecondInversionTriads.html"
             }
             errors.append(e.Error(**ErrorParams))
     return errors
@@ -187,6 +193,7 @@ def rule20(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'suggestion': f'double the 5th: {chord.chord_obj.fifth.name}',
                 'voices': WHOLE_CHORD,
                 'duration': 1.0,
+                'link': "https://musictheory.pugetsound.edu/mt21c/VoiceLeadingSecondInversionTriads.html"
             }
             errors.append(e.Error(**ErrorParams))
     return errors
@@ -199,6 +206,7 @@ def rule21(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
         and str(chord.rn.romanNumeral) == "bII"
         and chord.inversion == 1):
 
+        link = "https://musictheory.pugetsound.edu/mt21c/VoiceLeadingNeapolitanChord.html"
         bass_note = chord.notes[3].name
         bass_counter = 0
         for note in chord.notes:
@@ -212,6 +220,7 @@ def rule21(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'suggestion': f'double the bass: {bass_note}',
                 'voices': WHOLE_CHORD,
                 'duration': 1.0,
+                'link': link
             }
             errors.append(e.Error(**ErrorParams))
         if chord.melodic_intervals[2].direction == "Direction.ASCENDING":
@@ -222,6 +231,7 @@ def rule21(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'suggestion': f'resolve b2^ note down: {chord.notes[2].name}',
                 'voices': [False, False, True, False],
                 'duration': 2.0,
+                'link': link
             }
             errors.append(e.Error(**ErrorParams))
     return errors
@@ -232,6 +242,7 @@ def rule22(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
     # 22
     if chord.incomplete and not chord.isSeventh:
 
+        link = "https://musictheory.pugetsound.edu/mt21c/V7toIVoiceLeading.html"
         root_counter = 0
         voices = [False, False, False, False]
         for i, note in enumerate(chord.notes):
@@ -246,6 +257,7 @@ def rule22(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                     'suggestion': f'Omit the 5th: {note.name}',
                     'voices': voices,
                     'duration': 1.0,
+                    'link': link
                 }
                 errors.append(e.Error(**ErrorParams))
         if root_counter < 3:
@@ -256,6 +268,7 @@ def rule22(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'suggestion': f'Triple the root: {chord.chord_obj.root().name}',
                 'voices': WHOLE_CHORD,
                 'duration': 1.0,
+                'link': link
             }
             errors.append(e.Error(**ErrorParams))
     return errors
@@ -269,6 +282,7 @@ def rule23(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
 
         root_counter = 0
         voices = [False, False, False, False]
+        link = "https://musictheory.pugetsound.edu/mt21c/SuccessiveSeventhChords.html"
         if chord.chord_obj.fifth is not None:
             ErrorParams = {
                 'title': 'Incomplete Seventh Omission',
@@ -277,6 +291,7 @@ def rule23(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'suggestion': f'Omit the 5th: {chord.chord_obj.fifth}',
                 'voices': WHOLE_CHORD,
                 'duration': 1.0,
+                'link': link
             }
             errors.append(e.Error(**ErrorParams))
         for i, note in enumerate(chord.notes):
@@ -290,6 +305,7 @@ def rule23(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                 'suggestion': f'Double the root: {chord.chord_obj.root().name}',
                 'voices': WHOLE_CHORD,
                 'duration': 1.0,
+                'link': link
             }
             errors.append(e.Error(**ErrorParams))
     return errors
@@ -316,6 +332,7 @@ def rule24(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
                         'suggestion': f'3rd of V must resolve up: {note.name}',
                         'voices': voices,
                         'duration': 2.0,
+                        'link': "https://musictheory.pugetsound.edu/mt21c/VoiceLeadingFourPartsRootPosition.html"
                     }
                     errors.append(e.Error(**ErrorParams))
     return errors
@@ -337,6 +354,7 @@ def rule26(chord: mxp.ChordWrapper, score: mxp.ScoreWrapper):
             'suggestion': f'6/4 Chords can only be used in four cases: cadential 6/4, passing in bass, arpeggio staying on same chord, pedal point',
             'voices': WHOLE_CHORD,
             'duration': 1.0,
+            'link': "https://musictheory.pugetsound.edu/mt21c/TypesOfSixFourChords.html"
         }
         errors.append(e.Error(**ErrorParams))
     return errors

@@ -16,6 +16,7 @@ def generate_counterpoint(fn, cantus_firmus):
 
     mm = 0
     count = 0
+    max_count = 50
     while mm < len(sw.interval_wrappers):
         if verbose: print(mm)
         if tree_indices[mm] == len(sw.interval_wrappers[mm].counterpoints):
@@ -76,6 +77,8 @@ def generate_counterpoint(fn, cantus_firmus):
             print(count, ":", counterpoint)
             tree_indices[-1] += 1
             mm = -1
+            if count >= max_count:
+                break
 
         mm += 1
 
