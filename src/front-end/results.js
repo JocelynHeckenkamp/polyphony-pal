@@ -1,58 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import SheetMusicComponent from './SheetMusicComponent';
 import { Paper, CircularProgress, Grid, Typography } from '@mui/material';
 import Upload from "./components/upload";
 import Header from './components/polypalHeader';
 import css from "./components/frontEnd.module.css"
-import XMLtoMIDI from './XMLtoMIDI';  // Adjust the path as necessary
-import MidiPlayerComponent from './components/midiplayback'; //added for musicplayback -cory
+import XMLtoMIDI from './XMLtoMIDI';
+import MidiPlayerComponent from './components/midiplayback';
 
-
-
-//DONT DELETE
-//delay fetch to test loading bars
-// const delayedfetch = (url, options, delay = 10000) => new Promise((resolve, reject) => {
-//     setTimeout(() => {
-//         fetch(url, options)
-//             .then(resolve)
-//             .catch(reject);
-//     }, delay);
-// });
-
-
-//fetch musicXML data to give to SheetMusicComponent
 function Results() {
     const [musicXml, setMusicXml] = useState('');
-    const [midiBlob, setMidiBlob] = useState(null); //adding this so we store the MIDIblob too (for playback component) -cory
+    const [midiBlob, setMidiBlob] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [pageError, setError] = useState(null);
+    const [pageError, setPageError] = useState(null);
     const [uploadVis, setUploadVis] = useState(true);
     const [musicErrors, setMusicErrors] = useState([]);
     const [musicSuggestions, setMusicSuggestions] = useState([]);
     const [showXMLtoMIDI, setShowXMLtoMIDI] = useState(false);
 
-    /* adding for music playback data -cory */
     const handleConversionComplete = (midiBlob, errorMessage) => {
         if (midiBlob) {
-            // Set state to be used by the MidiPlayerComponent
             setMidiBlob(midiBlob);
         } else {
-
             console.error(errorMessage);
-            setError(errorMessage);
+            setPageError(errorMessage);
         }
     };
-
 
     const handleClick = () => {
-        console.log("handleClick function executed");
         if (musicXml) {
-            setShowXMLtoMIDI((prevShowXMLtoMIDI) => !prevShowXMLtoMIDI);
+            setShowXMLtoMIDI(prevShowXMLtoMIDI => !prevShowXMLtoMIDI);
         }
     };
 
-    const renderContent = () => {
-        console.log("rendercontent function executed");
+    const renderContent = useMemo(() => {
         if (uploadVis) {
             const title = String.raw`Upload Music XML File`;
             const subtitle = String.raw`Export Music XML file from Musescore or any other editor`;
@@ -71,7 +51,7 @@ function Results() {
                                     <SheetMusicComponent musicXml={musicXml} />
                                 </Grid>
                             </Paper>
-                            {showXMLtoMIDI && <XMLtoMIDI musicXML={musicXml} onConversionComplete={handleConversionComplete}/>} {/* Render XMLtoMIDI component conditionally */}
+                            {showXMLtoMIDI && <XMLtoMIDI musicXML={musicXml} onConversionComplete={handleConversionComplete} />}
                         </Grid>
 
                         <Grid container item sx={{ maxHeight: '80vh', maxWidth: '15vw' }}>
@@ -122,13 +102,13 @@ function Results() {
         } else {
             return <p>No sheet music data available.</p>;
         }
-    };
-    console.log("Rendering Results component");
+    }, [uploadVis, pageError, isLoading, musicXml, showXMLtoMIDI, musicErrors, musicSuggestions, midiBlob]);
+
     return (
         <div className={css.flex_container}>
             <Grid>
                 <Header />
-                {renderContent()}
+                {renderContent}
             </Grid>
         </div>
     );

@@ -9,7 +9,7 @@ const MidiPlayerComponent = ({ midiBlob }) => {
     // Set up event listener for the MIDI player
     player.current.on('endOfFile', () => {
       setIsPlaying(false);
-      stopMidi();
+      //stopMidi();
     });
 
     // Cleanup function for useEffect
