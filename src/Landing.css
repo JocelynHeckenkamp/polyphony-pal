@@ -8,7 +8,7 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Primary font */
   color: #333;
-  background-color: rgb(250, 250, 250);
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: center; /* Vertically center children */
@@ -18,11 +18,11 @@ body {
 .intro-box {
   width: 100%;
 
-  background-color: #f6f5ed;
+  background-color: #ffffff;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   margin-bottom: 40px;
-  border: 1px solid #e8e0cb;
+  border: 1px solid rgb(199, 199, 199);
   border-radius: 40px;
   box-sizing: border-box;
 }
@@ -85,8 +85,8 @@ body {
 .team-member {
   text-align: center;
   margin: 0 10px; /* Add margin to space us out */
-  border: 1px solid #ddd;
-  background: #f6f5ed;
+  border: 1px solid rgb(199, 199, 199);
+  background: #ffffff;
   padding: 20px;
   transition: transform 0.3s ease-in-out;
   border-radius: 40px;
@@ -94,7 +94,7 @@ body {
 
 .team-avatar {
   transition: box-shadow 0.3s ease;
-  border: 2px solid #e8e0cb;
+  border: 1px solid rgb(199, 199, 199);
 }
 
 .team-avatar:hover {
@@ -104,6 +104,7 @@ body {
   padding: 10px 25px;
   border-radius: 25px; /* Pill shape button idea? */
   font-weight: 600;
+  
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
