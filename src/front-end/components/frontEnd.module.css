@@ -139,13 +139,8 @@
   position: fixed;
   width: 198vh;
   top: 0;
-  /* width: 300vh;
-  top: 0px;
-  color: black;
-  background-color: gray;
-  opacity: 90%;
-  font-size: 2rem;
-  font-weight: 4rem; */
+  opacity: 100%;
+
   
   
 }
