@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
+import MidiPlayerComponent from './components/midiplayback';
 
 const XMLtoMIDI = ({ musicXML, onConversionComplete }) => {
+    let midiBlob = null;
     useEffect(() => {
         if (musicXML) {
             const xmlBlob = new Blob([musicXML], { type: 'text/xml' });
             const file = new File([xmlBlob], "input.xml", { type: 'text/xml' });
-
             const formData = new FormData();
             formData.append("file", file);
             fetch("https://meigarage.edirom.de/ege-webservice/Conversions/musicxml-partwise%3Atext%3Axml/musicxml-timewise%3Atext%3Axml/mei30%3Atext%3Axml/mei40%3Atext%3Axml/midi%3Aaudio%3Ax-midi/", {
@@ -30,6 +31,7 @@ const XMLtoMIDI = ({ musicXML, onConversionComplete }) => {
                     document.body.removeChild(a);
                     window.URL.revokeObjectURL(url);
                     onConversionComplete && onConversionComplete(true, null);
+                    midiBlob = blob;
                 })
                 .catch(err => {
                     onConversionComplete && onConversionComplete(false, err.message);
@@ -37,7 +39,7 @@ const XMLtoMIDI = ({ musicXML, onConversionComplete }) => {
         }
     }, [musicXML, onConversionComplete]);
 
-    return null; // This component does not render anything
+    return midiBlob && <MidiPlayerComponent midiBlob={blob}/>; // This component does not render anything
 };
 
 export default XMLtoMIDI;
