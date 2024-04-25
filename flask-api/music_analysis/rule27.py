@@ -5,7 +5,7 @@ def check_rule_27(score: mxp.ScoreWrapper):
         errors = []
 
         # rule 27: key signatures
-        if (score.key != score.key_signature):
+        if (score.key.sharps != score.key_signature.sharps):
             suggestion = f"Suggested key: {score.key}"
 
             accidentals = score.key.sharps

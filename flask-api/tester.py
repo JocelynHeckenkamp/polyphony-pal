@@ -5,6 +5,7 @@ import music_generation.music21_method_extensions as m21me
 import music_generation.counterpoint_generation as cpg
 import music_analysis.music_xml_parser as mxp
 import music_analysis.rules1to13 as r113
+import music_analysis.rule27 as r27
 
 # fn = "./music_generation/melody4.musicxml"
 # fn1 = "./music_generation/melody2.musicxml"
@@ -23,12 +24,14 @@ if __name__ == '__main__':
     # print(errors)
 
     sw = mxp.getScoreWrapper(fn)
-    errors = []
-    for cw in sw.chord_wrappers:
-        errors.extend(r113.check_rules_1_to_13(cw, sw))
+    print(r27.check_rule_27(sw))
 
-    for e in errors:
-        print(e.title, e.location)
+    # errors = []
+    # for cw in sw.chord_wrappers:
+    #     errors.extend(r113.check_rules_1_to_13(cw, sw))
+    #
+    # for e in errors:
+    #     print(e.title, e.location)
     
     #for c in sw.chord_wrappers:
         #print(c.location, c.chord_obj.fullName)
