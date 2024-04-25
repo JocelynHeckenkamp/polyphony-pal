@@ -23,7 +23,7 @@
     }
 .music_paper{
    padding-top:20px;
-   background: #e0e0e0;
+   background: #ffffff;
    border: 1px solid rgb(199, 199, 199);
    border-radius: 20px;
    margin-top:-2;
@@ -106,14 +106,31 @@
 .error_scroller{
   overflow-y: scroll;
   max-height: 80vh;
-  max-width: 15vw;
+  
 }
+  .error_scroller_paper{
+    
+    padding: 15px;
+    background-color: "#ffffff";
+    border-radius: 20px; 
+    width: 100%;
+    
+   
+  }
+  .error_counter_paper{
+    
+    padding: 15px;
+    background-color: "#ffffff";
+    border-radius: 20px; 
+    width: 10vw;
+    margin-left:20px;
+  }
 
 .flex_container{
   
-  display: flex;
-  justify-content: space-around;
-  align-items: top;
+ 
+  justify-content: center;
+ 
   
   
   
@@ -123,19 +140,15 @@
   position: fixed;
   width: 198vh;
   top: 0;
-  /* width: 300vh;
-  top: 0px;
-  color: black;
-  background-color: gray;
-  opacity: 90%;
-  font-size: 2rem;
-  font-weight: 4rem; */
+  opacity: 100%;
+
   
   
 }
 
 .switch{
   top:-6px;
+  
   
 }
   .switch_container{
@@ -146,6 +159,6 @@
   }
 
 .file_select{
-  margin-right: -50px;
-  margin-left: -10px;
+  /* margin-right: -50px;
+  margin-left: -10px; */
 }
