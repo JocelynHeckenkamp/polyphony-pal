@@ -4,7 +4,7 @@ import music_generation.counterpoint_rules as cpr
 import music_generation.music21_method_extensions as m21me
 import music_generation.counterpoint_generation as cpg
 
-fn = "./music_generation/melody3.musicxml"
+fn = "./music_generation/melody4.musicxml"
 fn1 = "./music_generation/melody2.musicxml"
 fn2 = "./music_generation/harmony2.musicxml"
 # fn1 = "./music_generation/test_cases/rule10melody.musicxml"
