@@ -9,6 +9,7 @@ const MidiPlayerComponent = ({ midiBlob }) => {
     // Set up event listener for the MIDI player
     player.current.on('endOfFile', () => {
       setIsPlaying(false);
+      stopMidi();
     });
 
     // Cleanup function for useEffect
@@ -45,12 +46,12 @@ const MidiPlayerComponent = ({ midiBlob }) => {
   };
 
   const togglePlay = () => {
-    console.log('Before toggle:', isPlaying);
     setIsPlaying(prevIsPlaying => !prevIsPlaying); // Update state based on previous state
-    console.log('After toggle:', isPlaying); // This will still log the previous state value due to asynchronous state updates
   };
 
-  console.log('Component rendered. isPlaying:', isPlaying);
+  useEffect(() => {
+    console.log('Component rendered. isPlaying:', isPlaying);
+  }, [isPlaying]); // Log whenever isPlaying changes
 
   return (
     <div>
@@ -61,4 +62,4 @@ const MidiPlayerComponent = ({ midiBlob }) => {
   );
 };
 
-export default MidiPlayerComponent;
+export default React.memo(MidiPlayerComponent);

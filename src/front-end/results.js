@@ -45,12 +45,14 @@ function Results() {
 
 
     const handleClick = () => {
+        console.log("handleClick function executed");
         if (musicXml) {
             setShowXMLtoMIDI((prevShowXMLtoMIDI) => !prevShowXMLtoMIDI);
         }
     };
 
     const renderContent = () => {
+        console.log("rendercontent function executed");
         if (uploadVis) {
             const title = String.raw`Upload Music XML File`;
             const subtitle = String.raw`Export Music XML file from Musescore or any other editor`;
@@ -121,7 +123,7 @@ function Results() {
             return <p>No sheet music data available.</p>;
         }
     };
-
+    console.log("Rendering Results component");
     return (
         <div className={css.flex_container}>
             <Grid>

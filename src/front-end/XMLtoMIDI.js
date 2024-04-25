@@ -1,10 +1,10 @@
 import React, { useEffect, useCallback } from 'react';
-//import MidiPlayerComponent from './components/midiplayback';
 
 const XMLtoMIDI = ({ musicXML, onConversionComplete }) => {
     const handleConversionComplete = useCallback((blob, error) => {
         onConversionComplete(blob, error);
     }, [onConversionComplete]);
+
     useEffect(() => {
         if (musicXML) {
             const xmlBlob = new Blob([musicXML], { type: 'text/xml' });
@@ -14,7 +14,7 @@ const XMLtoMIDI = ({ musicXML, onConversionComplete }) => {
             fetch("https://meigarage.edirom.de/ege-webservice/Conversions/musicxml-partwise%3Atext%3Axml/musicxml-timewise%3Atext%3Axml/mei30%3Atext%3Axml/mei40%3Atext%3Axml/midi%3Aaudio%3Ax-midi/", {
                 method: 'POST',
                 body: formData,
-                redirect: 'follow' //maybe remove this
+                redirect: 'follow'
             })
                 .then(response => {
                     if (response.ok) {
@@ -24,7 +24,6 @@ const XMLtoMIDI = ({ musicXML, onConversionComplete }) => {
                     }
                 })
                 .then(blob => {
-
                     const url = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
@@ -39,11 +38,10 @@ const XMLtoMIDI = ({ musicXML, onConversionComplete }) => {
                 .catch(err => {
                     handleConversionComplete(null, err.message);
                 });
-
         }
-    }, [musicXML, handleConversionComplete]); //onconversioncomplete is a callback function -> look up callback functions in react if confused -cory
+    }, [musicXML, handleConversionComplete]);
 
-    return null; // This component does not render anything keep it as null - cory
+    return null;
 };
 
 export default XMLtoMIDI;
