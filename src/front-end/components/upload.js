@@ -9,6 +9,7 @@ function Upload({ titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMus
   const resultsRoute = "/results"
   const counterpointRoute = "/counterpoint"
   const [file, setFile] = useState(null);
+  const[ counterpointType, setCounterpointType] = useState("Melody");
   const [loading, setLoadingState] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -16,13 +17,17 @@ function Upload({ titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMus
 
 
   const handleUpload = async () => {
-    try {
+    
       if (!file) {
         setSnackbarMessage("No file selected");
         setError(true);
         setSnackbarOpen(true);
         return;
       }
+      const formData = new FormData();
+      formData.append("xml", file);
+      formData.append("type", counterpointType);
+
       if(window.location.href.includes(resultsRoute)){
         setLoading(true);
         // Upload file to the backend for error checking
@@ -62,22 +67,22 @@ function Upload({ titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMus
         // }
       } else {
         fetch(`${HOST}/counterpoint`,
-        {
-          method: "PUT",
-          body: file,
-        })
-        .then(response => response.text())
-        .then(data => {
-          //hide upload component, then set data
-          //ndata[0] holds the musicXML, the rest of the array holds the errors
-          
-          setVis(false);
-          setXML(data);
-
-          
-          //set loading bar false AFTER data has been set
-        })
-        .then(setLoading(false))
+          {
+            method: "PUT",
+            body: formData,
+          })
+          .then(response => response.text())
+          .then(data => {
+            //hide upload component, then set data
+            //ndata[0] holds the musicXML, the rest of the array holds the errors
+           
+            setVis(false);
+            setXML(data);
+  
+            
+            //set loading bar false AFTER data has been set
+          })
+          .then(setLoading(false))
       }
     } catch (error) {
       console.error("Error during the upload and conversion process:", error);
@@ -104,14 +109,14 @@ function Upload({ titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMus
             <Typography className={css.upload_subtitle} >{subTXT}</Typography>
             <Typography className={css.upload_thirdtitle} >{thirdTXT}</Typography>
           <Grid container item direction="row" spacing={3} className={css.flex_container}>
-              
+          <Grid item>
+              {window.location.pathname == counterpointRoute && (
+                <CustomSwitch switchVal={setCounterpointType} />)}
+              </Grid>
               <Grid item>
               <input className={css.file_select} onChange={(e) => { setFile(e.target.files[0]) }} type='file' accept='.musicxml,.mxml, .mxl' ></input>
               </Grid>
-              <Grid item>
-              {window.location.pathname == counterpointRoute && (
-                <CustomSwitch />)}
-              </Grid>
+              
             <Grid item>
               <Button variant="contained" sx={{mt:-1}} onClick={handleUpload} className={css.btn}>Upload</Button>
               </Grid>

@@ -47,13 +47,13 @@ const renderContent= () =>{
         return(<CircularProgress/>);
     }
     if(musicXml){
-        {console.log(JSON.parse(musicXml)[0])}
+        
         return(<Grid container direction="column" spacing={2}>
             
             {JSON.parse(musicXml).map(xml => (
-            <Grid item>
-                <Paper className={css.music_paper} onClick={() => {copyContent(xml.xml)}} >
-                <SheetMusicComponent key={xml} musicXml={xml}/>
+            <Grid item key={xml}>
+                <Paper className={css.music_paper} onClick={() => {copyContent(xml)}} >
+                <SheetMusicComponent  musicXml={xml}/>
                 </Paper>
             </Grid> 
             ))}
