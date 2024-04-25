@@ -63,7 +63,8 @@ function Results() {
                                         Measure Number: {error.location[0]} <br/>
                                         Offset:{error.location[1]} <br/><br/> 
                                         Description: {error.description} <br/><br/> 
-                                        Suggestion: {error.suggestion} 
+                                        Suggestion: {error.suggestion} <br/><br/>
+                                        <a href={error.link}>Learn More</a>
                                     </Paper>
                                 </Grid>
                             ))}
@@ -80,7 +81,8 @@ function Results() {
                                         Measure Number: {error.location[0]} <br/>
                                         Offset:{error.location[1]} <br/><br/> 
                                         Description: {error.description} <br/><br/> 
-                                        Suggestion: {error.suggestion} 
+                                        Suggestion: {error.suggestion} <br/><br/>
+                                        <a href={error.link}>Learn More</a>
                                     </Paper>
                                 </Grid>
                             ))}
