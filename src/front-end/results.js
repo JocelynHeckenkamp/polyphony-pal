@@ -48,22 +48,22 @@ function Results() {
         } else if (musicXml) {
             return (
                 <div>
-                    <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center', padding: "10px" }} className={css.flex_container}>
-                        <Grid container item direction="column" sx={{ overflow: 'visible', width: '40vw' }}>
-                            <Paper sx={{ pt: 5, backgroundColor: "#ffffff", borderRadius: 5, width: "100%" }} elevation={4} onClick={handleClick}>
-                                <Grid sx={{ justifyContent: 'center' }}>
+                    <Grid container spacing={2}  direction="row" className={css.flex_container}>
+                        <Grid  item sx={{  width: '40vw' }}>
+                            <Paper className={css.music_paper} elevation={4} onClick={handleClick}>
+                                
                                     <SheetMusicComponent musicXml={musicXml} />
-                                </Grid>
+                               
                             </Paper>
                             {showXMLtoMIDI && <XMLtoMIDI musicXML={musicXml} />} {/* Render XMLtoMIDI component conditionally */}
                         </Grid>
 
-                        <Grid container item sx={{ maxHeight: '80vh', maxWidth: '15vw' }}>
+                        <Grid item >
                             <Typography>Errors</Typography>
-                            <Grid container item className={css.error_scroller}>
+                            <Grid container item className={css.error_scroller} sx={{  width: '18vw' }}>
                                 {musicErrors.map((error, index) => (
-                                    <Grid item pb={2} pr={2} key={index}>
-                                        <Paper sx={{ padding: 3, backgroundColor: "#ffffff", borderRadius: 5 }} elevation={2}>
+                                    <Grid item pb={2} pr={1}  key={index}>
+                                        <Paper sx={{ padding: 3, backgroundColor: "#ffffff", borderRadius: 5,  }} elevation={2}>
                                             Title: {error.title} <br /><br />
                                             Measure Number: {error.location[0]} <br />
                                             Offset: {error.location[1]} <br /><br />
@@ -75,11 +75,11 @@ function Results() {
                             </Grid>
                         </Grid>
 
-                        <Grid container item sx={{ maxHeight: '80vh', maxWidth: '15vw' }}>
+                        <Grid  item  sx={{  width: '18vw' }}>
                             <Typography>Suggestions</Typography>
                             <Grid container item className={css.error_scroller}>
                                 {musicSuggestions.map((error, index) => (
-                                    <Grid item pb={2} pr={2} key={index}>
+                                    <Grid item pb={2} pr={1} key={index}>
                                         <Paper sx={{ padding: 3, backgroundColor: "#ffffff", borderRadius: 5 }} elevation={2}>
                                             Title: {error.title} <br /><br />
                                             Measure Number: {error.location[0]} <br />
@@ -92,12 +92,23 @@ function Results() {
                             </Grid>
                         </Grid>
 
-                        <Grid container item sx={{ maxHeight: '80vh', maxWidth: '15vw' }}>
-                            <Typography>Suggestions</Typography>
-                            <Paper sx={{ padding: 3, backgroundColor: "#ffffff", borderRadius: 5, width: "10vw", ml: 2 }} elevation={2} >
-                                <Typography>Number of Errors: {musicErrors.length}</Typography>
-                            </Paper>
+                        <Grid item  >
+                            <Grid  container item  direction="column" >
+                                <Grid item pb={2} sx={{ maxHeight: '30vh', maxWidth: '15vw' }}>
+                                    <Typography>Insights</Typography>
+                                    <Paper sx={{ padding: 3, backgroundColor: "#ffffff", borderRadius: 5, width: "10vw" }} elevation={2} >
+                                        <Typography>Number of Errors: {musicErrors.length}</Typography>
+                                    </Paper>
+                                </Grid>
+                                    <Grid  item sx={{ maxHeight: '30vh', maxWidth: '15vw' }}>
+                                    <Paper sx={{ padding: 3, backgroundColor: "#ffffff", borderRadius: 5, width: "10vw" }} elevation={2} >
+                                        <Typography>Number of Suggestions: {musicSuggestions.length }</Typography>
+                                        
+                                    </Paper>
+                                    </Grid>
+                            </Grid>        
                         </Grid>
+                        
 
                         {/* {musicXml && <XMLtoMIDI musicXML={musicXml} />} */}
                     </Grid>

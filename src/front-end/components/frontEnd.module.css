@@ -106,7 +106,7 @@
 .error_scroller{
   overflow-y: scroll;
   max-height: 80vh;
-  max-width: 15%;
+  
 }
   .error_scroller_paper{
     
@@ -114,6 +114,7 @@
     background-color: "#ffffff";
     border-radius: 20px; 
     width: 100%;
+    
    
   }
   .error_counter_paper{
