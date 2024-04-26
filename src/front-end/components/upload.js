@@ -17,7 +17,9 @@ function Upload({ titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMus
 
 
   const handleUpload = async () => {
+    
     try {
+
       if (!file) {
         setSnackbarMessage("No file selected");
         setError(true);
@@ -29,7 +31,7 @@ function Upload({ titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMus
       formData.append("type", counterpointType);
 
       if(window.location.href.includes(resultsRoute)){
-        setLoading(true);
+         setLoading(true);
         // Upload file to the backend for error checking
         const res = await fetch(`${HOST}/upload`, {
           method: "PUT",
@@ -42,37 +44,27 @@ function Upload({ titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMus
         setVis(false);
         
       } else {
-        fetch(`${HOST}/counterpoint`,
+        
+        setLoading(true);
+       const res = await fetch(`${HOST}/counterpoint`,
           {
             method: "PUT",
             body: formData,
-          })
-          .then(response => response.text())
-          .then(data => {
-            //hide upload component, then set data
-            //ndata[0] holds the musicXML, the rest of the array holds the errors
-           
-            setVis(false);
-            setXML(data);
-  
-            
-            //set loading bar false AFTER data has been set
-          })
-          .then(setLoading(false))
+          });
+          const data = await res.json();
+          setXML(await data);
+          
+          
       }
     } catch (error) {
       console.error("Error during the upload and conversion process:", error);
-      setSnackbarMessage("Failed to process the file.");
       setError(true);
     } finally {
       setLoading(false);
-      setSnackbarOpen(true);
     }
   }
 
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
+ 
 
   return (
     <div   >
@@ -97,11 +89,7 @@ function Upload({ titleTXT, subTXT, thirdTXT, setVis, setXML, setLoading, setMus
               <Button variant="contained" sx={{mt:-1}} onClick={handleUpload} className={css.btn}>Upload</Button>
               </Grid>
           </Grid>
-          <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
-            <Alert onClose={handleSnackbarClose} severity={error ? "error" : "success"} sx={{ width: '100%' }}>
-              {snackbarMessage}
-            </Alert>
-          </Snackbar>
+         
           </Paper>
         
       </Grid>

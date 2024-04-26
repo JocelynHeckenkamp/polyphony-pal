@@ -11,15 +11,8 @@ function Counterpoint() {
   const thirdtitle = String.raw`One line cantus firmus to be harmonized`
 
  const [isLoading, setIsLoading] = useState(false); //loading spinner state
- const [uploadVis, setUploadVis] = useState(true);
- const [musicErrors, setMusicErrors] = useState([]);//contains array of music errors
- const [musicXml, setMusicXml] = useState('');
- const [checked, setChecked] = useState(true);  
- const [musicSuggestions, setMusicSuggestions] = useState([]);//contains array of music errors     
-
- const handleChange = (event) => {
-    setChecked(event.target.checked);
-  };
+ const [musicXml, setMusicXml] = useState();
+  
 
   function copyContent(xml) {
      
@@ -42,37 +35,45 @@ function Counterpoint() {
   }
 
 
-const renderContent= () =>{
-    if(isLoading){
-        return(<CircularProgress/>);
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+      <>
+      <CircularProgress />
+      <Typography>Generating scores....Please wait a moment</Typography>
+      </>);
     }
-    if(musicXml){
+    if (musicXml) {
+
+      return (<>
+        <Typography className={css.upload_numerals}>Generated scores:</Typography>
+      <Grid container direction="column" spacing={2}>
         
-        return(<Grid container direction="column" spacing={2}>
-            
-            {JSON.parse(musicXml).map(xml => (
-            <Grid item key={xml}>
-                <Paper className={css.music_paper} onClick={() => {copyContent(xml)}} >
-                <SheetMusicComponent  musicXml={xml}/>
-                </Paper>
-            </Grid> 
-            ))}
-            </Grid>);
+        {musicXml.map(xml => (
+          <Grid item key={xml}>
+            <Paper className={css.music_paper} onClick={() => { copyContent(xml) }} >
+              <SheetMusicComponent musicXml={xml} />
+            </Paper>
+          </Grid>
+        ))}
+      </Grid>
+      </>)
+      
     }
 
-    else{
-            return(
-            <Grid>
-            <Upload titleTXT={title} subTXT={subtitle} thirdTXT={thirdtitle} setVis={setUploadVis}
-            setXML={setMusicXml} setLoading={setIsLoading} setMusicErrors={setMusicErrors} setMusicSuggestions={setMusicSuggestions} />
-            
-            </Grid>
+    else {
+      return (
+        <Grid>
+          <Upload titleTXT={title} subTXT={subtitle} thirdTXT={thirdtitle}
+            setXML={setMusicXml} setLoading={setIsLoading} />
 
-    );
+        </Grid>
+
+      );
     }
 
 
-}
+  }
 
 
     return(
