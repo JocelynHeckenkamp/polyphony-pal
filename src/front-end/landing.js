@@ -16,10 +16,10 @@ function Landing() {
 
 
   const teamMembers = [
-    { name: 'Alexander N. Chin', role: 'Software Engineer', email: 'anc202000@utdallas.edu', initials: 'AC', src: alexPP },
-    { name: 'Aseal Mohmand', role: 'Software Engineer', email: 'asm200011@utdallas.edu', initials: 'AM', src: asealPP },
-    { name: 'Jocelyn Heckenkamp', role: 'Software Engineer', email: 'jah190020@utdallas.edu', initials: 'JH', src: jocelynPP },
-    { name: 'Cory Harris', role: 'Software Engineer', email: 'clh200002@utdallas.edu', initials: 'CH', src: coryPP }
+    { name: 'Alexander N. Chin', role: 'Software Engineer', email: 'anc202000@utdallas.edu', initials: 'AC', src: alexPP, linkedin: 'https://www.linkedin.com/in/alexander-n-chin/'},
+    { name: 'Aseal Mohmand', role: 'Software Engineer', email: 'asm200011@utdallas.edu', initials: 'AM', src: asealPP, linkedin: 'https://www.linkedin.com/in/asealmohmand/'},
+    { name: 'Jocelyn Heckenkamp', role: 'Software Engineer', email: 'jah190020@utdallas.edu', initials: 'JH', src: jocelynPP, linkedin: 'https://www.linkedin.com/in/jocelyn-heckenkamp-7790791b7/'},
+    { name: 'Cory Harris', role: 'Software Engineer', email: 'clh200002@utdallas.edu', initials: 'CH', src: coryPP, linkedin: 'https://www.linkedin.com/in/corylharris/'}
   ];
 
   const waveStyles = [
@@ -69,10 +69,12 @@ function Landing() {
           Meet the Team
         </Typography>
         <Grid container spacing={0} className="team-grid-container">
-          {teamMembers.map((member, index) => (
+        {teamMembers.map((member, index) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={index} className="team-member">
               <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Avatar className="team-avatar" src={member.src} sx={{ width: 250, height: 250 }}>{member.initials}</Avatar>
+                <Link to={member.linkedin} target="_blank">
+                  <Avatar className="team-avatar" src={member.src} sx={{ width: 250, height: 250 }}>{member.initials}</Avatar>
+                </Link>
               </Grid>
               <Typography variant="subtitle1" component="div" className="team-name">
                 {member.name}
