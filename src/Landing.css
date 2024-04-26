@@ -17,10 +17,12 @@ body {
 
 .intro-box {
   width: 100%;
-
+   
   background-color: #ffffffa9;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 40px;
   border: 1px solid rgba(245, 241, 241, 0.82);
   border-radius: 40px;
