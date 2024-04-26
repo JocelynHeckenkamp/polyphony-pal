@@ -1,3 +1,48 @@
+# Deployment
+Our application is deployed at: https://polyphonypal.netlify.app/
+
+Jocelyn's CS^2 Research Extension is under "Counterpoint" in the navbar.
+
+--------------------------------
+# Starting the Application with Docker (recommended)
+
+Ensure you have Docker installed on your machine and that it includes docker compose V2.
+
+Navigate to PolyphonyPal/polyphonypal/flask-api and run
+
+  ```bash
+  docker compose up --build
+```
+
+In a new terminal in PolyphonyPal/polyphonpal, run the frontend:
+
+```commandline
+npm install
+npm start
+```
+
+To stop the backend container:
+```
+docker compose down
+```
+
+--------------------------------
+
+
+
+# Building the Docker Image without compose
+cd into PolyponyPal/polyphonypal/flask-api
+
+Create the image:
+```bash
+ docker pull python:3.10-slim
+ docker build -f Dev.Dockerfile . -t dockertesting
+```
+Run the container:
+```bash
+docker run -it -v "$(pwd)":/app -p 127.0.0.1:5001:5000 dockertesting
+```
+
 # Starting the Application without Docker
 
 ## Prerequisites
@@ -36,78 +81,3 @@ Ensure you have Python version 3.11 or higher installed.
   ```bash
   npm install
   npm start
-
-
-
-
-
-
-
-# Starting the Application with Docker
---------------------------------
-## Prerequisites
-Ensure you have Docker installed on your machine. and includes docker compose V2
-
---------------------------------
-### Build the docker image: WITH COMPOSE (FOR DEVELOPMENT)
-   - ensure you have docker daemon running, then cd into flask api directory to run the following commands:
-  ```bash
-  docker compose up --build
-```
-   - To stop the container:
-   `docker compose down`
-
-   - To run the frontend app: cd into polyphonypal root directory run
-    `npm install`
-    then
-    `npm start`
-
-
-## Build the Docker image: WITHOUT COMPOSE (FOR DEVELOPMENT)
------------------------------------
-# DEVELOPMENT If running WITH Docker on backend
-
-
-```bash
- docker pull python:3.10-slim
- docker build -f Dev.Dockerfile . -t dockertesting
-```
-- Run the container:
-
-  bash
-```bash
-docker run -it -v "$(pwd)":/app -p 127.0.0.1:5001:5000 dockertesting
-```
-## Build the docker image: WITH COMPOSE (FOR DEVELOPMENT)
-
-  - Ensure you have docker daemon running, then cd into flask api directory to run the following commands:
-
-  ```bash
-  docker compose up --build
-```
- - NOTE: if you get an error about the port being in use, you can change the port in the docker-compose.yml file to a different port, e.g. 5001:
- ```bash
- ports:
-      - "5001:5000"`
-  ```
-  - To stop the container: `docker compose down`
-
-  - To run the frontend app: cd into polyphonypal root directory run:
-   `npm install`
-   and then:
-  `npm start`
------------------------------------
-#### If running with Docker DEPLOYMENT ONLY on backend
-  build the docker image: WITHOUT SCRIPT
-  ```bash
-    docker pull python:3.10-slim
-    docker build -t flask_server .
-  ```
-  Run the container:
- ```bash
- docker run -p 127.0.0.1:5001:5000 flask_server
- ```
- Or using the DEPLOYMENT ONLY script provided:
- ` Docker_Deployment_script/buildContainer.bash`
-
-Then: `Docker_Deployment_script/runContainer.bash`

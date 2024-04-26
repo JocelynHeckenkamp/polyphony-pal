@@ -14,13 +14,14 @@ def generate_counterpoint(fn, cantus_firmus):
 
     tree_indices = [0] * len(sw.interval_wrappers)
 
+
     mm = 0
     count = 0
     max_count = 50
     while mm < len(sw.interval_wrappers):
         if verbose: print(mm)
         if tree_indices[mm] == len(sw.interval_wrappers[mm].counterpoints):
-            if verbose: print("Exausted level", mm, "with", tree_indices)
+            if verbose: print("Exhausted level", mm, "with", tree_indices)
             if mm == 0:
                 print("Parsing complete")
                 if verbose: print(correct_counterpoints)
@@ -77,8 +78,8 @@ def generate_counterpoint(fn, cantus_firmus):
             print(count, ":", counterpoint)
             tree_indices[-1] += 1
             mm = -1
-            if count >= max_count:
-                break
+            # if count >= max_count:
+            #     break
 
         mm += 1
 
@@ -88,6 +89,8 @@ def generate_counterpoint(fn, cantus_firmus):
 
     for cp in correct_counterpoints:
         musicXMLs.append(createXML(sw, cp))
+
+    print("Total count: ", count)
 
     return musicXMLs
 

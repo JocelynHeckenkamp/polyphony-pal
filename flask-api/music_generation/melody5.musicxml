@@ -2,12 +2,12 @@
 <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
 <score-partwise version="3.1">
   <work>
-    <work-title>melody5</work-title>
+    <work-title>Melody 6</work-title>
     </work>
   <identification>
     <encoding>
       <software>MuseScore 3.2.3</software>
-      <encoding-date>2024-04-14</encoding-date>
+      <encoding-date>2024-04-26</encoding-date>
       <supports element="accidental" type="yes"/>
       <supports element="beam" type="yes"/>
       <supports element="print" attribute="new-page" type="yes" value="yes"/>
@@ -40,7 +40,7 @@
     <lyric-font font-family="FreeSerif" font-size="11"/>
     </defaults>
   <credit page="1">
-    <credit-words default-x="595.44" default-y="1626.67" justify="center" valign="top" font-size="24">melody5</credit-words>
+    <credit-words default-x="595.44" default-y="1626.67" justify="center" valign="top" font-size="24">Melody 6</credit-words>
     </credit>
   <part-list>
     <score-part id="P1">
@@ -59,7 +59,7 @@
       </score-part>
     </part-list>
   <part id="P1">
-    <measure number="1" width="123.91">
+    <measure number="1" width="263.29">
       <print>
         <system-layout>
           <system-margins>
@@ -83,15 +83,6 @@
           <line>2</line>
           </clef>
         </attributes>
-      <direction placement="above">
-        <direction-type>
-          <metronome parentheses="no" default-x="-39.28" relative-y="20.00">
-            <beat-unit>quarter</beat-unit>
-            <per-minute>210</per-minute>
-            </metronome>
-          </direction-type>
-        <sound tempo="210"/>
-        </direction>
       <note default-x="79.27" default-y="-15.00">
         <pitch>
           <step>C</step>
@@ -102,40 +93,7 @@
         <type>whole</type>
         </note>
       </measure>
-    <measure number="2" width="63.24">
-      <note default-x="13.32" default-y="-5.00">
-        <pitch>
-          <step>E</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-        </note>
-      </measure>
-    <measure number="3" width="63.24">
-      <note default-x="13.32" default-y="5.00">
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-        </note>
-      </measure>
-    <measure number="4" width="63.24">
-      <note default-x="13.32" default-y="0.00">
-        <pitch>
-          <step>F</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-        </note>
-      </measure>
-    <measure number="5" width="63.24">
+    <measure number="2" width="202.62">
       <note default-x="13.32" default-y="-10.00">
         <pitch>
           <step>D</step>
@@ -146,95 +104,7 @@
         <type>whole</type>
         </note>
       </measure>
-    <measure number="6" width="63.24">
-      <note default-x="13.32" default-y="-15.00">
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-        </note>
-      </measure>
-    <measure number="7" width="63.24">
-      <note default-x="13.32" default-y="-20.00">
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-        </note>
-      </measure>
-    <measure number="8" width="63.90">
-      <note default-x="10.00" default-y="-25.00">
-        <pitch>
-          <step>A</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-        </note>
-      </measure>
-    <measure number="9" width="63.90">
-      <note default-x="10.00" default-y="-30.00">
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-        </note>
-      </measure>
-    <measure number="10" width="63.24">
-      <note default-x="13.32" default-y="-20.00">
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-        </note>
-      </measure>
-    <measure number="11" width="63.24">
-      <note default-x="13.32" default-y="-15.00">
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-        </note>
-      </measure>
-    <measure number="12" width="63.24">
-      <note default-x="13.32" default-y="5.00">
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-        </note>
-      </measure>
-    <measure number="13" width="63.24">
-      <note default-x="13.32" default-y="0.00">
-        <pitch>
-          <step>F</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-        </note>
-      </measure>
-    <measure number="14" width="63.24">
+    <measure number="3" width="202.62">
       <note default-x="13.32" default-y="-5.00">
         <pitch>
           <step>E</step>
@@ -245,7 +115,7 @@
         <type>whole</type>
         </note>
       </measure>
-    <measure number="15" width="63.24">
+    <measure number="4" width="202.62">
       <note default-x="13.32" default-y="-10.00">
         <pitch>
           <step>D</step>
@@ -256,7 +126,7 @@
         <type>whole</type>
         </note>
       </measure>
-    <measure number="16" width="66.96">
+    <measure number="5" width="206.34">
       <note default-x="13.32" default-y="-15.00">
         <pitch>
           <step>C</step>
