@@ -8,5 +8,5 @@ Flask-Restless-NG==2.5.0
 psycopg2-binary==2.9.9
 Flask-Cors==4.0.0
 beautifulsoup4==4.8.2
-lxml==4.5.0
+
 requests

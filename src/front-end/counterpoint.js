@@ -36,6 +36,7 @@ function Counterpoint() {
 
 
   const renderContent = () => {
+    //if waiting for fetch
     if (isLoading) {
       return (
       <>
@@ -43,9 +44,17 @@ function Counterpoint() {
       <Typography>Generating scores....Please wait a moment</Typography>
       </>);
     }
+    //if returned an empty array
     if (musicXml) {
-
+        if(musicXml.length == 0)
+        {
+          return(<div className={css.flex_container}>
+            <Typography className={css.upload_numerals}>Incorrect input Melody/Harmony <br/> Please try again</Typography></div>);
+        }
+    //ran based on returned musicXMLs
+    else{
       return (<>
+        {console.log(musicXml)}
         <Typography className={css.upload_numerals}>Generated scores:</Typography>
       <Grid container direction="column" spacing={2}>
         
@@ -58,6 +67,7 @@ function Counterpoint() {
         ))}
       </Grid>
       </>)
+      }
       
     }
 
