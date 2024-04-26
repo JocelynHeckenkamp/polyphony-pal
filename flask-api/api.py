@@ -17,6 +17,7 @@ import music_analysis.rule27 as r27
 import music_analysis.rules25_28_31 as rules252831
 import music_analysis.music_xml_parser as mxp
 import music_generation.counterpoint_generation as cpg
+import music_analysis.color_notes as cn
 from music_analysis.error import Error as e
 
 #database model
@@ -57,7 +58,6 @@ def music_upload():
     #run script then return
     errors, doubling_errors = calcErrors(musicXML)
     return jsonify({'errors': errors, 'suggestions': doubling_errors}), 200
-
 
 @app.route('/counterpoint', methods=['PUT'])
 def counterpoint():
