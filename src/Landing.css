@@ -8,7 +8,7 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Primary font */
   color: #333;
-  background-color: #ffffff;
+  background-color: #f4eeeedf; /* #f4eeeedf; offwhite for background coloring
   display: flex;
   flex-direction: column;
   justify-content: center; /* Vertically center children */
@@ -18,11 +18,11 @@ body {
 .intro-box {
   width: 100%;
 
-  background-color: #ffffff;
+  background-color: #ffffffa9;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   margin-bottom: 40px;
-  border: 1px solid rgb(199, 199, 199);
+  border: 1px solid rgba(245, 241, 241, 0.82);
   border-radius: 40px;
   box-sizing: border-box;
 }
@@ -104,7 +104,7 @@ body {
   padding: 10px 25px;
   border-radius: 25px; /* Pill shape button idea? */
   font-weight: 600;
-  
+
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
@@ -146,59 +146,57 @@ body {
 /* Footer styles */
 .footer {
   padding: 20px;
-  background: #d7cec4;
+  background: #78460b;
   text-align: center;
 }
+
+
 .front-container {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: -2;
+  pointer-events: none;
+  background: rgba(235, 235, 235, 0);
+}
+
+.wave-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: -1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-
-
-
-      background: linear-gradient(
-        90deg,
-        rgba(245, 245, 245, 0.8) 0%,  /* Off-white color */
-        rgba(245, 245, 245, 0.5) 25%,  /* Lighter color */
-        rgba(245, 245, 245, 0.3) 50%,  /* Lightest color */
-        rgba(245, 245, 245, 0.5) 75%,  /* Lighter color */
-        rgba(245, 245, 245, 0.8) 100%  /* Off-white color */
-);
-  background-size: 400% 100%;
-
-  /* Animation */
-  animation: moveWaves 40s linear infinite, fadeInOut 10s cubic-bezier(0.4, 2, 0.2, 1) infinite alternate;
-  opacity: 0.85;
+  pointer-events: none;
 }
 
-@keyframes moveWaves {
-  0%, 100% {
-      background-position: 0% 50%;
-  }
-  25% {
-      background-position: 25% 50%;
-  }
-  50% {
-      background-position: 50% 50%;
-  }
-  75% {
-      background-position: 75% 50%;
-  }
+.wave {
+  /* Initial size should be small but not zero to be visible when scaling starts */
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(255, 255, 255, 0.8) 0%, /* Off-white color */
+    rgba(186, 185, 185, 0.904) 100% /* Transparent to complete the gradient */
+  );
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0.1; /* Adjust opacity for a subtle effect */
+  animation: wave-animation 100s infinite linear; /* Adjust animation duration */
 }
 
-@keyframes fadeInOut {
+@keyframes wave-animation {
   0% {
-      opacity: 0.85;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.2; /* Start with a slightly higher opacity */
   }
   100% {
-      opacity: 0.5; /* Adjust for contrast */
+    /* Ensure the scale is large enough to grow the wave significantly */
+    transform: translate(-50%, -50%) scale(10000);
+    opacity: 0; /* Fade out as it grows */
   }
 }

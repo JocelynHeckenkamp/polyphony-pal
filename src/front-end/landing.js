@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Typography, Button, Grid, Avatar } from '@mui/material';
 import logo from '../polypalLogo.svg';
@@ -20,13 +19,24 @@ function Landing() {
     { name: 'Alexander N. Chin', role: 'Software Engineer', email: 'anc202000@utdallas.edu', initials: 'AC', src: alexPP },
     { name: 'Aseal Mohmand', role: 'Software Engineer', email: 'asm200011@utdallas.edu', initials: 'AM', src: asealPP },
     { name: 'Jocelyn Heckenkamp', role: 'Software Engineer', email: 'jah190020@utdallas.edu', initials: 'JH', src: jocelynPP },
-    { name: 'Cory Harris', role: 'Software Engineer', email: 'cnh200002@utdallas.edu', initials: 'CH', src: coryPP }
+    { name: 'Cory Harris', role: 'Software Engineer', email: 'clh200002@utdallas.edu', initials: 'CH', src: coryPP }
+  ];
+
+  const waveStyles = [
+    { animationDelay: '1s' },
+    { animationDelay: '10s' },
+    { animationDelay: '15s' }
   ];
 
   return (
+    <>
+      <div className='front-container'></div>
+      <div className='wave-container'>
+        {waveStyles.map((style, index) => (
+          <div key={index} className='wave' style={style} />
+        ))}
+      </div>
 
-
-<><div className='front-container'></div>
       <Header />
       <Container maxWidth="lg" className="landing-container">
 
@@ -36,11 +46,11 @@ function Landing() {
             <Typography variant="h2" component="h1" gutterBottom className="landing-title">
               PolyphonyPal
             </Typography>
-            <Typography variant="h6" color="inherit" className="landing-subtitle" sx={{ mb: 2 }}>
-              Welcome to Polyphony Pal, the ultimate tool for mastering voice leading in music composition. 
-              Whether you're a student refining your harmonies or an instructor guiding others, Polyphony Pal empowers you with tools to help you follow voice leading rules. 
-              Detect errors effortlessly with our 4-part voice leading analysis, generate rich harmonies with our Roman numeral-based music generation, 
-              and complete 2-part musical phrases with our counterpoint feature. Explore music theory creatively and confidently with Polyphony Pal, 
+            <Typography variant="h6"  className="landing-subtitle" sx={{ mb: 2 }}>
+              Welcome to Polyphony Pal, the ultimate tool for mastering voice leading in music composition.
+              Whether you're a student refining your harmonies or an instructor guiding others, Polyphony Pal empowers you with tools to help you follow voice leading rules.
+              Detect errors effortlessly with our 4-part voice leading analysis, generate rich harmonies with our Roman numeral-based music generation,
+              and complete 2-part musical phrases with our counterpoint feature. Explore music theory creatively and confidently with Polyphony Pal,
               transforming theoretical concepts into beautifully orchestrated compositions. Start composing with precision and inspiration today.
             </Typography>
             <Button variant="contained" component={Link} to="/results" className="get-started-btn"  >
@@ -78,8 +88,6 @@ function Landing() {
         </Grid>
 
       </Container>
-
-
     </>
   );
 }
