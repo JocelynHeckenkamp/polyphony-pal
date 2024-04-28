@@ -1,113 +1,54 @@
-# Starting the Application without Docker
 
-## Prerequisites
-Ensure you have Python version 3.11 or higher installed.
+# Accessing the Hosted Application
+The hosted application is accessible via the url: ```https://polyphonypal.netlify.app/```
+*Note: the database can only be accessed by running the app locally. There is no public access to the hosted database; however, I have made most of the data available for for download.
 
-## Backend Setup
-1. **Set Up the Virtual Environment:**
-   - Navigate to the `flask-api` directory.
-   - Create a virtual environment in the root directory:
-     ```bash
-     python3 -m venv venv
-     ```
-   - Activate the virtual environment:
-     - On macOS:
-       ```bash
-       source venv/bin/activate
-       ```
-     - On Windows:
-       ```powershell
-       .\venv\Scripts\activate
-       ```
-   - Install the required packages:
-     ```bash
-     pip install -r requirements.txt --no-cache-dir
-     ```
-
-2. **Run the Application:**
-   - Start the API:
-     ```bash
-     flask run
-     ```
-
-## Frontend Setup
-- Navigate to the `polyphonypal` root directory.
-- Install dependencies and start the frontend application:
-  ```bash
-  npm install
-  npm start
-
-
-
-
-
-
-
-# Starting the Application with Docker
 --------------------------------
+--------------------------------
+# Music Generation Usage
+## Basic Usage
+1. Open application via ```https://polyphonypal.netlify.app/``` or ```localhost:3000```
+2. Navigate to music generation via "generation" tab. 
+3. Select a key signature (uppercase = major, lowercase = minor)
+4. Enter a valid roman numeral combination. ```<chord symbol>,<chord symbol>,...,<chord symbol>```
+Full regular expression for valid roman numeral entries shown below:
+```
+Major Keys:
+^(?:(?:viio|IV|I|ii|iii|V|vi)(?:6|64|42|43|65|7|9|11|13|2)?(?:\/(?:viio|IV|I|ii|iii|V|vi)(?:6|64|42|43|65|7|9|11|13|2)?)?(?:,(?!$)|$))+$
+
+Minor Keys:
+^(?:(?:VII|VI|V|v|iv|III|iio|i)(?:6|64|42|43|65|7|9|11|13|2)?(?:\/(?:VII|VI|V|v|iv|III|iio|i)(?:6|64|42|43|65|7|9|11|13|2)?)?(?:,(?!$)|$))+$
+```
+5. Press the "Upload" button. If the combination is not already in the database, a process will be created to find every valid harmonization (limited to 10000 combinations). As they are created, they will be rendered on the page.
+
+7. (Optional) click the desired harmonization to download the midi and copy the music XML to clipboard.
+
+## Access local database
+1. Connect to localhost:8080 with the following credentials
+```
+POSTGRES_USER: postgres
+POSTGRES_PASSWORD: password
+POSTGRES_DB: mydatabase
+```
+2. Select XML and RomanScore tables
+3. Export the tables with the button in the bottom right of the select screen.
+--------------------------------
+--------------------------------
+# Starting the Application with Docker
+
 ## Prerequisites
 Ensure you have Docker installed on your machine. and includes docker compose V2
 
---------------------------------
 ### Build the docker image: WITH COMPOSE (FOR DEVELOPMENT)
-   - ensure you have docker daemon running, then cd into flask api directory to run the following commands:
+   - ensure you have docker daemon running, then cd into polyphonypal root directory to run the following commands:
   ```bash
   docker compose up --build
 ```
    - To stop the container:
-   `docker compose down`
+   `docker compose stop`
 
    - To run the frontend app: cd into polyphonypal root directory run
-    `npm install`
-    then
-    `npm start`
-
-
-## Build the Docker image: WITHOUT COMPOSE (FOR DEVELOPMENT)
------------------------------------
-# DEVELOPMENT If running WITH Docker on backend
-
-
-```bash
- docker pull python:3.10-slim
- docker build -f Dev.Dockerfile . -t dockertesting
+   ```bash
+    npm install
+    npm start
 ```
-- Run the container:
-
-  bash
-```bash
-docker run -it -v "$(pwd)":/app -p 127.0.0.1:5001:5000 dockertesting
-```
-## Build the docker image: WITH COMPOSE (FOR DEVELOPMENT)
-
-  - Ensure you have docker daemon running, then cd into flask api directory to run the following commands:
-
-  ```bash
-  docker compose up --build
-```
- - NOTE: if you get an error about the port being in use, you can change the port in the docker-compose.yml file to a different port, e.g. 5001:
- ```bash
- ports:
-      - "5001:5000"`
-  ```
-  - To stop the container: `docker compose down`
-
-  - To run the frontend app: cd into polyphonypal root directory run:
-   `npm install`
-   and then:
-  `npm start`
------------------------------------
-#### If running with Docker DEPLOYMENT ONLY on backend
-  build the docker image: WITHOUT SCRIPT
-  ```bash
-    docker pull python:3.10-slim
-    docker build -t flask_server .
-  ```
-  Run the container:
- ```bash
- docker run -p 127.0.0.1:5001:5000 flask_server
- ```
- Or using the DEPLOYMENT ONLY script provided:
- ` Docker_Deployment_script/buildContainer.bash`
-
-Then: `Docker_Deployment_script/runContainer.bash`
